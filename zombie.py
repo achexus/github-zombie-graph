@@ -89,7 +89,7 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, active_day_count)
     
     svg_content = f"""<svg xmlns="http://www.w3.org/2000/svg" width="{svg_width}" height="{svg_height}">
     <style>
-        .bg {{ fill: #050a05; }}
+        .bg {{ fill: transparent; }}
         .scanline {{ stroke: rgba(57, 255, 20, 0.10); stroke-width: 1; }}
         .text-neon {{ fill: #39ff14; font-family: 'Courier New', Courier, monospace; font-weight: bold; }}
         .text-dim {{ fill: #1a4d1a; font-family: 'Courier New', Courier, monospace; font-weight: bold; }}
