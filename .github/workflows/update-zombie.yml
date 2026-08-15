@@ -1,0 +1,37 @@
+name: Generate Zombie Survival Graph
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # Her gece 00:00'da çalışır
+  workflow_dispatch: # Manuel tetikleme butonu
+
+# Botun SVG dosyasını repoya geri pushlayabilmesi için gerekli izin
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repoyu Klonla
+        uses: actions/checkout@v4
+
+      - name: Python'u Kur
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Gerekli Paketleri Yükle
+        run: pip install -r requirements.txt
+
+      - name: Zombi Hayatta Kalma Kodunu Çalıştır
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_USERNAME: ${{ github.repository_owner }}
+        run: python zombie.py
+
+      - name: Oluşan SVG Grafiğini Repoya Kaydet
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Otomatik Güncelleme: Zombi Hayatta Kalma Grafiği"
+          file_pattern: "*.svg"
