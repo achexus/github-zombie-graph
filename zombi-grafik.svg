@@ -128,8 +128,8 @@
 <line x1="0" y1="376" x2="850" y2="376" class="scanline" />
 <text x="25" y="40" class="text-neon text-title">ACHEXUS SURVIVAL SYSTEM</text>
 <text x="25" y="75" class="text-neon text-info">SURVIVAL DAY : 1</text>
-<text x="25" y="95" class="text-neon text-info">RANK         : LOST CIVILIAN</text>
-<text x="400" y="75" class="text-neon text-info">STREAK       : 0 DAYS</text>
+<text x="25" y="95" class="text-neon text-info">RANK         : ROOKIE</text>
+<text x="400" y="75" class="text-neon text-info">STREAK       : 1 DAYS</text>
 <text x="400" y="95" class="text-neon text-info">STATUS       : 0 CLEARED / 1 INVADED</text>
 <rect x="25" y="130" width="12" height="12" class="past-0" />
 <rect x="25" y="145" width="12" height="12" class="past-0" />
@@ -501,11 +501,11 @@
 <rect x="805" y="175" width="12" height="12" class="past-0" />
 <rect x="805" y="190" width="12" height="12" class="past-1" />
 <rect x="805" y="205" width="12" height="12" class="past-1" />
-<rect x="805" y="220" width="12" height="12" class="game-invaded-2" />
+<rect x="805" y="220" width="12" height="12" class="game-invaded-1" />
 <text x="25" y="245" class="text-neon text-medal">ACHIEVEMENTS &amp; MEDALS</text>
-<rect x="25" y="260" width="185" height="45" rx="3" ry="3" class="box-medal-locked" />
-<text x="35" y="278" class="text-dim text-medal">◆ ROOKIE</text>
-<text x="35" y="295" class="text-dim text-medal">[LOCKED: 1 DAYS]</text>
+<rect x="25" y="260" width="185" height="45" rx="3" ry="3" class="box-medal-earned" />
+<text x="35" y="278" class="text-neon text-medal">◆ ROOKIE</text>
+<text x="35" y="295" class="text-neon text-medal">[UNLOCKED]</text>
 <rect x="230" y="260" width="185" height="45" rx="3" ry="3" class="box-medal-locked" />
 <text x="240" y="278" class="text-dim text-medal">▲▲▲ SERGEANT</text>
 <text x="240" y="295" class="text-dim text-medal">[LOCKED: 30 DAYS]</text>
@@ -517,8 +517,8 @@
 <text x="650" y="295" class="text-dim text-medal">[LOCKED: 365 DAYS]</text>
 
         <text y="350" class="text-neon text-info">
-            <animate attributeName="x" from="850" to="-1344" dur="30s" repeatCount="indefinite" />
-            STATIC... ADJUSTING FREQUENCY... /// SUPPLY DROP COORDINATES UPDATED... /// RADIO SILENCE ON 2026-08-15. SECTOR ASSUMED LOST. /// SUPPLY DROP COORDINATES UPDATED... ///
+            <animate attributeName="x" from="850" to="-1288" dur="30s" repeatCount="indefinite" />
+            STATIC... ADJUSTING FREQUENCY... /// SUPPLY DROP COORDINATES UPDATED... /// MAYDAY! BARRICADES BREACHED ON 2026-08-15! /// SUPPLY DROP COORDINATES UPDATED... ///
         </text>
     </g>
     </svg>
