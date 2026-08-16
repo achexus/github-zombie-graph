@@ -4,8 +4,6 @@
 
 Transform your GitHub contribution graph into a post-apocalyptic tactical survival system!
 
-[English](#-english) | [Türkçe](#-türkçe) | [Español](#-español) | [Français](#-français) | [Deutsch](#-deutsch) | [Italiano](#-italiano) | [Português](#-português) | [Русский](#-русский) | [中文](#-中文) | [日本語](#-日本語)
-
 </div>
 
 ---
