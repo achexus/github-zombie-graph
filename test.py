@@ -5,10 +5,10 @@ import sys
 USERNAME = "ACHEXUS"
 GAME_START_DATE = date.today().strftime("%Y-%m-%d")
 
-MSG_OVERKILL = ["TARGET PRACTICE AT SECTOR {date}. OVERWHELMING FIREPOWER USED.", "THREAT NEUTRALIZED ON {date}. NO CASUALTIES REPORTED.", "CLEAN SWEEP. {commits} HITS CONFIRMED ON {date}."]
-MSG_CLEARED = ["CLOSE CALL ON {date}. PERIMETER BARELY SECURED.", "HAND-TO-HAND COMBAT ON {date}. WE HOLD THE LINE.", "SECTOR {date} CLEAR BUT AMMO IS RUNNING DANGEROUSLY LOW."]
-MSG_FAILED = ["MAYDAY! BARRICADES BREACHED ON {date}!", "SECTOR {date} OVERRUN. WE TOOK DOWN {commits} BUT IT WAS NOT ENOUGH.", "DEFENSE FAILED AT {date}. FALLING BACK TO INNER SECTOR."]
-MSG_ZERO = ["RADIO SILENCE ON {date}. SECTOR ASSUMED LOST.", "NO DEFENSIVE ACTION TAKEN ON {date}. WALKERS ROAM FREE.", "CAMERAS SHOW HEAVY INFESTATION AT {date}. NO RESISTANCE."]
+MSG_OVERKILL = ["TARGET PRACTICE AT SECTOR {date}. OVERWHELMING FIREPOWER USED.", "THREAT NEUTRALIZED ON {date}. NO CASUALTIES REPORTED."]
+MSG_CLEARED = ["CLOSE CALL ON {date}. PERIMETER BARELY SECURED.", "HAND-TO-HAND COMBAT ON {date}. WE HOLD THE LINE."]
+MSG_FAILED = ["MAYDAY! BARRICADES BREACHED ON {date}!", "SECTOR {date} OVERRUN. WE TOOK DOWN {commits} BUT IT WAS NOT ENOUGH."]
+MSG_ZERO = ["RADIO SILENCE ON {date}. SECTOR ASSUMED LOST.", "NO DEFENSIVE ACTION TAKEN ON {date}. WALKERS ROAM FREE."]
 MSG_GENERIC = ["STATIC... ADJUSTING FREQUENCY...", "OUTPOST ALPHA REPORTING ALL CLEAR...", "HEARING MOANS FROM THE EASTERN WOODS..."]
 
 def generate_mock_data():
@@ -23,93 +23,119 @@ def generate_mock_data():
         })
     return days
 
-# --- ANİMASYON MODÜLLERİ ---
-def get_radar_svg(x, y):
-    cx = x + 120
-    cy = y + 90
+# --- GELİŞMİŞ ANİMASYON MODÜLLERİ ---
+def get_radar_svg(remaining_zombies, x, y, width, height):
+    cx = x + (width / 2)
+    cy = y + 95 # Radarı biraz daha aşağı aldık
+    
+    # Sadece HAYATTA KALAN (vurulmamış) zombiler kadar nokta çiz
+    dots = ""
+    coords = [(-40, -35), (35, 20), (-15, 45), (45, -25)]
+    for idx in range(min(remaining_zombies, 4)):
+        dx, dy = coords[idx]
+        dots += f"""
+        <circle cx="{cx+dx}" cy="{cy+dy}" r="4" fill="#ff003c">
+            <animate attributeName="opacity" values="0;1;0" dur="3s" begin="{idx * 0.7}s" repeatCount="indefinite" />
+        </circle>
+        """
+        
     return f"""
-    <rect x="{x}" y="{y}" width="240" height="175" class="intel-panel" />
-    <text x="{x+10}" y="{y+20}" class="text-neon text-medal">LOCAL RADAR [50M RADIUS]</text>
-    <circle cx="{cx}" cy="{cy}" r="65" stroke="#1a4d1a" stroke-width="1" fill="none" />
-    <circle cx="{cx}" cy="{cy}" r="45" stroke="#1a4d1a" stroke-width="1" fill="none" />
-    <circle cx="{cx}" cy="{cy}" r="25" stroke="#1a4d1a" stroke-width="1" fill="none" />
-    <line x1="{cx}" y1="{cy-65}" x2="{cx}" y2="{cy+65}" stroke="#1a4d1a" stroke-width="1" />
-    <line x1="{cx-65}" y1="{cy}" x2="{cx+65}" y2="{cy}" stroke="#1a4d1a" stroke-width="1" />
-    
+    <rect x="{x}" y="{y}" width="{width}" height="{height}" class="intel-panel" />
+    <text x="{x+15}" y="{y+25}" class="text-neon text-medal">LOCAL RADAR [50M RADIUS]</text>
+    <circle cx="{cx}" cy="{cy}" r="55" stroke="#1a4d1a" stroke-width="1" fill="none" />
+    <circle cx="{cx}" cy="{cy}" r="35" stroke="#1a4d1a" stroke-width="1" fill="none" />
+    <circle cx="{cx}" cy="{cy}" r="15" stroke="#1a4d1a" stroke-width="1" fill="none" />
+    <line x1="{cx}" y1="{cy-55}" x2="{cx}" y2="{cy+55}" stroke="#1a4d1a" stroke-width="1" />
+    <line x1="{cx-55}" y1="{cy}" x2="{cx+55}" y2="{cy}" stroke="#1a4d1a" stroke-width="1" />
     <g>
-        <path d="M {cx} {cy} L {cx} {cy-65} A 65 65 0 0 1 {cx+65} {cy} Z" fill="rgba(57, 255, 20, 0.15)" />
-        <animateTransform attributeName="transform" type="rotate" from="0 {cx} {cy}" to="360 {cx} {cy}" dur="4s" repeatCount="indefinite" />
+        <path d="M {cx} {cy} L {cx} {cy-55} A 55 55 0 0 1 {cx+55} {cy} Z" fill="rgba(57, 255, 20, 0.15)" />
+        <animateTransform attributeName="transform" type="rotate" from="0 {cx} {cy}" to="360 {cx} {cy}" dur="3.5s" repeatCount="indefinite" />
     </g>
-    
-    <circle cx="{cx-30}" cy="{cy-40}" r="3" fill="#ff003c">
-        <animate attributeName="opacity" values="0;1;0" dur="4s" begin="1s" repeatCount="indefinite" />
-    </circle>
-    <circle cx="{cx+40}" cy="{cy+20}" r="3" fill="#ff003c">
-        <animate attributeName="opacity" values="0;1;0" dur="4s" begin="2.5s" repeatCount="indefinite" />
-    </circle>
-    <circle cx="{cx-15}" cy="{cy+50}" r="3" fill="#ff003c">
-        <animate attributeName="opacity" values="0;1;0" dur="4s" begin="3.5s" repeatCount="indefinite" />
-    </circle>
+    {dots}
     """
 
-def get_live_cam_svg(state, x, y):
-    bg = f'<rect x="{x}" y="{y}" width="240" height="140" class="intel-panel" />'
+def get_live_cam_svg(state, x, y, width, height):
+    bg = f'<rect x="{x}" y="{y}" width="{width}" height="{height}" class="intel-panel" />'
     
     if state == "en_route":
         content = f"""
-        <text x="{x+10}" y="{y+20}" class="text-neon text-medal">LIVE CAM: SQUAD EN ROUTE</text>
-        <line x1="{x+20}" y1="{y+70}" x2="{x+200}" y2="{y+70}" stroke="#1a4d1a" stroke-dasharray="5,5" stroke-width="2" />
-        <circle cx="{x+20}" cy="{y+70}" r="6" fill="#39ff14">
-            <animate attributeName="cx" values="{x+20};{x+200};{x+20}" dur="6s" repeatCount="indefinite" />
-        </circle>
-        <rect x="{x+195}" y="{y+65}" width="10" height="10" fill="#ff003c" opacity="0.7" />
-        <text x="{x+180}" y="{y+95}" class="text-neon" font-size="10">TARGET</text>
+        <text x="{x+15}" y="{y+25}" class="text-neon text-medal">LIVE CAM: SQUAD EN ROUTE</text>
+        <!-- Kayan Yol (Hareket Hissi) -->
+        <line x1="{x+10}" y1="{y+130}" x2="{x+width-10}" y2="{y+130}" stroke="#39ff14" stroke-dasharray="15, 10" stroke-width="2">
+            <animate attributeName="stroke-dashoffset" from="25" to="0" dur="0.4s" repeatCount="indefinite" />
+        </line>
+        <!-- Zırhlı Araç -->
+        <g>
+            <animate attributeName="transform" type="translate" values="0,0; 0,2; 0,0" dur="0.2s" repeatCount="indefinite" />
+            <path d="M {x+50} {y+110} L {x+70} {y+80} L {x+130} {y+80} L {x+150} {y+110} L {x+170} {y+110} L {x+170} {y+125} L {x+50} {y+125} Z" fill="#285473" />
+            <rect x="{x+80}" y="{y+85}" width="20" height="15" fill="#0d1117" />
+            <rect x="{x+110}" y="{y+85}" width="20" height="15" fill="#0d1117" />
+            <!-- Tekerlekler -->
+            <circle cx="{x+80}" cy="{y+125}" r="10" fill="#0d1117" stroke="#39ff14" stroke-width="2" />
+            <circle cx="{x+140}" cy="{y+125}" r="10" fill="#0d1117" stroke="#39ff14" stroke-width="2" />
+        </g>
         """
     elif state == "combat":
         content = f"""
-        <text x="{x+10}" y="{y+20}" class="text-neon text-medal">LIVE CAM: ENGAGING HORDE</text>
-        <!-- Barricade -->
-        <rect x="{x+40}" y="{y+50}" width="15" height="60" fill="#285473" />
-        <!-- Muzzle Flashes -->
-        <line x1="{x+55}" y1="{y+60}" x2="{x+220}" y2="{y+60}" stroke="#39ff14" stroke-width="2" opacity="0">
-            <animate attributeName="opacity" values="0;1;0;0" dur="0.2s" repeatCount="indefinite" />
-        </line>
-        <line x1="{x+55}" y1="{y+90}" x2="{x+220}" y2="{y+90}" stroke="#39ff14" stroke-width="2" opacity="0">
-            <animate attributeName="opacity" values="0;0;0;1;0" dur="0.35s" repeatCount="indefinite" />
-        </line>
-        <!-- Zombies Approaching -->
-        <circle cx="{x+230}" cy="{y+60}" r="5" fill="#ff003c">
-             <animate attributeName="cx" values="{x+230};{x+60}" dur="1.5s" repeatCount="indefinite" />
+        <text x="{x+15}" y="{y+25}" class="text-neon text-medal">LIVE CAM: THERMAL SCOPE (ENGAGING)</text>
+        <!-- Termal Arka Plan -->
+        <rect x="{x+10}" y="{y+40}" width="{width-20}" height="{height-50}" fill="#0a0a2a" rx="4" ry="4" />
+        
+        <!-- Termal Zombiler (Isı İmzası) -->
+        <circle cx="{x+230}" cy="{y+100}" r="8" fill="#ff8c00" opacity="0.8">
+             <animate attributeName="cx" values="{x+250};{x+40}" dur="4s" repeatCount="indefinite" />
+             <animate attributeName="cy" values="{y+100};{y+95};{y+100}" dur="0.5s" repeatCount="indefinite" />
         </circle>
-        <circle cx="{x+200}" cy="{y+90}" r="5" fill="#ff003c">
-             <animate attributeName="cx" values="{x+200};{x+60}" dur="2.1s" repeatCount="indefinite" />
+        <circle cx="{x+180}" cy="{y+120}" r="10" fill="#ff003c" opacity="0.9">
+             <animate attributeName="cx" values="{x+250};{x+40}" dur="5s" repeatCount="indefinite" />
+             <animate attributeName="cy" values="{y+120};{y+115};{y+120}" dur="0.7s" repeatCount="indefinite" />
         </circle>
+        
+        <!-- Sniper Dürbünü (Crosshair) & Geri Tepme (Recoil) -->
+        <g stroke="#39ff14" stroke-width="1.5">
+            <animate attributeName="transform" type="translate" values="0,0; -8,-8; 0,0; 0,0" dur="2.5s" keyTimes="0; 0.05; 0.15; 1" repeatCount="indefinite" />
+            <circle cx="{x+(width/2)}" cy="{y+95}" r="45" fill="rgba(57,255,20,0.05)" />
+            <line x1="{x+(width/2)-60}" y1="{y+95}" x2="{x+(width/2)+60}" y2="{y+95}" />
+            <line x1="{x+(width/2)}" y1="{y+35}" x2="{x+(width/2)}" y2="{y+155}" />
+            <!-- Merkez Lazer Noktası -->
+            <circle cx="{x+(width/2)}" cy="{y+95}" r="2" fill="#ff003c" stroke="none">
+                <animate attributeName="opacity" values="1;0;1" dur="2.5s" repeatCount="indefinite" />
+            </circle>
+        </g>
         """
     elif state == "secure":
         content = f"""
-        <text x="{x+10}" y="{y+20}" class="text-neon text-medal">LIVE CAM: SECTOR SECURE</text>
-        <text x="{x+120}" y="{y+115}" class="text-neon" font-size="14" text-anchor="middle">
-            <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite" />
-            CAMP ESTABLISHED
-        </text>
-        <!-- Campfire -->
-        <polygon points="{x+110},{y+90} {x+120},{y+60} {x+130},{y+90}" fill="#ff8c00">
-            <animate attributeName="points" values="{x+110},{y+90} {x+120},{y+60} {x+130},{y+90}; {x+110},{y+90} {x+120},{y+75} {x+130},{y+90}; {x+110},{y+90} {x+120},{y+60} {x+130},{y+90}" dur="0.6s" repeatCount="indefinite" />
+        <text x="{x+15}" y="{y+25}" class="text-neon text-medal">LIVE CAM: SECTOR SECURE (CITY)</text>
+        
+        <!-- Şehir Silüeti (Skyline) -->
+        <path d="M {x+20} {y+145} L {x+20} {y+80} L {x+40} {y+80} L {x+40} {y+60} L {x+70} {y+60} L {x+70} {y+90} L {x+100} {y+90} L {x+100} {y+50} L {x+140} {y+50} L {x+140} {y+100} L {x+170} {y+100} L {x+170} {y+70} L {x+210} {y+70} L {x+210} {y+145} Z" fill="#1c3242" />
+        
+        <!-- Binalardaki Tek Tük Işıklar -->
+        <rect x="{x+30}" y="{y+90}" width="4" height="4" fill="#39ff14" opacity="0.6" />
+        <rect x="{x+80}" y="{y+100}" width="4" height="4" fill="#39ff14" opacity="0.6" />
+        <rect x="{x+150}" y="{y+80}" width="4" height="4" fill="#39ff14" opacity="0.6" />
+        
+        <!-- Dönen Arama/Kurtarma Projektörü -->
+        <polygon points="{x+120},{y+145} {x+40},{y+40} {x+200},{y+40}" fill="rgba(57, 255, 20, 0.15)">
+            <animate attributeName="points" values="{x+120},{y+145} {x+40},{y+40} {x+200},{y+40}; {x+120},{y+145} {x+100},{y+30} {x+260},{y+30}; {x+120},{y+145} {x+40},{y+40} {x+200},{y+40}" dur="6s" repeatCount="indefinite" />
         </polygon>
-        <rect x="{x+105}" y="{y+90}" width="30" height="6" fill="#4a3b2c" />
+        <text x="{x+132}" y="{y+130}" class="text-neon" font-size="12" text-anchor="middle">SAFE ZONE</text>
         """
     return bg + content
 
 
 def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_count):
-    svg_width = 900
-    svg_height = 680
+    # --- YENİ: GENİŞLETİLMİŞ VE EŞİTLENMİŞ BOYUTLAR ---
+    svg_width = 980
+    svg_height = 740
     
     today_data = days[-1]
     today_date = today_data['date']
     today_commits = today_data['contributionCount']
     random.seed(today_date)
     today_zombies = random.randint(1, 4)
+    
+    remaining_zombies = max(0, today_zombies - today_commits)
     
     if today_commits == 0:
         cam_state = "en_route"
@@ -174,13 +200,14 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
     svg_content += f'<text x="25" y="40" class="text-neon text-title">{USERNAME.upper()} SURVIVAL SYSTEM</text>\n'
     svg_content += f'<text x="25" y="75" class="text-neon text-info">SURVIVAL DAY : {survival_day_count}</text>\n'
     svg_content += f'<text x="25" y="95" class="text-neon text-info">RANK         : {rank.upper()}</text>\n'
-    svg_content += f'<text x="400" y="75" class="text-neon text-info">STREAK       : {streak} DAYS</text>\n'
-    svg_content += f'<text x="400" y="95" class="text-neon text-info">STATUS       : {survived} CLEARED / {invaded} INVADED</text>\n'
+    svg_content += f'<text x="450" y="75" class="text-neon text-info">STREAK       : {streak} DAYS</text>\n'
+    svg_content += f'<text x="450" y="95" class="text-neon text-info">STATUS       : {survived} CLEARED / {invaded} INVADED</text>\n'
     
-    svg_content += f'<rect x="25" y="115" width="850" height="30" class="intel-panel" />\n'
+    svg_content += f'<rect x="25" y="115" width="930" height="30" class="intel-panel" />\n'
     svg_content += f'<text x="35" y="135" class="text-neon text-info">TODAY INTEL | INCOMING ZOMBIES: {today_zombies} | ELIMINATED: {today_commits} | STATUS: <tspan class="text-status">{today_status}</tspan></text>\n'
 
-    box_size = 18 
+    # --- MATEMATİKSEL KUSURSUZ HARİTA HİZALAMASI ---
+    box_size = 20 # Büyütüldü
     gap = 4
     start_x = 25
     start_y = 165 
@@ -235,25 +262,28 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
         extra_class = " current-day" if i == len(days) - 1 else ""
         svg_content += f'<rect x="{x}" y="{y}" width="{box_size}" height="{box_size}" class="{color_class}{extra_class}" />\n'
         
-    # --- YENİ EKLENEN ANİMASYON PANELLERİ (SAĞ TARAF) ---
-    # Map genişliği yaklaşık 600px tutuyor. Sağdaki 300px'lik alanı panellere ayırdık.
-    live_cam_x = 635
-    svg_content += get_live_cam_svg(cam_state, live_cam_x, 165)
-    svg_content += get_radar_svg(live_cam_x, 315)
+    # --- YAN PANELLER (Alt Sınırları Harita ile Eşitlendi: 497. Pixel) ---
+    panel_x = 690
+    panel_width = 265
+    panel_height = 164
+    
+    svg_content += get_live_cam_svg(cam_state, panel_x, 165, panel_width, panel_height)
+    svg_content += get_radar_svg(remaining_zombies, panel_x, 337, panel_width, panel_height)
 
 
-    medal_y = 510
+    # --- MADALYALAR AŞAĞI KAYDIRILDI ---
+    medal_y = 540
     ranks_data = [
         {"name": "ROOKIE", "req": 1, "icon": "◆"},
         {"name": "SERGEANT", "req": 30, "icon": "▲▲▲"},
         {"name": "COMMANDER", "req": 100, "icon": "★"},
         {"name": "WAR HERO", "req": 365, "icon": "❂"}
     ]
-    medal_box_width = 185
-    medal_gap = 20
+    medal_box_width = 200
+    medal_gap = 25
     start_medal_x = 25
     
-    svg_content += f'<text x="25" y="495" class="text-neon text-medal">ACHIEVEMENTS &amp; MEDALS</text>\n'
+    svg_content += f'<text x="25" y="525" class="text-neon text-medal">ACHIEVEMENTS &amp; MEDALS</text>\n'
 
     for idx, r_data in enumerate(ranks_data):
         m_x = start_medal_x + (idx * (medal_box_width + medal_gap))
@@ -273,7 +303,7 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
     animation_duration = max(30, int(len(ticker_text) * 0.05))
     
     svg_content += f"""
-        <text y="610" class="text-neon text-info">
+        <text y="640" class="text-neon text-info">
             <animate attributeName="x" from="{svg_width}" to="{to_x_coord}" dur="{animation_duration}s" repeatCount="indefinite" />
             {ticker_text}
         </text>
@@ -283,7 +313,7 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
     
     with open("test_v2_graph.svg", "w", encoding="utf-8") as file:
         file.write(svg_content)
-    print("[SUCCESS] Ana harita oluşturuldu: 'test_v2_graph.svg'")
+    print("[SUCCESS] Hizalanmış Ana Harita oluşturuldu: 'test_v2_graph.svg'")
 
 def generate_animations_test():
     """Tüm animasyonları aynı anda görebilmen için özel şov dosyası"""
@@ -297,10 +327,10 @@ def generate_animations_test():
     <rect width="100%" height="100%" class="bg" />
     <text x="20" y="30" class="text-neon">ANIMATION SHOWCASE ROOM</text>
     
-    {get_live_cam_svg("en_route", 20, 50)}
-    {get_live_cam_svg("combat", 280, 50)}
-    {get_live_cam_svg("secure", 20, 210)}
-    {get_radar_svg(280, 210)}
+    {get_live_cam_svg("en_route", 20, 50, 265, 164)}
+    {get_live_cam_svg("combat", 300, 50, 265, 164)}
+    {get_live_cam_svg("secure", 20, 230, 265, 164)}
+    {get_radar_svg(4, 300, 230, 265, 164)} 
     </svg>
     """
     with open("test_animasyonlar.svg", "w", encoding="utf-8") as file:
