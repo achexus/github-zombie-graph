@@ -2,36 +2,34 @@ name: Generate Zombie Survival Graph
 
 on:
   schedule:
-    - cron: "0 0 * * *" # Her gece 00:00'da çalışır
-  workflow_dispatch: # Manuel tetikleme butonu
-
-# Botun SVG dosyasını repoya geri pushlayabilmesi için gerekli izin
-permissions:
-  contents: write
+    - cron: "0 0 * * *" # Her gece yarısı otomatik çalışır
+  workflow_dispatch:    # Manuel tetikleme butonu ekler
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Repoyu Klonla
-        uses: actions/checkout@v4
-
-      - name: Python'u Kur
+      - uses: actions/checkout@v3
+      
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
-
-      - name: Gerekli Paketleri Yükle
-        run: pip install -r requirements.txt
-
-      - name: Zombi Hayatta Kalma Kodunu Çalıştır
+          python-version: '3.x'
+          
+      - name: Install Dependencies
+        run: pip install requests python-dotenv
+        
+      - name: Generate Zombie Graph
         env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          GITHUB_USERNAME: ${{ github.repository_owner }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_USERNAME: ${{ github.repository_owner }} # Repoyu kim kurduysa onun ismini çeker
+          GAME_START_DATE: "2026-08-15" # Başkaları kurarken bu tarihi değiştirecek
         run: python zombie.py
-
-      - name: Oluşan SVG Grafiğini Repoya Kaydet
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "Otomatik Güncelleme: Zombi Hayatta Kalma Grafiği"
-          file_pattern: "*.svg"
+        
+      - name: Commit & Push Generated Graph
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add zombi-grafik.svg
+          git commit -m "update: Daily Zombie Survival Intel" || echo "No changes to commit"
+          git push
