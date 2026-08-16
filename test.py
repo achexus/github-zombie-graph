@@ -10,11 +10,51 @@ TOKEN = os.getenv("GITHUB_TOKEN")
 USERNAME = os.getenv("GITHUB_USERNAME", "achexus")
 GAME_START_DATE = "2026-08-15"
 
+# Gün Sonu Raporları (Haritadaki kutular çizilirken kullanılır)
 MSG_OVERKILL = ["TARGET PRACTICE AT SECTOR {date}. OVERWHELMING FIREPOWER USED.", "THREAT NEUTRALIZED ON {date}. NO CASUALTIES REPORTED."]
 MSG_CLEARED = ["CLOSE CALL ON {date}. PERIMETER BARELY SECURED.", "HAND-TO-HAND COMBAT ON {date}. WE HOLD THE LINE."]
 MSG_FAILED = ["MAYDAY! BARRICADES BREACHED ON {date}!", "SECTOR {date} OVERRUN. WE TOOK DOWN {commits} BUT IT WAS NOT ENOUGH."]
 MSG_ZERO = ["RADIO SILENCE ON {date}. SECTOR ASSUMED LOST.", "NO DEFENSIVE ACTION TAKEN ON {date}. WALKERS ROAM FREE."]
-MSG_GENERIC = ["STATIC... ADJUSTING FREQUENCY...", "OUTPOST ALPHA REPORTING ALL CLEAR...", "HEARING MOANS FROM THE EASTERN WOODS..."]
+
+# YENİ: Duruma Göre Akacak 30 Farklı Taktiksel İstihbarat Metni
+MSG_EN_ROUTE = [
+    "RADAR CONTACT ON THE MOVE. WE NEED BACKUP AT THE NEXT CROSSROAD.",
+    "SQUAD EN ROUTE. MULTIPLE BOGEYS DETECTED ON SCANNERS.",
+    "ETA 5 MINUTES. KEEP WEAPONS HOT AND EYES PEELED.",
+    "MOVEMENT IN THE SHADOWS AHEAD. PROCEED WITH CAUTION.",
+    "VEHICLE SYSTEMS NOMINAL. CLOSING IN ON THE TARGET ZONE.",
+    "RADIO DISTURBANCE DETECTED IN THE WESTERN SECTOR. STAY SHARP.",
+    "TRANSPORT MOVING TO GRID ALPHA. PREPARE FOR ENGAGEMENT.",
+    "VISUAL ON STRAGGLERS. RUN THEM OVER OR IGNORE.",
+    "APPROACHING INFESTED TERRITORY. LOCKING DOORS AND LOADING MAGS.",
+    "RADAR PING: UNKNOWN MASS AHEAD. SQUAD, GET READY FOR ANYTHING."
+]
+
+MSG_COMBAT = [
+    "HOT DROP! WE HAVE ENGAGED THE ENEMY! FIRE AT WILL!",
+    "DO NOT LET THEM CROSS THE PERIMETER! HOLD THE LINE!",
+    "RELOADING! COVERING FIRE NEEDED AT THE FLANK!",
+    "THEY ARE BREAKING THROUGH THE WIRE! FALL BACK TO SECONDARY POSITIONS!",
+    "MULTIPLE HOSTILES DOWN, BUT MORE ARE COMING FROM THE WOODS!",
+    "THERMAL SHOWS MASSIVE SWARM! FOCUS FIRE ON THE CENTER!",
+    "GRENADE OUT! CLEAR THE BLAST ZONE!",
+    "TARGET DOWN! SWITCHING TO NEXT HOSTILE!",
+    "AMMO RUNNING LOW! MAKE EVERY SHOT COUNT, NO WARNING SHOTS!",
+    "CLOSE QUARTERS COMBAT AUTHORIZED. DRAW BLADES AND SURVIVE!"
+]
+
+MSG_SECURE = [
+    "SECTOR CLEAR. REBUILDING BARRICADES AND RESTOCKING SUPPLIES.",
+    "HQ, BE ADVISED: WE HEAR SCREAMS FROM GRID C-7. BE CAREFUL OUT THERE.",
+    "ALL HOSTILES NEUTRALIZED. PATROLLING THE BORDERS FOR STRAGGLERS.",
+    "WARNING: OUTPOST DELTA WENT SILENT. STAY ALERT IN SECURE ZONES.",
+    "GATHERING SUPPLIES. NO SIGN OF THE UNDEAD IN THIS SECTOR TODAY.",
+    "MAINTAINING RADIO SILENCE. WE DO NOT WANT TO ATTRACT WANDERERS.",
+    "NEW ZONES REPORTING HEAVY LOSSES. SECURE YOUR PERIMETERS AND CHECK AMMO.",
+    "WEAPONS ON SAFETY. TAKE A BREATH, BUT DO NOT FALL ASLEEP ON WATCH.",
+    "SCAVENGING TEAM RETURNING TO SAFE ZONE. NO BITES REPORTED.",
+    "THE CITY IS QUIET TODAY. ALMOST TOO QUIET. DO NOT DROP YOUR GUARD."
+]
 
 DEFENSE_BADGES = [
     {"name": "IRON SENTRY", "req": 50, "icon": "🛡️", "desc": "Demir Muhafız"},
@@ -93,7 +133,6 @@ def get_radar_svg(remaining_zombies, x, y, width, height):
 def get_live_cam_svg(state, x, y, width, height):
     bg = f'<rect x="{x}" y="{y}" width="{width}" height="{height}" class="intel-panel" />'
     
-    # YENİ: Ortak Canlı Yayın Başlığı (Yanıp Sönen Kırmızı Nokta + Sadece "LIVE" yazısı)
     live_header = f"""
     <circle cx="{x+18}" cy="{y+20}" r="4" fill="#ff003c">
         <animate attributeName="opacity" values="1;0;1" dur="1.5s" repeatCount="indefinite" />
@@ -244,6 +283,14 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
             today_status = "SECURE (CLEARED)"
             status_color = "#39ff14"
 
+    # YENİ: Bugünün durumuna (cam_state) göre ticker mesajlarını seç
+    if cam_state == "en_route":
+        current_msgs = MSG_EN_ROUTE
+    elif cam_state == "combat":
+        current_msgs = MSG_COMBAT
+    else:
+        current_msgs = MSG_SECURE
+
     svg_content = f"""<svg xmlns="http://www.w3.org/2000/svg" width="{svg_width}" height="{svg_height}">
     <style>
         .bg {{ fill: transparent; }}
@@ -294,7 +341,9 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
     svg_content += f'<text x="35" y="135" class="text-neon text-info">TODAY INTEL | INCOMING ZOMBIES: {display_zombies} | ELIMINATED: {display_commits} | STATUS: <tspan class="text-status">{today_status}</tspan></text>\n'
 
     box_size, gap, start_x, start_y = 20, 4, 25, 165 
-    ticker_logs = [random.choice(MSG_GENERIC), random.choice(MSG_GENERIC)]
+    
+    # Hikayeli metinlerin başlangıcı
+    ticker_logs = [random.choice(current_msgs), random.choice(current_msgs)]
     
     for i in range(378):
         week_idx, day_idx = i // 7, i % 7   
@@ -321,9 +370,14 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
                     if fark == 0: color_class = "game-survived-1"
                     elif fark <= 2: color_class = "game-survived-2"
                     else: color_class = "game-survived-3"
+                    ticker_logs.append(random.choice(MSG_CLEARED).format(date=date_str, commits=commits))
                 else:
-                    if commits > 0: color_class = "game-invaded-1"
-                    else: color_class = "game-invaded-2"
+                    if commits > 0: 
+                        color_class = "game-invaded-1"
+                        ticker_logs.append(random.choice(MSG_FAILED).format(date=date_str, commits=commits))
+                    else: 
+                        color_class = "game-invaded-2"
+                        ticker_logs.append(random.choice(MSG_ZERO).format(date=date_str, commits=commits))
             svg_content += f'<rect x="{x}" y="{y}" width="{box_size}" height="{box_size}" class="{color_class}{extra_class}" />\n'
         else:
             svg_content += f'<rect x="{x}" y="{y}" width="{box_size}" height="{box_size}" class="fog-of-war" />\n'
@@ -352,14 +406,14 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
         box_class = "box-medal-earned" if slot["unlocked"] else "box-medal-locked"
         text_class = "text-neon" if slot["unlocked"] else "text-dim"
         
-        # YENİ: Kilitli madalyalarda belirgin şekilde [LOCKED] yazacak
         status_text = "[UNLOCKED]" if slot["unlocked"] else f"[LOCKED: {slot['req']}]"
         
         svg_content += f'<rect x="{m_x}" y="{medal_y}" width="{medal_box_width}" height="45" rx="3" ry="3" class="{box_class}" />\n'
         svg_content += f'<text x="{m_x + 10}" y="{medal_y + 18}" class="{text_class} text-medal">{slot["icon"]} {slot["name"]}</text>\n'
         svg_content += f'<text x="{m_x + 10}" y="{medal_y + 35}" class="{text_class} text-medal">{status_text}</text>\n'
 
-    ticker_logs.append(random.choice(MSG_GENERIC))
+    # Sona da günün durumuyla ilgili bir metin ekle
+    ticker_logs.append(random.choice(current_msgs))
     ticker_text = " /// ".join(ticker_logs) + " ///"
     text_width_px = len(ticker_text) * 8
     to_x_coord = -(text_width_px)
@@ -376,7 +430,7 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
     
     with open("test_v2_graph.svg", "w", encoding="utf-8") as file:
         file.write(svg_content)
-    print(f"[SUCCESS] v0.7.3 UI ve Locked Guncellemeleri Eklendi. Harita: 'test_v2_graph.svg'")
+    print(f"[SUCCESS] v0.7.4 Dinamik Ticker Hikayeleri Eklendi. Harita: 'test_v2_graph.svg'")
 
 def generate_animations_test():
     svg_content = f"""<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400">
@@ -387,7 +441,7 @@ def generate_animations_test():
         .intel-panel {{ fill: rgba(13, 17, 23, 0.8); stroke: #1a4d1a; stroke-width: 1; rx: 4; ry: 4; }}
     </style>
     <rect width="100%" height="100%" class="bg" />
-    <text x="20" y="30" class="text-neon">ANIMATION SHOWCASE ROOM (v0.7.3)</text>
+    <text x="20" y="30" class="text-neon">ANIMATION SHOWCASE ROOM (v0.7.4)</text>
     {get_live_cam_svg("en_route", 20, 50, 265, 164)}
     {get_live_cam_svg("combat", 300, 50, 265, 164)}
     {get_live_cam_svg("secure", 20, 230, 265, 164)}
