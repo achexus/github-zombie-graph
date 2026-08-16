@@ -1,7 +1,3 @@
-# 🧟‍♂️ GitHub Zombie Survival Graph
-
-<br>
-
 <div align="center">
   <a href="#english">🇬🇧 English</a> • 
   <a href="#turkce">🇹🇷 Türkçe</a> • 
