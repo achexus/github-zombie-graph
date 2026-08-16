@@ -48,3 +48,5 @@ jobs:
           git add zombie-graph.svg
           git commit -m "update: Daily Zombie Survival Intel" || echo "No changes to commit"
           git push
+
+          <img src="zombie-graph.svg" alt="Zombie Survival System" />
