@@ -16,7 +16,6 @@ MSG_FAILED = ["MAYDAY! BARRICADES BREACHED ON {date}!", "SECTOR {date} OVERRUN. 
 MSG_ZERO = ["RADIO SILENCE ON {date}. SECTOR ASSUMED LOST.", "NO DEFENSIVE ACTION TAKEN ON {date}. WALKERS ROAM FREE."]
 MSG_GENERIC = ["STATIC... ADJUSTING FREQUENCY...", "OUTPOST ALPHA REPORTING ALL CLEAR...", "HEARING MOANS FROM THE EASTERN WOODS..."]
 
-# --- YENİ: GİZLİ VE DESTANSİ MADALYA HAVUZU ---
 DEFENSE_BADGES = [
     {"name": "IRON SENTRY", "req": 50, "icon": "🛡️", "desc": "Demir Muhafız"},
     {"name": "IMPENETRABLE", "req": 100, "icon": "🏰", "desc": "Aşılmaz Surlar"},
@@ -37,45 +36,22 @@ COMMIT_BADGES = [
 ]
 
 def get_current_epic_badge(value, badges_list):
-    """Değere göre açılmış en son veya sıradaki kilitli madalyayı belirler"""
     earned = [b for b in badges_list if value >= b['req']]
     unearned = [b for b in badges_list if value < b['req']]
-    
-    if not earned:
-        # Hiçbiri açılmamışsa ilkini kilitli döndürür
-        return badges_list[0], False
-    elif unearned:
-        # Açılmış olanlar var ama sırada kilitli olanlar var -> Sıradakini hedef olarak göster
-        return unearned[0], False
-    else:
-        # Hepsi açılmışsa en sonuncuyu göster (Unlocked)
-        return earned[-1], True
+    if not earned: return badges_list[0], False
+    elif unearned: return unearned[0], False
+    else: return earned[-1], True
 
 query = f"""
-query {{
-  user(login: "{USERNAME}") {{
-    contributionsCollection {{
-      contributionCalendar {{
-        totalContributions
-        weeks {{
-          contributionDays {{
-            contributionCount
-            date
-          }}
-        }}
-      }}
-    }}
-  }}
-}}
+query {{ user(login: "{USERNAME}") {{ contributionsCollection {{ contributionCalendar {{
+        totalContributions weeks {{ contributionDays {{ contributionCount date }} }}
+}} }} }} }}
 """
 
 def get_contribution_data():
     print(f"[INTEL] {USERNAME} için GitHub'dan canlı veriler çekiliyor...")
     url = 'https://api.github.com/graphql'
-    headers = {
-        'Authorization': f'Bearer {TOKEN}',
-        'Content-Type': 'application/json'
-    }
+    headers = {'Authorization': f'Bearer {TOKEN}', 'Content-Type': 'application/json'}
     response = requests.post(url, json={'query': query}, headers=headers)
     if response.status_code == 200:
         data = response.json()
@@ -83,8 +59,7 @@ def get_contribution_data():
         weeks = data['data']['user']['contributionsCollection']['contributionCalendar']['weeks']
         days = []
         for week in weeks:
-            for day in week['contributionDays']:
-                days.append(day)
+            for day in week['contributionDays']: days.append(day)
         return days
     return None
 
@@ -117,54 +92,119 @@ def get_radar_svg(remaining_zombies, x, y, width, height):
 
 def get_live_cam_svg(state, x, y, width, height):
     bg = f'<rect x="{x}" y="{y}" width="{width}" height="{height}" class="intel-panel" />'
+    
+    # YENİ: Ortak Canlı Yayın Başlığı (Yanıp Sönen Kırmızı Nokta + Sadece "LIVE" yazısı)
+    live_header = f"""
+    <circle cx="{x+18}" cy="{y+20}" r="4" fill="#ff003c">
+        <animate attributeName="opacity" values="1;0;1" dur="1.5s" repeatCount="indefinite" />
+    </circle>
+    <text x="{x+28}" y="{y+24}" class="text-neon text-medal">LIVE</text>
+    """
+    
     if state == "en_route":
-        content = f"""
-        <text x="{x+15}" y="{y+25}" class="text-neon text-medal">LIVE CAM: SQUAD EN ROUTE</text>
-        <line x1="{x+10}" y1="{y+130}" x2="{x+width-10}" y2="{y+130}" stroke="#39ff14" stroke-dasharray="15, 10" stroke-width="2">
-            <animate attributeName="stroke-dashoffset" from="25" to="0" dur="0.4s" repeatCount="indefinite" />
-        </line>
-        <g>
-            <animate attributeName="transform" type="translate" values="0,0; 0,2; 0,0" dur="0.2s" repeatCount="indefinite" />
-            <path d="M {x+50} {y+110} L {x+70} {y+80} L {x+130} {y+80} L {x+150} {y+110} L {x+170} {y+110} L {x+170} {y+125} L {x+50} {y+125} Z" fill="#285473" />
-            <rect x="{x+80}" y="{y+85}" width="20" height="15" fill="#0d1117" />
-            <rect x="{x+110}" y="{y+85}" width="20" height="15" fill="#0d1117" />
-            <circle cx="{x+80}" cy="{y+125}" r="10" fill="#0d1117" stroke="#39ff14" stroke-width="2" />
-            <circle cx="{x+140}" cy="{y+125}" r="10" fill="#0d1117" stroke="#39ff14" stroke-width="2" />
+        content = live_header + f"""
+        <clipPath id="tire_clip_cam">
+            <rect x="{x+10}" y="{y+40}" width="{width-20}" height="{height-50}" rx="4" />
+        </clipPath>
+        
+        <g clip-path="url(#tire_clip_cam)">
+            <rect x="{x+10}" y="{y+40}" width="{width-20}" height="{height-50}" fill="#0a0a0f" />
+            
+            <line x1="{x+10}" y1="{y+145}" x2="{x+width-10}" y2="{y+145}" stroke="#1a4d1a" stroke-dasharray="35, 25" stroke-width="4">
+                <animate attributeName="stroke-dashoffset" from="60" to="0" dur="0.15s" repeatCount="indefinite" />
+            </line>
+            
+            <g>
+                <animateTransform attributeName="transform" type="translate" values="0,0; 0,4; 0,0" dur="0.25s" repeatCount="indefinite" />
+                <g>
+                    <animateTransform attributeName="transform" type="rotate" from="0 {x+(width/2)} {y+40}" to="360 {x+(width/2)} {y+40}" dur="0.8s" repeatCount="indefinite" />
+                    <circle cx="{x+(width/2)}" cy="{y+40}" r="105" fill="#050a05" stroke="#1a2332" stroke-width="8" />
+                    <circle cx="{x+(width/2)}" cy="{y+40}" r="100" fill="none" stroke="#000000" stroke-width="10" stroke-dasharray="18, 15" />
+                    <circle cx="{x+(width/2)}" cy="{y+40}" r="65" fill="#1c3242" stroke="#0d1117" stroke-width="4" />
+                    
+                    <line x1="{x+(width/2)}" y1="{y+40-65}" x2="{x+(width/2)}" y2="{y+40+65}" stroke="#0d1117" stroke-width="8" />
+                    <line x1="{x+(width/2)-65}" y1="{y+40}" x2="{x+(width/2)+65}" y2="{y+40}" stroke="#0d1117" stroke-width="8" />
+                    <line x1="{x+(width/2)-45}" y1="{y+40-45}" x2="{x+(width/2)+45}" y2="{y+40+45}" stroke="#0d1117" stroke-width="8" />
+                    <line x1="{x+(width/2)-45}" y1="{y+40+45}" x2="{x+(width/2)+45}" y2="{y+40-45}" stroke="#0d1117" stroke-width="8" />
+                    
+                    <circle cx="{x+(width/2)}" cy="{y+40}" r="18" fill="#0d1117" />
+                </g>
+            </g>
         </g>
+        <rect x="{x+10}" y="{y+40}" width="{width-20}" height="{height-50}" fill="none" stroke="#1a4d1a" stroke-width="1" rx="4" />
         """
     elif state == "combat":
-        content = f"""
-        <text x="{x+15}" y="{y+25}" class="text-neon text-medal">LIVE CAM: THERMAL SCOPE (ENGAGING)</text>
-        <rect x="{x+10}" y="{y+40}" width="{width-20}" height="{height-50}" fill="#0a0a2a" rx="4" ry="4" />
-        <circle cx="{x+230}" cy="{y+100}" r="8" fill="#ff8c00" opacity="0.8">
-             <animate attributeName="cx" values="{x+250};{x+40}" dur="4s" repeatCount="indefinite" />
-             <animate attributeName="cy" values="{y+100};{y+95};{y+100}" dur="0.5s" repeatCount="indefinite" />
-        </circle>
-        <circle cx="{x+180}" cy="{y+120}" r="10" fill="#ff003c" opacity="0.9">
-             <animate attributeName="cx" values="{x+250};{x+40}" dur="5s" repeatCount="indefinite" />
-             <animate attributeName="cy" values="{y+120};{y+115};{y+120}" dur="0.7s" repeatCount="indefinite" />
-        </circle>
+        content = live_header + f"""
+        <rect x="{x+10}" y="{y+40}" width="{width-20}" height="{height-50}" fill="#050510" rx="4" ry="4" />
+        
+        <g>
+            <animateTransform attributeName="transform" type="translate" values="0,0; 0,-12; 0,0" dur="1.5s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="1;1;0;0" keyTimes="0;0.7;0.8;1" dur="4s" repeatCount="indefinite" />
+            <circle cx="{x+240}" cy="{y+100}" r="15" fill="#FF0000" opacity="0.6">
+                 <animate attributeName="cx" values="{x+240};{x+40}" dur="4s" repeatCount="indefinite" />
+            </circle>
+            <circle cx="{x+240}" cy="{y+100}" r="9" fill="#FF8C00" opacity="0.9">
+                 <animate attributeName="cx" values="{x+240};{x+40}" dur="4s" repeatCount="indefinite" />
+            </circle>
+            <circle cx="{x+240}" cy="{y+100}" r="4" fill="#FFFFFF" opacity="1">
+                 <animate attributeName="cx" values="{x+240};{x+40}" dur="4s" repeatCount="indefinite" />
+            </circle>
+        </g>
+
+        <g>
+            <animateTransform attributeName="transform" type="translate" values="0,0; 0,-8; 0,0" dur="1.2s" repeatCount="indefinite" />
+            <animate attributeName="opacity" values="1;1;0;0" keyTimes="0;0.8;0.9;1" dur="5s" repeatCount="indefinite" />
+            <circle cx="{x+220}" cy="{y+130}" r="18" fill="#FF0000" opacity="0.5">
+                 <animate attributeName="cx" values="{x+220};{x+40}" dur="5s" repeatCount="indefinite" />
+            </circle>
+            <circle cx="{x+220}" cy="{y+130}" r="11" fill="#FFD700" opacity="0.8">
+                 <animate attributeName="cx" values="{x+220};{x+40}" dur="5s" repeatCount="indefinite" />
+            </circle>
+            <circle cx="{x+220}" cy="{y+130}" r="5" fill="#FFFFFF" opacity="1">
+                 <animate attributeName="cx" values="{x+220};{x+40}" dur="5s" repeatCount="indefinite" />
+            </circle>
+        </g>
+        
         <g stroke="#39ff14" stroke-width="1.5">
-            <animate attributeName="transform" type="translate" values="0,0; -8,-8; 0,0; 0,0" dur="2.5s" keyTimes="0; 0.05; 0.15; 1" repeatCount="indefinite" />
+            <animateTransform attributeName="transform" type="translate" values="0,0; 30,8; -20,-10; 0,0" dur="4s" repeatCount="indefinite" />
             <circle cx="{x+(width/2)}" cy="{y+95}" r="45" fill="rgba(57,255,20,0.05)" />
             <line x1="{x+(width/2)-60}" y1="{y+95}" x2="{x+(width/2)+60}" y2="{y+95}" />
             <line x1="{x+(width/2)}" y1="{y+35}" x2="{x+(width/2)}" y2="{y+155}" />
-            <circle cx="{x+(width/2)}" cy="{y+95}" r="2" fill="#ff003c" stroke="none">
-                <animate attributeName="opacity" values="1;0;1" dur="2.5s" repeatCount="indefinite" />
+            <circle cx="{x+(width/2)}" cy="{y+95}" r="2" fill="#39ff14" stroke="none">
+                <animate attributeName="opacity" values="1;0;1" dur="0.8s" repeatCount="indefinite" />
             </circle>
         </g>
         """
     elif state == "secure":
-        content = f"""
-        <text x="{x+15}" y="{y+25}" class="text-neon text-medal">LIVE CAM: SECTOR SECURE (CITY)</text>
-        <path d="M {x+20} {y+145} L {x+20} {y+80} L {x+40} {y+80} L {x+40} {y+60} L {x+70} {y+60} L {x+70} {y+90} L {x+100} {y+90} L {x+100} {y+50} L {x+140} {y+50} L {x+140} {y+100} L {x+170} {y+100} L {x+170} {y+70} L {x+210} {y+70} L {x+210} {y+145} Z" fill="#1c3242" />
-        <rect x="{x+30}" y="{y+90}" width="4" height="4" fill="#39ff14" opacity="0.6" />
-        <rect x="{x+80}" y="{y+100}" width="4" height="4" fill="#39ff14" opacity="0.6" />
-        <rect x="{x+150}" y="{y+80}" width="4" height="4" fill="#39ff14" opacity="0.6" />
-        <polygon points="{x+120},{y+145} {x+40},{y+40} {x+200},{y+40}" fill="rgba(57, 255, 20, 0.15)">
-            <animate attributeName="points" values="{x+120},{y+145} {x+40},{y+40} {x+200},{y+40}; {x+120},{y+145} {x+100},{y+30} {x+260},{y+30}; {x+120},{y+145} {x+40},{y+40} {x+200},{y+40}" dur="6s" repeatCount="indefinite" />
-        </polygon>
-        <text x="{x+132}" y="{y+130}" class="text-neon" font-size="12" text-anchor="middle">SAFE ZONE</text>
+        content = live_header + f"""
+        <rect x="{x+10}" y="{y+40}" width="{width-20}" height="{height-50}" fill="#0d1117" rx="4" ry="4" />
+        
+        <path d="M {x+10} {y+70} L {x+width-10} {y+70} M {x+10} {y+105} L {x+width-10} {y+105} M {x+10} {y+140} L {x+width-10} {y+140}" stroke="#1a2332" stroke-width="4" />
+        <path d="M {x+60} {y+40} L {x+60} {y+height-10} M {x+130} {y+40} L {x+130} {y+height-10} M {x+200} {y+40} L {x+200} {y+height-10}" stroke="#1a2332" stroke-width="4" />
+        
+        <rect x="{x+20}" y="{y+45}" width="30" height="20" fill="#1c3242" />
+        <rect x="{x+70}" y="{y+45}" width="50" height="20" fill="#285473" />
+        <rect x="{x+140}" y="{y+45}" width="50" height="20" fill="#1c3242" />
+        <rect x="{x+210}" y="{y+45}" width="40" height="20" fill="#285473" />
+        
+        <rect x="{x+20}" y="{y+75}" width="30" height="25" fill="#285473" />
+        <rect x="{x+70}" y="{y+75}" width="50" height="25" fill="#1c3242" />
+        <rect x="{x+140}" y="{y+75}" width="50" height="25" fill="#1c3242" />
+        <rect x="{x+210}" y="{y+75}" width="40" height="25" fill="#285473" />
+        
+        <rect x="{x+20}" y="{y+110}" width="30" height="25" fill="#1c3242" />
+        <rect x="{x+70}" y="{y+110}" width="50" height="25" fill="#285473" />
+        
+        <rect x="{x+135}" y="{y+110}" width="115" height="25" fill="rgba(57, 255, 20, 0.15)" stroke="#39ff14" stroke-width="1" />
+        <circle cx="{x+150}" cy="{y+122}" r="3" fill="#39ff14">
+            <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite" />
+        </circle>
+        <text x="{x+195}" y="{y+126}" class="text-neon" font-size="11" text-anchor="middle">SAFE ZONE</text>
+        
+        <line x1="{x+10}" y1="{y+40}" x2="{x+10}" y2="{y+height-10}" stroke="rgba(57, 255, 20, 0.5)" stroke-width="2">
+            <animate attributeName="x1" values="{x+10};{x+width-10};{x+10}" dur="5s" repeatCount="indefinite" />
+            <animate attributeName="x2" values="{x+10};{x+width-10};{x+10}" dur="5s" repeatCount="indefinite" />
+        </line>
         """
     return bg + content
 
@@ -214,38 +254,26 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
         .text-info {{ font-size: 14px; }}
         .text-medal {{ font-size: 12px; }}
         .text-status {{ fill: {status_color}; font-family: 'Courier New', Courier, monospace; font-weight: bold; font-size: 14px; }}
-        
         .box-medal-earned {{ fill: rgba(57, 255, 20, 0.05); stroke: #39ff14; stroke-width: 1; }}
         .box-medal-locked {{ fill: transparent; stroke: #1a4d1a; stroke-width: 1; stroke-dasharray: 4; }}
         .intel-panel {{ fill: rgba(13, 17, 23, 0.8); stroke: #1a4d1a; stroke-width: 1; rx: 4; ry: 4; }}
-        
         .fog-of-war {{ fill: rgba(13, 17, 23, 0.3); stroke: #1a4d1a; stroke-width: 1; stroke-dasharray: 2; opacity: 0.8; }}
-
         .past-0 {{ fill: #0d1117; stroke: #1a2332; stroke-width: 1; rx: 2; ry: 2; }}
         .past-1 {{ fill: #1c3242; rx: 2; ry: 2; }}
         .past-2 {{ fill: #285473; rx: 2; ry: 2; }}
         .past-3 {{ fill: #3679a6; rx: 2; ry: 2; }}
         .past-4 {{ fill: #459fdb; rx: 2; ry: 2; }}
-
         .game-survived-1 {{ fill: #1f6b11; rx: 2; ry: 2; }} 
         .game-survived-2 {{ fill: #2c9e17; rx: 2; ry: 2; }} 
         .game-survived-3 {{ fill: #39ff14; rx: 2; ry: 2; }} 
-        
         .game-invaded-1 {{ fill: #8a0020; rx: 2; ry: 2; }}  
         .game-invaded-2 {{ fill: #ff003c; rx: 2; ry: 2; }}  
-
-        @keyframes pulse-beacon {{
-            0% {{ fill-opacity: 1; stroke: #ffffff; stroke-width: 1px; }}
-            50% {{ fill-opacity: 0.4; stroke: #39ff14; stroke-width: 3px; }}
-            100% {{ fill-opacity: 1; stroke: #ffffff; stroke-width: 1px; }}
-        }}
+        @keyframes pulse-beacon {{ 0% {{ fill-opacity: 1; stroke: #ffffff; stroke-width: 1px; }} 50% {{ fill-opacity: 0.4; stroke: #39ff14; stroke-width: 3px; }} 100% {{ fill-opacity: 1; stroke: #ffffff; stroke-width: 1px; }} }}
         .current-day {{ animation: pulse-beacon 1.5s infinite; rx: 3; ry: 3; }}
-
         @keyframes crt-flicker {{ 0% {{ opacity: 0.95; }} 5% {{ opacity: 0.85; }} 10% {{ opacity: 0.95; }} 15% {{ opacity: 1.0; }} 50% {{ opacity: 0.98; }} 100% {{ opacity: 0.95; }} }}
         @keyframes system-glitch {{ 0% {{ transform: translate(0, 0); }} 2% {{ transform: translate(1px, -1px); }} 4% {{ transform: translate(-1px, 1px); }} 6% {{ transform: translate(0, 0); }} 100% {{ transform: translate(0, 0); }} }}
         .screen {{ animation: crt-flicker 0.15s infinite, system-glitch 4s infinite; }}
     </style>
-    
     <rect width="{svg_width}" height="{svg_height}" class="bg" />
     <g class="screen">
     """
@@ -259,43 +287,24 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
     svg_content += f'<text x="450" y="75" class="text-neon text-info">STREAK       : {streak} DAYS</text>\n'
     svg_content += f'<text x="450" y="95" class="text-neon text-info">STATUS       : {survived} CLEARED / {invaded} INVADED</text>\n'
     
-    if today_str < GAME_START_DATE:
-        display_zombies = 0
-        display_commits = 0
-    else:
-        display_zombies = today_zombies
-        display_commits = today_commits
+    display_zombies = 0 if today_str < GAME_START_DATE else today_zombies
+    display_commits = 0 if today_str < GAME_START_DATE else today_commits
 
     svg_content += f'<rect x="25" y="115" width="930" height="30" class="intel-panel" />\n'
     svg_content += f'<text x="35" y="135" class="text-neon text-info">TODAY INTEL | INCOMING ZOMBIES: {display_zombies} | ELIMINATED: {display_commits} | STATUS: <tspan class="text-status">{today_status}</tspan></text>\n'
 
-    box_size = 20 
-    gap = 4
-    start_x = 25
-    start_y = 165 
-    
+    box_size, gap, start_x, start_y = 20, 4, 25, 165 
     ticker_logs = [random.choice(MSG_GENERIC), random.choice(MSG_GENERIC)]
-    total_grid_slots = 378
     
-    for i in range(total_grid_slots):
-        week_idx = i // 7  
-        day_idx = i % 7   
-        
-        if week_idx < 27:
-            col = week_idx
-            row = day_idx
-        else:
-            col = week_idx - 27
-            row = day_idx + 7
-        
-        x = start_x + (col * (box_size + gap))
-        y = start_y + (row * (box_size + gap))
+    for i in range(378):
+        week_idx, day_idx = i // 7, i % 7   
+        col = week_idx if week_idx < 27 else week_idx - 27
+        row = day_idx if week_idx < 27 else day_idx + 7
+        x, y = start_x + (col * (box_size + gap)), start_y + (row * (box_size + gap))
         
         if i < len(days):
             day = days[i]
-            date_str = day['date']
-            commits = day['contributionCount']
-            
+            date_str, commits = day['date'], day['contributionCount']
             extra_class = " current-day" if i == len(days) - 1 else ""
             
             if date_str < GAME_START_DATE:
@@ -309,66 +318,27 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
                 zombies = random.randint(1, 4)
                 if commits >= zombies:
                     fark = commits - zombies
-                    if fark == 0: 
-                        color_class = "game-survived-1"
-                        ticker_logs.append(random.choice(MSG_CLEARED).format(date=date_str, commits=commits))
-                    elif fark <= 2: 
-                        color_class = "game-survived-2"
-                        ticker_logs.append(random.choice(MSG_CLEARED).format(date=date_str, commits=commits))
-                    else: 
-                        color_class = "game-survived-3"
-                        ticker_logs.append(random.choice(MSG_OVERKILL).format(date=date_str, commits=commits))
+                    if fark == 0: color_class = "game-survived-1"
+                    elif fark <= 2: color_class = "game-survived-2"
+                    else: color_class = "game-survived-3"
                 else:
-                    if commits > 0: 
-                        color_class = "game-invaded-1"
-                        ticker_logs.append(random.choice(MSG_FAILED).format(date=date_str, commits=commits))
-                    else: 
-                        color_class = "game-invaded-2"
-                        ticker_logs.append(random.choice(MSG_ZERO).format(date=date_str, commits=commits))
-                        
+                    if commits > 0: color_class = "game-invaded-1"
+                    else: color_class = "game-invaded-2"
             svg_content += f'<rect x="{x}" y="{y}" width="{box_size}" height="{box_size}" class="{color_class}{extra_class}" />\n'
         else:
-            color_class = "fog-of-war"
-            svg_content += f'<rect x="{x}" y="{y}" width="{box_size}" height="{box_size}" class="{color_class}" />\n'
+            svg_content += f'<rect x="{x}" y="{y}" width="{box_size}" height="{box_size}" class="fog-of-war" />\n'
         
-    panel_x = 690
-    panel_width = 265
-    panel_height = 164
-    
+    panel_x, panel_width, panel_height = 690, 265, 164
     svg_content += get_live_cam_svg(cam_state, panel_x, 165, panel_width, panel_height)
     svg_content += get_radar_svg(remaining_zombies, panel_x, 337, panel_width, panel_height)
 
-    # --- YENİ 4'LÜ SLOT MADALYA SİSTEMİ ---
-    medal_y = 540
-    medal_box_width = 200
-    medal_gap = 25
-    start_medal_x = 25
-    
-    # 1. Slot: Ana Rütbe (Sergeant / Commander vb.)
-    ranks_data = [
-        {"name": "ROOKIE", "req": 1, "icon": "◆"},
-        {"name": "SERGEANT", "req": 30, "icon": "▲▲▲"},
-        {"name": "COMMANDER", "req": 100, "icon": "★"},
-        {"name": "WAR HERO", "req": 365, "icon": "❂"}
-    ]
-    # Aktif rütbeyi bul
-    active_rank = ranks_data[0]
-    for r in ranks_data:
-        if streak >= r["req"]:
-            active_rank = r
-
-    # 2. Slot: Genel İlerleme (Sonraki rütbe hedefi veya War Hero)
-    next_rank = ranks_data[-1]
-    for idx, r in enumerate(ranks_data):
-        if streak < r["req"]:
-            next_rank = r
-            break
-
-    # 3. ve 4. Slotlar: Savunma ve Commit (Katliam) Destansı Başarımları
+    medal_y, medal_box_width, medal_gap, start_medal_x = 540, 200, 25, 25
+    ranks_data = [{"name": "ROOKIE", "req": 1, "icon": "◆"}, {"name": "SERGEANT", "req": 30, "icon": "▲▲▲"}, {"name": "COMMANDER", "req": 100, "icon": "★"}, {"name": "WAR HERO", "req": 365, "icon": "❂"}]
+    active_rank = next((r for r in reversed(ranks_data) if streak >= r["req"]), ranks_data[0])
+    next_rank = next((r for r in ranks_data if streak < r["req"]), ranks_data[-1])
     def_badge, def_unlocked = get_current_epic_badge(survived, DEFENSE_BADGES)
     commit_badge, commit_unlocked = get_current_epic_badge(total_commits, COMMIT_BADGES)
 
-    # Slotları listeliyoruz (1. Slot Rütbe, 2. Slot Sıradaki Rütbe/Hedef, 3. Slot Savunma, 4. Slot Katliam)
     slots = [
         {"name": active_rank["name"], "req": active_rank["req"], "icon": active_rank["icon"], "unlocked": True, "type": "RANK"},
         {"name": next_rank["name"], "req": next_rank["req"], "icon": next_rank["icon"], "unlocked": streak >= next_rank["req"], "type": "GOAL"},
@@ -377,19 +347,17 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
     ]
     
     svg_content += f'<text x="25" y="525" class="text-neon text-medal">ACHIEVEMENTS &amp; MEDALS [TACTICAL SLOTS]</text>\n'
-
     for idx, slot in enumerate(slots):
         m_x = start_medal_x + (idx * (medal_box_width + medal_gap))
         box_class = "box-medal-earned" if slot["unlocked"] else "box-medal-locked"
         text_class = "text-neon" if slot["unlocked"] else "text-dim"
-        status_text = "[UNLOCKED]" if slot["unlocked"] else f"[TARGET: {slot['req']}]"
+        
+        # YENİ: Kilitli madalyalarda belirgin şekilde [LOCKED] yazacak
+        status_text = "[UNLOCKED]" if slot["unlocked"] else f"[LOCKED: {slot['req']}]"
         
         svg_content += f'<rect x="{m_x}" y="{medal_y}" width="{medal_box_width}" height="45" rx="3" ry="3" class="{box_class}" />\n'
         svg_content += f'<text x="{m_x + 10}" y="{medal_y + 18}" class="{text_class} text-medal">{slot["icon"]} {slot["name"]}</text>\n'
         svg_content += f'<text x="{m_x + 10}" y="{medal_y + 35}" class="{text_class} text-medal">{status_text}</text>\n'
-
-    # Ayrıca test edebilmen için ikinci bir şov dosyası (`test_madalya.svg`) oluşturalım
-    generate_medal_showcase(slots)
 
     ticker_logs.append(random.choice(MSG_GENERIC))
     ticker_text = " /// ".join(ticker_logs) + " ///"
@@ -408,48 +376,30 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
     
     with open("test_v2_graph.svg", "w", encoding="utf-8") as file:
         file.write(svg_content)
-    print(f"[SUCCESS] Destansı Madalya Slotları Eklendi: 'test_v2_graph.svg'")
+    print(f"[SUCCESS] v0.7.3 UI ve Locked Guncellemeleri Eklendi. Harita: 'test_v2_graph.svg'")
 
-def generate_medal_showcase(slots):
-    """Sadece yeni madalya slotlarını ve gizli rütbeleri ayrı inceleyebilmen için özel test dosyası"""
-    svg_content = f"""<svg xmlns="http://www.w3.org/2000/svg" width="900" height="200">
+def generate_animations_test():
+    svg_content = f"""<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400">
     <style>
         .bg {{ fill: #050a05; }}
         .text-neon {{ fill: #39ff14; font-family: 'Courier New', Courier, monospace; font-weight: bold; font-size: 14px;}}
-        .text-dim {{ fill: #1a4d1a; font-family: 'Courier New', Courier, monospace; font-weight: bold; font-size: 14px;}}
-        .box-medal-earned {{ fill: rgba(57, 255, 20, 0.05); stroke: #39ff14; stroke-width: 1; }}
-        .box-medal-locked {{ fill: transparent; stroke: #1a4d1a; stroke-width: 1; stroke-dasharray: 4; }}
+        .text-medal {{ font-size: 12px; }}
+        .intel-panel {{ fill: rgba(13, 17, 23, 0.8); stroke: #1a4d1a; stroke-width: 1; rx: 4; ry: 4; }}
     </style>
     <rect width="100%" height="100%" class="bg" />
-    <text x="25" y="30" class="text-neon">EPIC MEDAL SLOTS SHOWCASE ROOM</text>
+    <text x="20" y="30" class="text-neon">ANIMATION SHOWCASE ROOM (v0.7.3)</text>
+    {get_live_cam_svg("en_route", 20, 50, 265, 164)}
+    {get_live_cam_svg("combat", 300, 50, 265, 164)}
+    {get_live_cam_svg("secure", 20, 230, 265, 164)}
+    </svg>
     """
-    
-    medal_y = 60
-    medal_box_width = 200
-    medal_gap = 25
-    start_medal_x = 25
-    
-    for idx, slot in enumerate(slots):
-        m_x = start_medal_x + (idx * (medal_box_width + medal_gap))
-        box_class = "box-medal-earned" if slot["unlocked"] else "box-medal-locked"
-        text_class = "text-neon" if slot["unlocked"] else "text-dim"
-        status_text = "[UNLOCKED]" if slot["unlocked"] else f"[TARGET: {slot['req']}]"
-        
-        svg_content += f'<rect x="{m_x}" y="{medal_y}" width="{medal_box_width}" height="65" rx="3" ry="3" class="{box_class}" />\n'
-        svg_content += f'<text x="{m_x + 10}" y="{medal_y + 22}" class="{text_class}">{slot["icon"]} [{slot["type"]}]</text>\n'
-        svg_content += f'<text x="{m_x + 10}" y="{medal_y + 42}" class="{text_class}" font-size="12">{slot["name"]}</text>\n'
-        svg_content += f'<text x="{m_x + 10}" y="{medal_y + 58}" class="{text_class}" font-size="10">{status_text}</text>\n'
-
-    svg_content += "</svg>"
-    with open("test_madalya.svg", "w", encoding="utf-8") as file:
+    with open("test_animasyonlar.svg", "w", encoding="utf-8") as file:
         file.write(svg_content)
-    print("[SUCCESS] Madalya Vitrin Dosyası Oluşturuldu: 'test_madalya.svg'")
+    print("[SUCCESS] SVG Animasyon şov dosyası oluşturuldu: 'test_animasyonlar.svg'")
 
 def simulate_zombie_survival(days):
     active_days = [day for day in days if day['date'] >= GAME_START_DATE]
-    
     if not active_days: 
-        print("[INTEL] Sistem Standby Modunda. Oyun henüz başlamadı (0. Gün).")
         generate_pipboy_svg(days, streak=0, rank="ROOKIE", survived=0, invaded=0, survival_day_count=0, total_commits=0)
         return
 
@@ -461,12 +411,9 @@ def simulate_zombie_survival(days):
     total_commits = sum(d['contributionCount'] for d in active_days)
 
     for i, day in enumerate(reversed(active_days)):
-        if day['contributionCount'] > 0: 
-            streak += 1
-        elif i == 0 and day['contributionCount'] == 0: 
-            continue
-        else: 
-            break
+        if day['contributionCount'] > 0: streak += 1
+        elif i == 0 and day['contributionCount'] == 0: continue
+        else: break
             
     if streak >= 365: rank = "WAR HERO"
     elif streak >= 100: rank = "COMMANDER"
@@ -480,25 +427,17 @@ def simulate_zombie_survival(days):
     
     for d in active_days:
         date_str = d['date']
-        if date_str >= today_str:
-            continue
-            
+        if date_str >= today_str: continue
         commits = d['contributionCount']
         random.seed(date_str)
         zombies = random.randint(1, 4)
-        
-        if commits >= zombies:
-            total_survived += 1
-        else:
-            total_invaded += 1 
-    
-    print(f"[STATS] Rütbe: {rank} | Streak: {streak} | Survived (Def): {total_survived} | Invaded: {total_invaded} | Commits (Kills): {total_commits}")
+        if commits >= zombies: total_survived += 1
+        else: total_invaded += 1 
     
     generate_pipboy_svg(days, streak, rank, total_survived, total_invaded, survival_day, total_commits)
+    generate_animations_test()
 
 if __name__ == "__main__":
     real_github_data = get_contribution_data()
-    if real_github_data:
-        simulate_zombie_survival(real_github_data)
-    else:
-        print("[ERROR] Veri çekilemedi.")
+    if real_github_data: simulate_zombie_survival(real_github_data)
+    else: print("[ERROR] Veri çekilemedi.")

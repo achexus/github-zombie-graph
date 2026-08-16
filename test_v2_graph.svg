@@ -7,39 +7,27 @@
         .text-title { font-size: 22px; }
         .text-info { font-size: 14px; }
         .text-medal { font-size: 12px; }
-        .text-status { fill: #ff8c00; font-family: 'Courier New', Courier, monospace; font-weight: bold; font-size: 14px; }
-        
+        .text-status { fill: #39ff14; font-family: 'Courier New', Courier, monospace; font-weight: bold; font-size: 14px; }
         .box-medal-earned { fill: rgba(57, 255, 20, 0.05); stroke: #39ff14; stroke-width: 1; }
         .box-medal-locked { fill: transparent; stroke: #1a4d1a; stroke-width: 1; stroke-dasharray: 4; }
         .intel-panel { fill: rgba(13, 17, 23, 0.8); stroke: #1a4d1a; stroke-width: 1; rx: 4; ry: 4; }
-        
         .fog-of-war { fill: rgba(13, 17, 23, 0.3); stroke: #1a4d1a; stroke-width: 1; stroke-dasharray: 2; opacity: 0.8; }
-
         .past-0 { fill: #0d1117; stroke: #1a2332; stroke-width: 1; rx: 2; ry: 2; }
         .past-1 { fill: #1c3242; rx: 2; ry: 2; }
         .past-2 { fill: #285473; rx: 2; ry: 2; }
         .past-3 { fill: #3679a6; rx: 2; ry: 2; }
         .past-4 { fill: #459fdb; rx: 2; ry: 2; }
-
         .game-survived-1 { fill: #1f6b11; rx: 2; ry: 2; } 
         .game-survived-2 { fill: #2c9e17; rx: 2; ry: 2; } 
         .game-survived-3 { fill: #39ff14; rx: 2; ry: 2; } 
-        
         .game-invaded-1 { fill: #8a0020; rx: 2; ry: 2; }  
         .game-invaded-2 { fill: #ff003c; rx: 2; ry: 2; }  
-
-        @keyframes pulse-beacon {
-            0% { fill-opacity: 1; stroke: #ffffff; stroke-width: 1px; }
-            50% { fill-opacity: 0.4; stroke: #39ff14; stroke-width: 3px; }
-            100% { fill-opacity: 1; stroke: #ffffff; stroke-width: 1px; }
-        }
+        @keyframes pulse-beacon { 0% { fill-opacity: 1; stroke: #ffffff; stroke-width: 1px; } 50% { fill-opacity: 0.4; stroke: #39ff14; stroke-width: 3px; } 100% { fill-opacity: 1; stroke: #ffffff; stroke-width: 1px; } }
         .current-day { animation: pulse-beacon 1.5s infinite; rx: 3; ry: 3; }
-
         @keyframes crt-flicker { 0% { opacity: 0.95; } 5% { opacity: 0.85; } 10% { opacity: 0.95; } 15% { opacity: 1.0; } 50% { opacity: 0.98; } 100% { opacity: 0.95; } }
         @keyframes system-glitch { 0% { transform: translate(0, 0); } 2% { transform: translate(1px, -1px); } 4% { transform: translate(-1px, 1px); } 6% { transform: translate(0, 0); } 100% { transform: translate(0, 0); } }
         .screen { animation: crt-flicker 0.15s infinite, system-glitch 4s infinite; }
     </style>
-    
     <rect width="980" height="740" class="bg" />
     <g class="screen">
     <line x1="0" y1="0" x2="980" y2="0" class="scanline" />
@@ -233,7 +221,7 @@
 <text x="450" y="75" class="text-neon text-info">STREAK       : 2 DAYS</text>
 <text x="450" y="95" class="text-neon text-info">STATUS       : 1 CLEARED / 0 INVADED</text>
 <rect x="25" y="115" width="930" height="30" class="intel-panel" />
-<text x="35" y="135" class="text-neon text-info">TODAY INTEL | INCOMING ZOMBIES: 4 | ELIMINATED: 1 | STATUS: <tspan class="text-status">BREACHED (ENGAGING)</tspan></text>
+<text x="35" y="135" class="text-neon text-info">TODAY INTEL | INCOMING ZOMBIES: 4 | ELIMINATED: 8 | STATUS: <tspan class="text-status">SECURE (CLEARED)</tspan></text>
 <rect x="25" y="165" width="20" height="20" class="past-0" />
 <rect x="25" y="189" width="20" height="20" class="past-0" />
 <rect x="25" y="213" width="20" height="20" class="past-0" />
@@ -598,7 +586,7 @@
 <rect x="601" y="429" width="20" height="20" class="past-1" />
 <rect x="601" y="453" width="20" height="20" class="past-1" />
 <rect x="601" y="477" width="20" height="20" class="game-survived-3" />
-<rect x="625" y="333" width="20" height="20" class="game-invaded-1 current-day" />
+<rect x="625" y="333" width="20" height="20" class="game-survived-3 current-day" />
 <rect x="625" y="357" width="20" height="20" class="fog-of-war" />
 <rect x="625" y="381" width="20" height="20" class="fog-of-war" />
 <rect x="625" y="405" width="20" height="20" class="fog-of-war" />
@@ -613,25 +601,39 @@
 <rect x="649" y="453" width="20" height="20" class="fog-of-war" />
 <rect x="649" y="477" width="20" height="20" class="fog-of-war" />
 <rect x="690" y="165" width="265" height="164" class="intel-panel" />
-        <text x="705" y="190" class="text-neon text-medal">LIVE CAM: THERMAL SCOPE (ENGAGING)</text>
-        <rect x="700" y="205" width="245" height="114" fill="#0a0a2a" rx="4" ry="4" />
-        <circle cx="920" cy="265" r="8" fill="#ff8c00" opacity="0.8">
-             <animate attributeName="cx" values="940;730" dur="4s" repeatCount="indefinite" />
-             <animate attributeName="cy" values="265;260;265" dur="0.5s" repeatCount="indefinite" />
+    <circle cx="708" cy="185" r="4" fill="#ff003c">
+        <animate attributeName="opacity" values="1;0;1" dur="1.5s" repeatCount="indefinite" />
+    </circle>
+    <text x="718" y="189" class="text-neon text-medal">LIVE</text>
+    
+        <rect x="700" y="205" width="245" height="114" fill="#0d1117" rx="4" ry="4" />
+        
+        <path d="M 700 235 L 945 235 M 700 270 L 945 270 M 700 305 L 945 305" stroke="#1a2332" stroke-width="4" />
+        <path d="M 750 205 L 750 319 M 820 205 L 820 319 M 890 205 L 890 319" stroke="#1a2332" stroke-width="4" />
+        
+        <rect x="710" y="210" width="30" height="20" fill="#1c3242" />
+        <rect x="760" y="210" width="50" height="20" fill="#285473" />
+        <rect x="830" y="210" width="50" height="20" fill="#1c3242" />
+        <rect x="900" y="210" width="40" height="20" fill="#285473" />
+        
+        <rect x="710" y="240" width="30" height="25" fill="#285473" />
+        <rect x="760" y="240" width="50" height="25" fill="#1c3242" />
+        <rect x="830" y="240" width="50" height="25" fill="#1c3242" />
+        <rect x="900" y="240" width="40" height="25" fill="#285473" />
+        
+        <rect x="710" y="275" width="30" height="25" fill="#1c3242" />
+        <rect x="760" y="275" width="50" height="25" fill="#285473" />
+        
+        <rect x="825" y="275" width="115" height="25" fill="rgba(57, 255, 20, 0.15)" stroke="#39ff14" stroke-width="1" />
+        <circle cx="840" cy="287" r="3" fill="#39ff14">
+            <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite" />
         </circle>
-        <circle cx="870" cy="285" r="10" fill="#ff003c" opacity="0.9">
-             <animate attributeName="cx" values="940;730" dur="5s" repeatCount="indefinite" />
-             <animate attributeName="cy" values="285;280;285" dur="0.7s" repeatCount="indefinite" />
-        </circle>
-        <g stroke="#39ff14" stroke-width="1.5">
-            <animate attributeName="transform" type="translate" values="0,0; -8,-8; 0,0; 0,0" dur="2.5s" keyTimes="0; 0.05; 0.15; 1" repeatCount="indefinite" />
-            <circle cx="822.5" cy="260" r="45" fill="rgba(57,255,20,0.05)" />
-            <line x1="762.5" y1="260" x2="882.5" y2="260" />
-            <line x1="822.5" y1="200" x2="822.5" y2="320" />
-            <circle cx="822.5" cy="260" r="2" fill="#ff003c" stroke="none">
-                <animate attributeName="opacity" values="1;0;1" dur="2.5s" repeatCount="indefinite" />
-            </circle>
-        </g>
+        <text x="885" y="291" class="text-neon" font-size="11" text-anchor="middle">SAFE ZONE</text>
+        
+        <line x1="700" y1="205" x2="700" y2="319" stroke="rgba(57, 255, 20, 0.5)" stroke-width="2">
+            <animate attributeName="x1" values="700;945;700" dur="5s" repeatCount="indefinite" />
+            <animate attributeName="x2" values="700;945;700" dur="5s" repeatCount="indefinite" />
+        </line>
         
     <rect x="690" y="337" width="265" height="164" class="intel-panel" />
     <text x="705" y="362" class="text-neon text-medal">LOCAL RADAR [50M RADIUS]</text>
@@ -645,35 +647,23 @@
         <animateTransform attributeName="transform" type="rotate" from="0 822.5 432" to="360 822.5 432" dur="3.5s" repeatCount="indefinite" />
     </g>
     
-        <circle cx="782.5" cy="397" r="4" fill="#ff003c">
-            <animate attributeName="opacity" values="0;1;0" dur="3s" begin="0.0s" repeatCount="indefinite" />
-        </circle>
-        
-        <circle cx="857.5" cy="452" r="4" fill="#ff003c">
-            <animate attributeName="opacity" values="0;1;0" dur="3s" begin="0.7s" repeatCount="indefinite" />
-        </circle>
-        
-        <circle cx="807.5" cy="477" r="4" fill="#ff003c">
-            <animate attributeName="opacity" values="0;1;0" dur="3s" begin="1.4s" repeatCount="indefinite" />
-        </circle>
-        
     <text x="25" y="525" class="text-neon text-medal">ACHIEVEMENTS &amp; MEDALS [TACTICAL SLOTS]</text>
 <rect x="25" y="540" width="200" height="45" rx="3" ry="3" class="box-medal-earned" />
 <text x="35" y="558" class="text-neon text-medal">◆ ROOKIE</text>
 <text x="35" y="575" class="text-neon text-medal">[UNLOCKED]</text>
 <rect x="250" y="540" width="200" height="45" rx="3" ry="3" class="box-medal-locked" />
 <text x="260" y="558" class="text-dim text-medal">▲▲▲ SERGEANT</text>
-<text x="260" y="575" class="text-dim text-medal">[TARGET: 30]</text>
+<text x="260" y="575" class="text-dim text-medal">[LOCKED: 30]</text>
 <rect x="475" y="540" width="200" height="45" rx="3" ry="3" class="box-medal-locked" />
 <text x="485" y="558" class="text-dim text-medal">🛡️ IRON SENTRY</text>
-<text x="485" y="575" class="text-dim text-medal">[TARGET: 50]</text>
+<text x="485" y="575" class="text-dim text-medal">[LOCKED: 50]</text>
 <rect x="700" y="540" width="200" height="45" rx="3" ry="3" class="box-medal-locked" />
 <text x="710" y="558" class="text-dim text-medal">🗡️ FLESH RIPPER</text>
-<text x="710" y="575" class="text-dim text-medal">[TARGET: 100]</text>
+<text x="710" y="575" class="text-dim text-medal">[LOCKED: 100]</text>
 
         <text y="640" class="text-neon text-info">
-            <animate attributeName="x" from="980" to="-1992" dur="30s" repeatCount="indefinite" />
-            HEARING MOANS FROM THE EASTERN WOODS... /// HEARING MOANS FROM THE EASTERN WOODS... /// TARGET PRACTICE AT SECTOR 2026-08-15. OVERWHELMING FIREPOWER USED. /// MAYDAY! BARRICADES BREACHED ON 2026-08-16! /// HEARING MOANS FROM THE EASTERN WOODS... ///
+            <animate attributeName="x" from="980" to="-1048" dur="30s" repeatCount="indefinite" />
+            HEARING MOANS FROM THE EASTERN WOODS... /// HEARING MOANS FROM THE EASTERN WOODS... /// HEARING MOANS FROM THE EASTERN WOODS... ///
         </text>
     </g>
     </svg>
