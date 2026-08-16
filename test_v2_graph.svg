@@ -13,7 +13,6 @@
         .box-medal-locked { fill: transparent; stroke: #1a4d1a; stroke-width: 1; stroke-dasharray: 4; }
         .intel-panel { fill: rgba(13, 17, 23, 0.8); stroke: #1a4d1a; stroke-width: 1; rx: 4; ry: 4; }
         
-        /* Sis Perdesi: Sadece haritanın sonundaki boşlukları doldurmak için */
         .fog-of-war { fill: rgba(13, 17, 23, 0.3); stroke: #1a4d1a; stroke-width: 1; stroke-dasharray: 2; opacity: 0.8; }
 
         .past-0 { fill: #0d1117; stroke: #1a2332; stroke-width: 1; rx: 2; ry: 2; }
@@ -232,7 +231,7 @@
 <text x="25" y="75" class="text-neon text-info">SURVIVAL DAY : 1</text>
 <text x="25" y="95" class="text-neon text-info">RANK         : ROOKIE</text>
 <text x="450" y="75" class="text-neon text-info">STREAK       : 2 DAYS</text>
-<text x="450" y="95" class="text-neon text-info">STATUS       : 1 CLEARED / 1 INVADED</text>
+<text x="450" y="95" class="text-neon text-info">STATUS       : 1 CLEARED / 0 INVADED</text>
 <rect x="25" y="115" width="930" height="30" class="intel-panel" />
 <text x="35" y="135" class="text-neon text-info">TODAY INTEL | INCOMING ZOMBIES: 4 | ELIMINATED: 1 | STATUS: <tspan class="text-status">BREACHED (ENGAGING)</tspan></text>
 <rect x="25" y="165" width="20" height="20" class="past-0" />
@@ -658,19 +657,19 @@
             <animate attributeName="opacity" values="0;1;0" dur="3s" begin="1.4s" repeatCount="indefinite" />
         </circle>
         
-    <text x="25" y="525" class="text-neon text-medal">ACHIEVEMENTS &amp; MEDALS</text>
+    <text x="25" y="525" class="text-neon text-medal">ACHIEVEMENTS &amp; MEDALS [TACTICAL SLOTS]</text>
 <rect x="25" y="540" width="200" height="45" rx="3" ry="3" class="box-medal-earned" />
 <text x="35" y="558" class="text-neon text-medal">◆ ROOKIE</text>
 <text x="35" y="575" class="text-neon text-medal">[UNLOCKED]</text>
 <rect x="250" y="540" width="200" height="45" rx="3" ry="3" class="box-medal-locked" />
 <text x="260" y="558" class="text-dim text-medal">▲▲▲ SERGEANT</text>
-<text x="260" y="575" class="text-dim text-medal">[LOCKED: 30 DAYS]</text>
+<text x="260" y="575" class="text-dim text-medal">[TARGET: 30]</text>
 <rect x="475" y="540" width="200" height="45" rx="3" ry="3" class="box-medal-locked" />
-<text x="485" y="558" class="text-dim text-medal">★ COMMANDER</text>
-<text x="485" y="575" class="text-dim text-medal">[LOCKED: 100 DAYS]</text>
+<text x="485" y="558" class="text-dim text-medal">🛡️ IRON SENTRY</text>
+<text x="485" y="575" class="text-dim text-medal">[TARGET: 50]</text>
 <rect x="700" y="540" width="200" height="45" rx="3" ry="3" class="box-medal-locked" />
-<text x="710" y="558" class="text-dim text-medal">❂ WAR HERO</text>
-<text x="710" y="575" class="text-dim text-medal">[LOCKED: 365 DAYS]</text>
+<text x="710" y="558" class="text-dim text-medal">🗡️ FLESH RIPPER</text>
+<text x="710" y="575" class="text-dim text-medal">[TARGET: 100]</text>
 
         <text y="640" class="text-neon text-info">
             <animate attributeName="x" from="980" to="-1992" dur="30s" repeatCount="indefinite" />

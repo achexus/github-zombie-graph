@@ -1,15 +1,13 @@
 import os
 import requests
 import random
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from dotenv import load_dotenv
 
 load_dotenv()
 
-# GERÇEK GITHUB BİLGİLERİ
 TOKEN = os.getenv("GITHUB_TOKEN")
 USERNAME = os.getenv("GITHUB_USERNAME", "achexus")
-# OYUNUN GERÇEK BAŞLANGIÇ TARİHİ (Gün 0 Kuralı)
 GAME_START_DATE = "2026-08-15"
 
 MSG_OVERKILL = ["TARGET PRACTICE AT SECTOR {date}. OVERWHELMING FIREPOWER USED.", "THREAT NEUTRALIZED ON {date}. NO CASUALTIES REPORTED."]
@@ -17,6 +15,41 @@ MSG_CLEARED = ["CLOSE CALL ON {date}. PERIMETER BARELY SECURED.", "HAND-TO-HAND 
 MSG_FAILED = ["MAYDAY! BARRICADES BREACHED ON {date}!", "SECTOR {date} OVERRUN. WE TOOK DOWN {commits} BUT IT WAS NOT ENOUGH."]
 MSG_ZERO = ["RADIO SILENCE ON {date}. SECTOR ASSUMED LOST.", "NO DEFENSIVE ACTION TAKEN ON {date}. WALKERS ROAM FREE."]
 MSG_GENERIC = ["STATIC... ADJUSTING FREQUENCY...", "OUTPOST ALPHA REPORTING ALL CLEAR...", "HEARING MOANS FROM THE EASTERN WOODS..."]
+
+# --- YENİ: GİZLİ VE DESTANSİ MADALYA HAVUZU ---
+DEFENSE_BADGES = [
+    {"name": "IRON SENTRY", "req": 50, "icon": "🛡️", "desc": "Demir Muhafız"},
+    {"name": "IMPENETRABLE", "req": 100, "icon": "🏰", "desc": "Aşılmaz Surlar"},
+    {"name": "SIEGE BREAKER", "req": 500, "icon": "⚔️", "desc": "Kuşatma Kıran"},
+    {"name": "TITAN BULWARK", "req": 1500, "icon": "⛰️", "desc": "Titan Kalkanı"},
+    {"name": "ETERNAL HAVEN", "req": 3000, "icon": "🏛️", "desc": "Ebedi Sığınak"},
+    {"name": "WORLD CITADEL", "req": 5000, "icon": "👑", "desc": "Dünyanın Sonu Kalesi"}
+]
+
+COMMIT_BADGES = [
+    {"name": "FLESH RIPPER", "req": 100, "icon": "🗡️", "desc": "Et Parçalayan"},
+    {"name": "APEX PREDATOR", "req": 500, "icon": "🐺", "desc": "Zirve Avcısı"},
+    {"name": "SOUL HARVESTER", "req": 1000, "icon": "💀", "desc": "Can Söken"},
+    {"name": "PURE CARNAGE", "req": 2500, "icon": "🩸", "desc": "Saf Kıyım"},
+    {"name": "APOCALYPSE ENG", "req": 5000, "icon": "⚙️", "desc": "Kıyamet Çarkı"},
+    {"name": "WALKING CALAMITY", "req": 10000, "icon": "⚡", "desc": "Yürüyen Felaket"},
+    {"name": "ABS EXTINCTION", "req": 50000, "icon": "🌌", "desc": "Mutlak Yok Oluş"}
+]
+
+def get_current_epic_badge(value, badges_list):
+    """Değere göre açılmış en son veya sıradaki kilitli madalyayı belirler"""
+    earned = [b for b in badges_list if value >= b['req']]
+    unearned = [b for b in badges_list if value < b['req']]
+    
+    if not earned:
+        # Hiçbiri açılmamışsa ilkini kilitli döndürür
+        return badges_list[0], False
+    elif unearned:
+        # Açılmış olanlar var ama sırada kilitli olanlar var -> Sıradakini hedef olarak göster
+        return unearned[0], False
+    else:
+        # Hepsi açılmışsa en sonuncuyu göster (Unlocked)
+        return earned[-1], True
 
 query = f"""
 query {{
@@ -46,23 +79,18 @@ def get_contribution_data():
     response = requests.post(url, json={'query': query}, headers=headers)
     if response.status_code == 200:
         data = response.json()
-        if 'errors' in data: 
-            print("[ERROR] GitHub API Hatası:", data['errors'])
-            return None
+        if 'errors' in data: return None
         weeks = data['data']['user']['contributionsCollection']['contributionCalendar']['weeks']
         days = []
         for week in weeks:
             for day in week['contributionDays']:
                 days.append(day)
-        print("[INTEL] Veriler başarıyla alındı!")
         return days
-    print(f"[ERROR] Bağlantı Hatası: {response.status_code}")
     return None
 
 def get_radar_svg(remaining_zombies, x, y, width, height):
     cx = x + (width / 2)
     cy = y + 95
-    
     dots = ""
     coords = [(-40, -35), (35, 20), (-15, 45), (45, -25)]
     for idx in range(min(remaining_zombies, 4)):
@@ -72,7 +100,6 @@ def get_radar_svg(remaining_zombies, x, y, width, height):
             <animate attributeName="opacity" values="0;1;0" dur="3s" begin="{idx * 0.7}s" repeatCount="indefinite" />
         </circle>
         """
-        
     return f"""
     <rect x="{x}" y="{y}" width="{width}" height="{height}" class="intel-panel" />
     <text x="{x+15}" y="{y+25}" class="text-neon text-medal">LOCAL RADAR [50M RADIUS]</text>
@@ -90,7 +117,6 @@ def get_radar_svg(remaining_zombies, x, y, width, height):
 
 def get_live_cam_svg(state, x, y, width, height):
     bg = f'<rect x="{x}" y="{y}" width="{width}" height="{height}" class="intel-panel" />'
-    
     if state == "en_route":
         content = f"""
         <text x="{x+15}" y="{y+25}" class="text-neon text-medal">LIVE CAM: SQUAD EN ROUTE</text>
@@ -142,21 +168,24 @@ def get_live_cam_svg(state, x, y, width, height):
         """
     return bg + content
 
-
-def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_count):
+def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_count, total_commits):
     svg_width = 980
     svg_height = 740
     
-    today_data = days[-1]
-    today_date_str = today_data['date']
-    today_commits = today_data['contributionCount']
+    day_map = {d['date']: d['contributionCount'] for d in days}
+    today_date_obj = date.today()
+    today_str = today_date_obj.strftime("%Y-%m-%d")
     
-    random.seed(today_date_str)
+    gh_weekday = (today_date_obj.weekday() + 1) % 7 
+    grid_end_date = today_date_obj + timedelta(days=(6 - gh_weekday))
+    grid_start_date = grid_end_date - timedelta(days=377)
+    
+    today_commits = day_map.get(today_str, 0)
+    random.seed(today_str)
     today_zombies = random.randint(1, 4)
     remaining_zombies = max(0, today_zombies - today_commits)
     
-    if today_date_str < GAME_START_DATE:
-        # Eğer oyun henüz başlamadıysa radar ve kameralar "Standby" veya güvenli modda görünsün
+    if today_str < GAME_START_DATE:
         cam_state = "secure"
         today_status = "SYSTEM STANDBY (PRE-INVASION)"
         status_color = "#39ff14"
@@ -190,7 +219,6 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
         .box-medal-locked {{ fill: transparent; stroke: #1a4d1a; stroke-width: 1; stroke-dasharray: 4; }}
         .intel-panel {{ fill: rgba(13, 17, 23, 0.8); stroke: #1a4d1a; stroke-width: 1; rx: 4; ry: 4; }}
         
-        /* Sis Perdesi: Sadece haritanın sonundaki boşlukları doldurmak için */
         .fog-of-war {{ fill: rgba(13, 17, 23, 0.3); stroke: #1a4d1a; stroke-width: 1; stroke-dasharray: 2; opacity: 0.8; }}
 
         .past-0 {{ fill: #0d1117; stroke: #1a2332; stroke-width: 1; rx: 2; ry: 2; }}
@@ -231,8 +259,7 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
     svg_content += f'<text x="450" y="75" class="text-neon text-info">STREAK       : {streak} DAYS</text>\n'
     svg_content += f'<text x="450" y="95" class="text-neon text-info">STATUS       : {survived} CLEARED / {invaded} INVADED</text>\n'
     
-    # Bugünün durumu paneli
-    if today_date_str < GAME_START_DATE:
+    if today_str < GAME_START_DATE:
         display_zombies = 0
         display_commits = 0
     else:
@@ -248,15 +275,12 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
     start_y = 165 
     
     ticker_logs = [random.choice(MSG_GENERIC), random.choice(MSG_GENERIC)]
-    
-    # Haritayı oluştur: 27 Sütun x 14 Satır = Tam 378 Kare
     total_grid_slots = 378
     
     for i in range(total_grid_slots):
         week_idx = i // 7  
         day_idx = i % 7   
         
-        # Haritayı ikiye katlama matematiği
         if week_idx < 27:
             col = week_idx
             row = day_idx
@@ -267,16 +291,13 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
         x = start_x + (col * (box_size + gap))
         y = start_y + (row * (box_size + gap))
         
-        # Eğer i indisi GitHub'dan gelen gün sayısından küçükse GERÇEK VERİYİ çiz
         if i < len(days):
             day = days[i]
             date_str = day['date']
             commits = day['contributionCount']
             
-            # Son güne "Radar/Aktif Gün" animasyonu ekle
             extra_class = " current-day" if i == len(days) - 1 else ""
             
-            # GÜN SIFIR KURALI: Başlangıçtan önceki günler "Mavi Topoloji" (Stat dışı savaşlar)
             if date_str < GAME_START_DATE:
                 if commits == 0: color_class = "past-0"
                 elif commits <= 2: color_class = "past-1"
@@ -284,7 +305,6 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
                 elif commits <= 6: color_class = "past-3"
                 else: color_class = "past-4"
             else:
-                # Oyun başladıktan sonraki günler ZOMBI İSTİLASI renkleri
                 random.seed(date_str)
                 zombies = random.randint(1, 4)
                 if commits >= zombies:
@@ -307,13 +327,10 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
                         ticker_logs.append(random.choice(MSG_ZERO).format(date=date_str, commits=commits))
                         
             svg_content += f'<rect x="{x}" y="{y}" width="{box_size}" height="{box_size}" class="{color_class}{extra_class}" />\n'
-            
         else:
-            # GITHUB VERİSİ BİTTİ (Haritanın sonunda kalan eksik boşluklar) -> SİS PERDESİ EKLE
             color_class = "fog-of-war"
             svg_content += f'<rect x="{x}" y="{y}" width="{box_size}" height="{box_size}" class="{color_class}" />\n'
         
-    # --- YAN PANELLER ---
     panel_x = 690
     panel_width = 265
     panel_height = 164
@@ -321,30 +338,58 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
     svg_content += get_live_cam_svg(cam_state, panel_x, 165, panel_width, panel_height)
     svg_content += get_radar_svg(remaining_zombies, panel_x, 337, panel_width, panel_height)
 
-    # --- MADALYALAR ---
+    # --- YENİ 4'LÜ SLOT MADALYA SİSTEMİ ---
     medal_y = 540
+    medal_box_width = 200
+    medal_gap = 25
+    start_medal_x = 25
+    
+    # 1. Slot: Ana Rütbe (Sergeant / Commander vb.)
     ranks_data = [
         {"name": "ROOKIE", "req": 1, "icon": "◆"},
         {"name": "SERGEANT", "req": 30, "icon": "▲▲▲"},
         {"name": "COMMANDER", "req": 100, "icon": "★"},
         {"name": "WAR HERO", "req": 365, "icon": "❂"}
     ]
-    medal_box_width = 200
-    medal_gap = 25
-    start_medal_x = 25
-    
-    svg_content += f'<text x="25" y="525" class="text-neon text-medal">ACHIEVEMENTS &amp; MEDALS</text>\n'
+    # Aktif rütbeyi bul
+    active_rank = ranks_data[0]
+    for r in ranks_data:
+        if streak >= r["req"]:
+            active_rank = r
 
-    for idx, r_data in enumerate(ranks_data):
+    # 2. Slot: Genel İlerleme (Sonraki rütbe hedefi veya War Hero)
+    next_rank = ranks_data[-1]
+    for idx, r in enumerate(ranks_data):
+        if streak < r["req"]:
+            next_rank = r
+            break
+
+    # 3. ve 4. Slotlar: Savunma ve Commit (Katliam) Destansı Başarımları
+    def_badge, def_unlocked = get_current_epic_badge(survived, DEFENSE_BADGES)
+    commit_badge, commit_unlocked = get_current_epic_badge(total_commits, COMMIT_BADGES)
+
+    # Slotları listeliyoruz (1. Slot Rütbe, 2. Slot Sıradaki Rütbe/Hedef, 3. Slot Savunma, 4. Slot Katliam)
+    slots = [
+        {"name": active_rank["name"], "req": active_rank["req"], "icon": active_rank["icon"], "unlocked": True, "type": "RANK"},
+        {"name": next_rank["name"], "req": next_rank["req"], "icon": next_rank["icon"], "unlocked": streak >= next_rank["req"], "type": "GOAL"},
+        {"name": def_badge["name"], "req": def_badge["req"], "icon": def_badge["icon"], "unlocked": def_unlocked, "type": "DEFENSE"},
+        {"name": commit_badge["name"], "req": commit_badge["req"], "icon": commit_badge["icon"], "unlocked": commit_unlocked, "type": "COMMIT"}
+    ]
+    
+    svg_content += f'<text x="25" y="525" class="text-neon text-medal">ACHIEVEMENTS &amp; MEDALS [TACTICAL SLOTS]</text>\n'
+
+    for idx, slot in enumerate(slots):
         m_x = start_medal_x + (idx * (medal_box_width + medal_gap))
-        is_earned = streak >= r_data["req"]
-        box_class = "box-medal-earned" if is_earned else "box-medal-locked"
-        text_class = "text-neon" if is_earned else "text-dim"
-        status_text = "[UNLOCKED]" if is_earned else f"[LOCKED: {r_data['req']} DAYS]"
+        box_class = "box-medal-earned" if slot["unlocked"] else "box-medal-locked"
+        text_class = "text-neon" if slot["unlocked"] else "text-dim"
+        status_text = "[UNLOCKED]" if slot["unlocked"] else f"[TARGET: {slot['req']}]"
         
         svg_content += f'<rect x="{m_x}" y="{medal_y}" width="{medal_box_width}" height="45" rx="3" ry="3" class="{box_class}" />\n'
-        svg_content += f'<text x="{m_x + 10}" y="{medal_y + 18}" class="{text_class} text-medal">{r_data["icon"]} {r_data["name"]}</text>\n'
+        svg_content += f'<text x="{m_x + 10}" y="{medal_y + 18}" class="{text_class} text-medal">{slot["icon"]} {slot["name"]}</text>\n'
         svg_content += f'<text x="{m_x + 10}" y="{medal_y + 35}" class="{text_class} text-medal">{status_text}</text>\n'
+
+    # Ayrıca test edebilmen için ikinci bir şov dosyası (`test_madalya.svg`) oluşturalım
+    generate_medal_showcase(slots)
 
     ticker_logs.append(random.choice(MSG_GENERIC))
     ticker_text = " /// ".join(ticker_logs) + " ///"
@@ -363,17 +408,49 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
     
     with open("test_v2_graph.svg", "w", encoding="utf-8") as file:
         file.write(svg_content)
-    print(f"[SUCCESS] Gerçek verilerle Ana Harita (Mavi Topoloji Korumalı) oluşturuldu: 'test_v2_graph.svg'")
+    print(f"[SUCCESS] Destansı Madalya Slotları Eklendi: 'test_v2_graph.svg'")
 
+def generate_medal_showcase(slots):
+    """Sadece yeni madalya slotlarını ve gizli rütbeleri ayrı inceleyebilmen için özel test dosyası"""
+    svg_content = f"""<svg xmlns="http://www.w3.org/2000/svg" width="900" height="200">
+    <style>
+        .bg {{ fill: #050a05; }}
+        .text-neon {{ fill: #39ff14; font-family: 'Courier New', Courier, monospace; font-weight: bold; font-size: 14px;}}
+        .text-dim {{ fill: #1a4d1a; font-family: 'Courier New', Courier, monospace; font-weight: bold; font-size: 14px;}}
+        .box-medal-earned {{ fill: rgba(57, 255, 20, 0.05); stroke: #39ff14; stroke-width: 1; }}
+        .box-medal-locked {{ fill: transparent; stroke: #1a4d1a; stroke-width: 1; stroke-dasharray: 4; }}
+    </style>
+    <rect width="100%" height="100%" class="bg" />
+    <text x="25" y="30" class="text-neon">EPIC MEDAL SLOTS SHOWCASE ROOM</text>
+    """
+    
+    medal_y = 60
+    medal_box_width = 200
+    medal_gap = 25
+    start_medal_x = 25
+    
+    for idx, slot in enumerate(slots):
+        m_x = start_medal_x + (idx * (medal_box_width + medal_gap))
+        box_class = "box-medal-earned" if slot["unlocked"] else "box-medal-locked"
+        text_class = "text-neon" if slot["unlocked"] else "text-dim"
+        status_text = "[UNLOCKED]" if slot["unlocked"] else f"[TARGET: {slot['req']}]"
+        
+        svg_content += f'<rect x="{m_x}" y="{medal_y}" width="{medal_box_width}" height="65" rx="3" ry="3" class="{box_class}" />\n'
+        svg_content += f'<text x="{m_x + 10}" y="{medal_y + 22}" class="{text_class}">{slot["icon"]} [{slot["type"]}]</text>\n'
+        svg_content += f'<text x="{m_x + 10}" y="{medal_y + 42}" class="{text_class}" font-size="12">{slot["name"]}</text>\n'
+        svg_content += f'<text x="{m_x + 10}" y="{medal_y + 58}" class="{text_class}" font-size="10">{status_text}</text>\n'
+
+    svg_content += "</svg>"
+    with open("test_madalya.svg", "w", encoding="utf-8") as file:
+        file.write(svg_content)
+    print("[SUCCESS] Madalya Vitrin Dosyası Oluşturuldu: 'test_madalya.svg'")
 
 def simulate_zombie_survival(days):
-    """Gerçek verileri kullanarak istatistikleri ve rütbeleri hesaplar (Sadece GAME_START_DATE sonrasını sayar)"""
-    # Sadece Oyun Başlangıcından sonraki aktif günleri filtrele
     active_days = [day for day in days if day['date'] >= GAME_START_DATE]
     
     if not active_days: 
         print("[INTEL] Sistem Standby Modunda. Oyun henüz başlamadı (0. Gün).")
-        generate_pipboy_svg(days, streak=0, rank="ROOKIE", survived=0, invaded=0, survival_day_count=0)
+        generate_pipboy_svg(days, streak=0, rank="ROOKIE", survived=0, invaded=0, survival_day_count=0, total_commits=0)
         return
 
     start_date_obj = datetime.strptime(GAME_START_DATE, "%Y-%m-%d").date()
@@ -381,12 +458,12 @@ def simulate_zombie_survival(days):
     survival_day = max(0, (latest_date_obj - start_date_obj).days)
 
     streak = 0
-    # Streak hesaplarken listeyi tersine çevirip (sondan başa) bakıyoruz
+    total_commits = sum(d['contributionCount'] for d in active_days)
+
     for i, day in enumerate(reversed(active_days)):
         if day['contributionCount'] > 0: 
             streak += 1
         elif i == 0 and day['contributionCount'] == 0: 
-            # Bugün (son gün) commit atılmamışsa seriyi hemen bozma
             continue
         else: 
             break
@@ -399,9 +476,13 @@ def simulate_zombie_survival(days):
     
     total_survived = 0
     total_invaded = 0
+    today_str = date.today().strftime("%Y-%m-%d")
     
     for d in active_days:
         date_str = d['date']
+        if date_str >= today_str:
+            continue
+            
         commits = d['contributionCount']
         random.seed(date_str)
         zombies = random.randint(1, 4)
@@ -409,20 +490,15 @@ def simulate_zombie_survival(days):
         if commits >= zombies:
             total_survived += 1
         else:
-            if commits > 0:
-                total_invaded += 1 
-            else:
-                total_invaded += 1 
+            total_invaded += 1 
     
-    print(f"[STATS] Rütbe: {rank} | Streak: {streak} | Survived: {total_survived} | Invaded: {total_invaded}")
+    print(f"[STATS] Rütbe: {rank} | Streak: {streak} | Survived (Def): {total_survived} | Invaded: {total_invaded} | Commits (Kills): {total_commits}")
     
-    generate_pipboy_svg(days, streak, rank, total_survived, total_invaded, survival_day)
-
+    generate_pipboy_svg(days, streak, rank, total_survived, total_invaded, survival_day, total_commits)
 
 if __name__ == "__main__":
     real_github_data = get_contribution_data()
-    
     if real_github_data:
         simulate_zombie_survival(real_github_data)
     else:
-        print("[ERROR] Veri çekilemedi. Lütfen .env dosyanı kontrol et.")
+        print("[ERROR] Veri çekilemedi.")
