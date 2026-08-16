@@ -5,3 +5,12 @@
 </div>
 
 <br>
+
+<div align="center">
+  <a href="#english">🇬🇧 English</a> • 
+  <a href="#turkce">🇹🇷 Türkçe</a> • 
+  <a href="#espanol">🇪🇸 Español</a> • 
+  <a href="#deutsch">🇩🇪 Deutsch</a>
+</div>
+
+---
