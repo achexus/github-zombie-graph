@@ -7,12 +7,15 @@
         .text-title { font-size: 22px; }
         .text-info { font-size: 14px; }
         .text-medal { font-size: 12px; }
-        .text-status { fill: #ff003c; font-family: 'Courier New', Courier, monospace; font-weight: bold; font-size: 14px; }
+        .text-status { fill: #ff8c00; font-family: 'Courier New', Courier, monospace; font-weight: bold; font-size: 14px; }
         
         .box-medal-earned { fill: rgba(57, 255, 20, 0.05); stroke: #39ff14; stroke-width: 1; }
         .box-medal-locked { fill: transparent; stroke: #1a4d1a; stroke-width: 1; stroke-dasharray: 4; }
         .intel-panel { fill: rgba(13, 17, 23, 0.8); stroke: #1a4d1a; stroke-width: 1; rx: 4; ry: 4; }
         
+        /* Sis Perdesi: Sadece haritanın sonundaki boşlukları doldurmak için */
+        .fog-of-war { fill: rgba(13, 17, 23, 0.3); stroke: #1a4d1a; stroke-width: 1; stroke-dasharray: 2; opacity: 0.8; }
+
         .past-0 { fill: #0d1117; stroke: #1a2332; stroke-width: 1; rx: 2; ry: 2; }
         .past-1 { fill: #1c3242; rx: 2; ry: 2; }
         .past-2 { fill: #285473; rx: 2; ry: 2; }
@@ -226,398 +229,409 @@
 <line x1="0" y1="732" x2="980" y2="732" class="scanline" />
 <line x1="0" y1="736" x2="980" y2="736" class="scanline" />
 <text x="25" y="40" class="text-neon text-title">ACHEXUS SURVIVAL SYSTEM</text>
-<text x="25" y="75" class="text-neon text-info">SURVIVAL DAY : 0</text>
+<text x="25" y="75" class="text-neon text-info">SURVIVAL DAY : 1</text>
 <text x="25" y="95" class="text-neon text-info">RANK         : ROOKIE</text>
-<text x="450" y="75" class="text-neon text-info">STREAK       : 12 DAYS</text>
-<text x="450" y="95" class="text-neon text-info">STATUS       : 0 CLEARED / 0 INVADED</text>
+<text x="450" y="75" class="text-neon text-info">STREAK       : 2 DAYS</text>
+<text x="450" y="95" class="text-neon text-info">STATUS       : 1 CLEARED / 1 INVADED</text>
 <rect x="25" y="115" width="930" height="30" class="intel-panel" />
-<text x="35" y="135" class="text-neon text-info">TODAY INTEL | INCOMING ZOMBIES: 4 | ELIMINATED: 0 | STATUS: <tspan class="text-status">CRITICAL (EN ROUTE)</tspan></text>
-<rect x="25" y="165" width="20" height="20" class="past-1" />
-<rect x="25" y="189" width="20" height="20" class="past-3" />
-<rect x="25" y="213" width="20" height="20" class="past-1" />
-<rect x="25" y="237" width="20" height="20" class="past-3" />
-<rect x="25" y="261" width="20" height="20" class="past-4" />
+<text x="35" y="135" class="text-neon text-info">TODAY INTEL | INCOMING ZOMBIES: 4 | ELIMINATED: 1 | STATUS: <tspan class="text-status">BREACHED (ENGAGING)</tspan></text>
+<rect x="25" y="165" width="20" height="20" class="past-0" />
+<rect x="25" y="189" width="20" height="20" class="past-0" />
+<rect x="25" y="213" width="20" height="20" class="past-0" />
+<rect x="25" y="237" width="20" height="20" class="past-0" />
+<rect x="25" y="261" width="20" height="20" class="past-0" />
 <rect x="25" y="285" width="20" height="20" class="past-0" />
-<rect x="25" y="309" width="20" height="20" class="past-1" />
-<rect x="49" y="165" width="20" height="20" class="past-1" />
+<rect x="25" y="309" width="20" height="20" class="past-0" />
+<rect x="49" y="165" width="20" height="20" class="past-0" />
 <rect x="49" y="189" width="20" height="20" class="past-0" />
 <rect x="49" y="213" width="20" height="20" class="past-0" />
-<rect x="49" y="237" width="20" height="20" class="past-1" />
-<rect x="49" y="261" width="20" height="20" class="past-2" />
-<rect x="49" y="285" width="20" height="20" class="past-2" />
-<rect x="49" y="309" width="20" height="20" class="past-2" />
+<rect x="49" y="237" width="20" height="20" class="past-0" />
+<rect x="49" y="261" width="20" height="20" class="past-0" />
+<rect x="49" y="285" width="20" height="20" class="past-0" />
+<rect x="49" y="309" width="20" height="20" class="past-0" />
 <rect x="73" y="165" width="20" height="20" class="past-0" />
 <rect x="73" y="189" width="20" height="20" class="past-0" />
-<rect x="73" y="213" width="20" height="20" class="past-1" />
+<rect x="73" y="213" width="20" height="20" class="past-0" />
 <rect x="73" y="237" width="20" height="20" class="past-0" />
-<rect x="73" y="261" width="20" height="20" class="past-2" />
+<rect x="73" y="261" width="20" height="20" class="past-0" />
 <rect x="73" y="285" width="20" height="20" class="past-0" />
-<rect x="73" y="309" width="20" height="20" class="past-3" />
-<rect x="97" y="165" width="20" height="20" class="past-1" />
+<rect x="73" y="309" width="20" height="20" class="past-0" />
+<rect x="97" y="165" width="20" height="20" class="past-0" />
 <rect x="97" y="189" width="20" height="20" class="past-0" />
-<rect x="97" y="213" width="20" height="20" class="past-2" />
+<rect x="97" y="213" width="20" height="20" class="past-0" />
 <rect x="97" y="237" width="20" height="20" class="past-0" />
 <rect x="97" y="261" width="20" height="20" class="past-0" />
 <rect x="97" y="285" width="20" height="20" class="past-0" />
 <rect x="97" y="309" width="20" height="20" class="past-0" />
 <rect x="121" y="165" width="20" height="20" class="past-0" />
-<rect x="121" y="189" width="20" height="20" class="past-2" />
+<rect x="121" y="189" width="20" height="20" class="past-0" />
 <rect x="121" y="213" width="20" height="20" class="past-0" />
 <rect x="121" y="237" width="20" height="20" class="past-0" />
-<rect x="121" y="261" width="20" height="20" class="past-2" />
-<rect x="121" y="285" width="20" height="20" class="past-3" />
-<rect x="121" y="309" width="20" height="20" class="past-2" />
+<rect x="121" y="261" width="20" height="20" class="past-0" />
+<rect x="121" y="285" width="20" height="20" class="past-0" />
+<rect x="121" y="309" width="20" height="20" class="past-0" />
 <rect x="145" y="165" width="20" height="20" class="past-0" />
-<rect x="145" y="189" width="20" height="20" class="past-1" />
+<rect x="145" y="189" width="20" height="20" class="past-0" />
 <rect x="145" y="213" width="20" height="20" class="past-0" />
 <rect x="145" y="237" width="20" height="20" class="past-0" />
 <rect x="145" y="261" width="20" height="20" class="past-1" />
-<rect x="145" y="285" width="20" height="20" class="past-1" />
-<rect x="145" y="309" width="20" height="20" class="past-1" />
-<rect x="169" y="165" width="20" height="20" class="past-2" />
+<rect x="145" y="285" width="20" height="20" class="past-0" />
+<rect x="145" y="309" width="20" height="20" class="past-0" />
+<rect x="169" y="165" width="20" height="20" class="past-0" />
 <rect x="169" y="189" width="20" height="20" class="past-0" />
-<rect x="169" y="213" width="20" height="20" class="past-4" />
+<rect x="169" y="213" width="20" height="20" class="past-0" />
 <rect x="169" y="237" width="20" height="20" class="past-0" />
-<rect x="169" y="261" width="20" height="20" class="past-1" />
+<rect x="169" y="261" width="20" height="20" class="past-0" />
 <rect x="169" y="285" width="20" height="20" class="past-1" />
 <rect x="169" y="309" width="20" height="20" class="past-1" />
-<rect x="193" y="165" width="20" height="20" class="past-0" />
-<rect x="193" y="189" width="20" height="20" class="past-2" />
+<rect x="193" y="165" width="20" height="20" class="past-1" />
+<rect x="193" y="189" width="20" height="20" class="past-0" />
 <rect x="193" y="213" width="20" height="20" class="past-0" />
-<rect x="193" y="237" width="20" height="20" class="past-4" />
-<rect x="193" y="261" width="20" height="20" class="past-2" />
-<rect x="193" y="285" width="20" height="20" class="past-1" />
-<rect x="193" y="309" width="20" height="20" class="past-3" />
-<rect x="217" y="165" width="20" height="20" class="past-2" />
-<rect x="217" y="189" width="20" height="20" class="past-1" />
-<rect x="217" y="213" width="20" height="20" class="past-2" />
-<rect x="217" y="237" width="20" height="20" class="past-1" />
+<rect x="193" y="237" width="20" height="20" class="past-0" />
+<rect x="193" y="261" width="20" height="20" class="past-0" />
+<rect x="193" y="285" width="20" height="20" class="past-0" />
+<rect x="193" y="309" width="20" height="20" class="past-0" />
+<rect x="217" y="165" width="20" height="20" class="past-0" />
+<rect x="217" y="189" width="20" height="20" class="past-0" />
+<rect x="217" y="213" width="20" height="20" class="past-0" />
+<rect x="217" y="237" width="20" height="20" class="past-0" />
 <rect x="217" y="261" width="20" height="20" class="past-0" />
-<rect x="217" y="285" width="20" height="20" class="past-1" />
-<rect x="217" y="309" width="20" height="20" class="past-1" />
-<rect x="241" y="165" width="20" height="20" class="past-2" />
+<rect x="217" y="285" width="20" height="20" class="past-0" />
+<rect x="217" y="309" width="20" height="20" class="past-0" />
+<rect x="241" y="165" width="20" height="20" class="past-0" />
 <rect x="241" y="189" width="20" height="20" class="past-0" />
-<rect x="241" y="213" width="20" height="20" class="past-2" />
-<rect x="241" y="237" width="20" height="20" class="past-3" />
-<rect x="241" y="261" width="20" height="20" class="past-2" />
+<rect x="241" y="213" width="20" height="20" class="past-0" />
+<rect x="241" y="237" width="20" height="20" class="past-0" />
+<rect x="241" y="261" width="20" height="20" class="past-0" />
 <rect x="241" y="285" width="20" height="20" class="past-0" />
 <rect x="241" y="309" width="20" height="20" class="past-0" />
-<rect x="265" y="165" width="20" height="20" class="past-1" />
+<rect x="265" y="165" width="20" height="20" class="past-0" />
 <rect x="265" y="189" width="20" height="20" class="past-0" />
 <rect x="265" y="213" width="20" height="20" class="past-0" />
-<rect x="265" y="237" width="20" height="20" class="past-1" />
+<rect x="265" y="237" width="20" height="20" class="past-0" />
 <rect x="265" y="261" width="20" height="20" class="past-0" />
 <rect x="265" y="285" width="20" height="20" class="past-0" />
 <rect x="265" y="309" width="20" height="20" class="past-0" />
 <rect x="289" y="165" width="20" height="20" class="past-0" />
 <rect x="289" y="189" width="20" height="20" class="past-0" />
 <rect x="289" y="213" width="20" height="20" class="past-0" />
-<rect x="289" y="237" width="20" height="20" class="past-1" />
+<rect x="289" y="237" width="20" height="20" class="past-0" />
 <rect x="289" y="261" width="20" height="20" class="past-0" />
 <rect x="289" y="285" width="20" height="20" class="past-0" />
 <rect x="289" y="309" width="20" height="20" class="past-0" />
-<rect x="313" y="165" width="20" height="20" class="past-2" />
-<rect x="313" y="189" width="20" height="20" class="past-1" />
+<rect x="313" y="165" width="20" height="20" class="past-0" />
+<rect x="313" y="189" width="20" height="20" class="past-0" />
 <rect x="313" y="213" width="20" height="20" class="past-0" />
-<rect x="313" y="237" width="20" height="20" class="past-4" />
+<rect x="313" y="237" width="20" height="20" class="past-0" />
 <rect x="313" y="261" width="20" height="20" class="past-0" />
-<rect x="313" y="285" width="20" height="20" class="past-3" />
-<rect x="313" y="309" width="20" height="20" class="past-3" />
-<rect x="337" y="165" width="20" height="20" class="past-1" />
+<rect x="313" y="285" width="20" height="20" class="past-0" />
+<rect x="313" y="309" width="20" height="20" class="past-0" />
+<rect x="337" y="165" width="20" height="20" class="past-0" />
 <rect x="337" y="189" width="20" height="20" class="past-0" />
-<rect x="337" y="213" width="20" height="20" class="past-1" />
-<rect x="337" y="237" width="20" height="20" class="past-1" />
-<rect x="337" y="261" width="20" height="20" class="past-1" />
-<rect x="337" y="285" width="20" height="20" class="past-1" />
+<rect x="337" y="213" width="20" height="20" class="past-0" />
+<rect x="337" y="237" width="20" height="20" class="past-0" />
+<rect x="337" y="261" width="20" height="20" class="past-0" />
+<rect x="337" y="285" width="20" height="20" class="past-0" />
 <rect x="337" y="309" width="20" height="20" class="past-0" />
-<rect x="361" y="165" width="20" height="20" class="past-4" />
+<rect x="361" y="165" width="20" height="20" class="past-0" />
 <rect x="361" y="189" width="20" height="20" class="past-0" />
 <rect x="361" y="213" width="20" height="20" class="past-0" />
 <rect x="361" y="237" width="20" height="20" class="past-0" />
-<rect x="361" y="261" width="20" height="20" class="past-2" />
+<rect x="361" y="261" width="20" height="20" class="past-0" />
 <rect x="361" y="285" width="20" height="20" class="past-0" />
-<rect x="361" y="309" width="20" height="20" class="past-2" />
-<rect x="385" y="165" width="20" height="20" class="past-2" />
-<rect x="385" y="189" width="20" height="20" class="past-2" />
+<rect x="361" y="309" width="20" height="20" class="past-0" />
+<rect x="385" y="165" width="20" height="20" class="past-0" />
+<rect x="385" y="189" width="20" height="20" class="past-0" />
 <rect x="385" y="213" width="20" height="20" class="past-0" />
-<rect x="385" y="237" width="20" height="20" class="past-2" />
+<rect x="385" y="237" width="20" height="20" class="past-0" />
 <rect x="385" y="261" width="20" height="20" class="past-0" />
 <rect x="385" y="285" width="20" height="20" class="past-0" />
-<rect x="385" y="309" width="20" height="20" class="past-3" />
+<rect x="385" y="309" width="20" height="20" class="past-0" />
 <rect x="409" y="165" width="20" height="20" class="past-0" />
 <rect x="409" y="189" width="20" height="20" class="past-0" />
 <rect x="409" y="213" width="20" height="20" class="past-0" />
-<rect x="409" y="237" width="20" height="20" class="past-2" />
+<rect x="409" y="237" width="20" height="20" class="past-0" />
 <rect x="409" y="261" width="20" height="20" class="past-0" />
 <rect x="409" y="285" width="20" height="20" class="past-0" />
 <rect x="409" y="309" width="20" height="20" class="past-0" />
-<rect x="433" y="165" width="20" height="20" class="past-2" />
+<rect x="433" y="165" width="20" height="20" class="past-0" />
 <rect x="433" y="189" width="20" height="20" class="past-0" />
-<rect x="433" y="213" width="20" height="20" class="past-3" />
-<rect x="433" y="237" width="20" height="20" class="past-1" />
-<rect x="433" y="261" width="20" height="20" class="past-1" />
+<rect x="433" y="213" width="20" height="20" class="past-0" />
+<rect x="433" y="237" width="20" height="20" class="past-0" />
+<rect x="433" y="261" width="20" height="20" class="past-0" />
 <rect x="433" y="285" width="20" height="20" class="past-0" />
 <rect x="433" y="309" width="20" height="20" class="past-0" />
 <rect x="457" y="165" width="20" height="20" class="past-0" />
-<rect x="457" y="189" width="20" height="20" class="past-2" />
-<rect x="457" y="213" width="20" height="20" class="past-3" />
-<rect x="457" y="237" width="20" height="20" class="past-2" />
-<rect x="457" y="261" width="20" height="20" class="past-2" />
+<rect x="457" y="189" width="20" height="20" class="past-0" />
+<rect x="457" y="213" width="20" height="20" class="past-0" />
+<rect x="457" y="237" width="20" height="20" class="past-0" />
+<rect x="457" y="261" width="20" height="20" class="past-0" />
 <rect x="457" y="285" width="20" height="20" class="past-0" />
 <rect x="457" y="309" width="20" height="20" class="past-0" />
-<rect x="481" y="165" width="20" height="20" class="past-1" />
-<rect x="481" y="189" width="20" height="20" class="past-2" />
-<rect x="481" y="213" width="20" height="20" class="past-2" />
+<rect x="481" y="165" width="20" height="20" class="past-0" />
+<rect x="481" y="189" width="20" height="20" class="past-0" />
+<rect x="481" y="213" width="20" height="20" class="past-0" />
 <rect x="481" y="237" width="20" height="20" class="past-0" />
 <rect x="481" y="261" width="20" height="20" class="past-0" />
 <rect x="481" y="285" width="20" height="20" class="past-0" />
 <rect x="481" y="309" width="20" height="20" class="past-0" />
 <rect x="505" y="165" width="20" height="20" class="past-0" />
-<rect x="505" y="189" width="20" height="20" class="past-2" />
-<rect x="505" y="213" width="20" height="20" class="past-2" />
+<rect x="505" y="189" width="20" height="20" class="past-0" />
+<rect x="505" y="213" width="20" height="20" class="past-0" />
 <rect x="505" y="237" width="20" height="20" class="past-0" />
 <rect x="505" y="261" width="20" height="20" class="past-0" />
-<rect x="505" y="285" width="20" height="20" class="past-1" />
+<rect x="505" y="285" width="20" height="20" class="past-0" />
 <rect x="505" y="309" width="20" height="20" class="past-0" />
 <rect x="529" y="165" width="20" height="20" class="past-0" />
-<rect x="529" y="189" width="20" height="20" class="past-1" />
-<rect x="529" y="213" width="20" height="20" class="past-3" />
+<rect x="529" y="189" width="20" height="20" class="past-0" />
+<rect x="529" y="213" width="20" height="20" class="past-0" />
 <rect x="529" y="237" width="20" height="20" class="past-0" />
-<rect x="529" y="261" width="20" height="20" class="past-3" />
+<rect x="529" y="261" width="20" height="20" class="past-0" />
 <rect x="529" y="285" width="20" height="20" class="past-0" />
 <rect x="529" y="309" width="20" height="20" class="past-0" />
-<rect x="553" y="165" width="20" height="20" class="past-3" />
-<rect x="553" y="189" width="20" height="20" class="past-1" />
+<rect x="553" y="165" width="20" height="20" class="past-0" />
+<rect x="553" y="189" width="20" height="20" class="past-0" />
 <rect x="553" y="213" width="20" height="20" class="past-0" />
-<rect x="553" y="237" width="20" height="20" class="past-2" />
-<rect x="553" y="261" width="20" height="20" class="past-1" />
-<rect x="553" y="285" width="20" height="20" class="past-2" />
-<rect x="553" y="309" width="20" height="20" class="past-4" />
-<rect x="577" y="165" width="20" height="20" class="past-1" />
+<rect x="553" y="237" width="20" height="20" class="past-0" />
+<rect x="553" y="261" width="20" height="20" class="past-0" />
+<rect x="553" y="285" width="20" height="20" class="past-0" />
+<rect x="553" y="309" width="20" height="20" class="past-0" />
+<rect x="577" y="165" width="20" height="20" class="past-0" />
 <rect x="577" y="189" width="20" height="20" class="past-0" />
-<rect x="577" y="213" width="20" height="20" class="past-1" />
-<rect x="577" y="237" width="20" height="20" class="past-2" />
+<rect x="577" y="213" width="20" height="20" class="past-0" />
+<rect x="577" y="237" width="20" height="20" class="past-0" />
 <rect x="577" y="261" width="20" height="20" class="past-0" />
-<rect x="577" y="285" width="20" height="20" class="past-1" />
-<rect x="577" y="309" width="20" height="20" class="past-1" />
-<rect x="601" y="165" width="20" height="20" class="past-3" />
+<rect x="577" y="285" width="20" height="20" class="past-0" />
+<rect x="577" y="309" width="20" height="20" class="past-0" />
+<rect x="601" y="165" width="20" height="20" class="past-0" />
 <rect x="601" y="189" width="20" height="20" class="past-0" />
-<rect x="601" y="213" width="20" height="20" class="past-2" />
-<rect x="601" y="237" width="20" height="20" class="past-1" />
+<rect x="601" y="213" width="20" height="20" class="past-0" />
+<rect x="601" y="237" width="20" height="20" class="past-0" />
 <rect x="601" y="261" width="20" height="20" class="past-0" />
-<rect x="601" y="285" width="20" height="20" class="past-1" />
+<rect x="601" y="285" width="20" height="20" class="past-0" />
 <rect x="601" y="309" width="20" height="20" class="past-0" />
-<rect x="625" y="165" width="20" height="20" class="past-2" />
+<rect x="625" y="165" width="20" height="20" class="past-0" />
 <rect x="625" y="189" width="20" height="20" class="past-0" />
-<rect x="625" y="213" width="20" height="20" class="past-0" />
-<rect x="625" y="237" width="20" height="20" class="past-3" />
+<rect x="625" y="213" width="20" height="20" class="past-2" />
+<rect x="625" y="237" width="20" height="20" class="past-0" />
 <rect x="625" y="261" width="20" height="20" class="past-1" />
-<rect x="625" y="285" width="20" height="20" class="past-3" />
-<rect x="625" y="309" width="20" height="20" class="past-3" />
+<rect x="625" y="285" width="20" height="20" class="past-1" />
+<rect x="625" y="309" width="20" height="20" class="past-0" />
 <rect x="649" y="165" width="20" height="20" class="past-0" />
-<rect x="649" y="189" width="20" height="20" class="past-2" />
+<rect x="649" y="189" width="20" height="20" class="past-0" />
 <rect x="649" y="213" width="20" height="20" class="past-0" />
-<rect x="649" y="237" width="20" height="20" class="past-3" />
-<rect x="649" y="261" width="20" height="20" class="past-2" />
-<rect x="649" y="285" width="20" height="20" class="past-4" />
+<rect x="649" y="237" width="20" height="20" class="past-0" />
+<rect x="649" y="261" width="20" height="20" class="past-0" />
+<rect x="649" y="285" width="20" height="20" class="past-0" />
 <rect x="649" y="309" width="20" height="20" class="past-0" />
 <rect x="25" y="333" width="20" height="20" class="past-0" />
 <rect x="25" y="357" width="20" height="20" class="past-0" />
-<rect x="25" y="381" width="20" height="20" class="past-3" />
-<rect x="25" y="405" width="20" height="20" class="past-1" />
-<rect x="25" y="429" width="20" height="20" class="past-3" />
+<rect x="25" y="381" width="20" height="20" class="past-0" />
+<rect x="25" y="405" width="20" height="20" class="past-0" />
+<rect x="25" y="429" width="20" height="20" class="past-1" />
 <rect x="25" y="453" width="20" height="20" class="past-0" />
 <rect x="25" y="477" width="20" height="20" class="past-0" />
-<rect x="49" y="333" width="20" height="20" class="past-1" />
+<rect x="49" y="333" width="20" height="20" class="past-0" />
 <rect x="49" y="357" width="20" height="20" class="past-0" />
 <rect x="49" y="381" width="20" height="20" class="past-0" />
 <rect x="49" y="405" width="20" height="20" class="past-0" />
-<rect x="49" y="429" width="20" height="20" class="past-3" />
+<rect x="49" y="429" width="20" height="20" class="past-0" />
 <rect x="49" y="453" width="20" height="20" class="past-0" />
-<rect x="49" y="477" width="20" height="20" class="past-1" />
+<rect x="49" y="477" width="20" height="20" class="past-0" />
 <rect x="73" y="333" width="20" height="20" class="past-0" />
 <rect x="73" y="357" width="20" height="20" class="past-0" />
-<rect x="73" y="381" width="20" height="20" class="past-2" />
+<rect x="73" y="381" width="20" height="20" class="past-0" />
 <rect x="73" y="405" width="20" height="20" class="past-0" />
-<rect x="73" y="429" width="20" height="20" class="past-1" />
+<rect x="73" y="429" width="20" height="20" class="past-0" />
 <rect x="73" y="453" width="20" height="20" class="past-0" />
 <rect x="73" y="477" width="20" height="20" class="past-0" />
-<rect x="97" y="333" width="20" height="20" class="past-1" />
-<rect x="97" y="357" width="20" height="20" class="past-1" />
+<rect x="97" y="333" width="20" height="20" class="past-0" />
+<rect x="97" y="357" width="20" height="20" class="past-0" />
 <rect x="97" y="381" width="20" height="20" class="past-0" />
-<rect x="97" y="405" width="20" height="20" class="past-2" />
+<rect x="97" y="405" width="20" height="20" class="past-0" />
 <rect x="97" y="429" width="20" height="20" class="past-0" />
 <rect x="97" y="453" width="20" height="20" class="past-0" />
-<rect x="97" y="477" width="20" height="20" class="past-2" />
-<rect x="121" y="333" width="20" height="20" class="past-1" />
-<rect x="121" y="357" width="20" height="20" class="past-2" />
+<rect x="97" y="477" width="20" height="20" class="past-0" />
+<rect x="121" y="333" width="20" height="20" class="past-0" />
+<rect x="121" y="357" width="20" height="20" class="past-0" />
 <rect x="121" y="381" width="20" height="20" class="past-0" />
-<rect x="121" y="405" width="20" height="20" class="past-1" />
-<rect x="121" y="429" width="20" height="20" class="past-1" />
+<rect x="121" y="405" width="20" height="20" class="past-0" />
+<rect x="121" y="429" width="20" height="20" class="past-0" />
 <rect x="121" y="453" width="20" height="20" class="past-0" />
-<rect x="121" y="477" width="20" height="20" class="past-4" />
+<rect x="121" y="477" width="20" height="20" class="past-0" />
 <rect x="145" y="333" width="20" height="20" class="past-0" />
-<rect x="145" y="357" width="20" height="20" class="past-1" />
-<rect x="145" y="381" width="20" height="20" class="past-4" />
+<rect x="145" y="357" width="20" height="20" class="past-0" />
+<rect x="145" y="381" width="20" height="20" class="past-0" />
 <rect x="145" y="405" width="20" height="20" class="past-0" />
-<rect x="145" y="429" width="20" height="20" class="past-3" />
+<rect x="145" y="429" width="20" height="20" class="past-0" />
 <rect x="145" y="453" width="20" height="20" class="past-0" />
 <rect x="145" y="477" width="20" height="20" class="past-0" />
-<rect x="169" y="333" width="20" height="20" class="past-1" />
+<rect x="169" y="333" width="20" height="20" class="past-0" />
 <rect x="169" y="357" width="20" height="20" class="past-0" />
 <rect x="169" y="381" width="20" height="20" class="past-0" />
 <rect x="169" y="405" width="20" height="20" class="past-0" />
-<rect x="169" y="429" width="20" height="20" class="past-1" />
-<rect x="169" y="453" width="20" height="20" class="past-4" />
+<rect x="169" y="429" width="20" height="20" class="past-0" />
+<rect x="169" y="453" width="20" height="20" class="past-0" />
 <rect x="169" y="477" width="20" height="20" class="past-0" />
 <rect x="193" y="333" width="20" height="20" class="past-0" />
-<rect x="193" y="357" width="20" height="20" class="past-1" />
+<rect x="193" y="357" width="20" height="20" class="past-0" />
 <rect x="193" y="381" width="20" height="20" class="past-0" />
-<rect x="193" y="405" width="20" height="20" class="past-3" />
+<rect x="193" y="405" width="20" height="20" class="past-0" />
 <rect x="193" y="429" width="20" height="20" class="past-0" />
 <rect x="193" y="453" width="20" height="20" class="past-0" />
 <rect x="193" y="477" width="20" height="20" class="past-0" />
 <rect x="217" y="333" width="20" height="20" class="past-0" />
-<rect x="217" y="357" width="20" height="20" class="past-2" />
+<rect x="217" y="357" width="20" height="20" class="past-0" />
 <rect x="217" y="381" width="20" height="20" class="past-0" />
-<rect x="217" y="405" width="20" height="20" class="past-2" />
+<rect x="217" y="405" width="20" height="20" class="past-0" />
 <rect x="217" y="429" width="20" height="20" class="past-0" />
-<rect x="217" y="453" width="20" height="20" class="past-1" />
+<rect x="217" y="453" width="20" height="20" class="past-0" />
 <rect x="217" y="477" width="20" height="20" class="past-0" />
 <rect x="241" y="333" width="20" height="20" class="past-0" />
-<rect x="241" y="357" width="20" height="20" class="past-2" />
+<rect x="241" y="357" width="20" height="20" class="past-0" />
 <rect x="241" y="381" width="20" height="20" class="past-0" />
 <rect x="241" y="405" width="20" height="20" class="past-0" />
-<rect x="241" y="429" width="20" height="20" class="past-3" />
-<rect x="241" y="453" width="20" height="20" class="past-1" />
+<rect x="241" y="429" width="20" height="20" class="past-0" />
+<rect x="241" y="453" width="20" height="20" class="past-0" />
 <rect x="241" y="477" width="20" height="20" class="past-0" />
 <rect x="265" y="333" width="20" height="20" class="past-0" />
 <rect x="265" y="357" width="20" height="20" class="past-0" />
 <rect x="265" y="381" width="20" height="20" class="past-0" />
 <rect x="265" y="405" width="20" height="20" class="past-0" />
-<rect x="265" y="429" width="20" height="20" class="past-3" />
+<rect x="265" y="429" width="20" height="20" class="past-0" />
 <rect x="265" y="453" width="20" height="20" class="past-0" />
-<rect x="265" y="477" width="20" height="20" class="past-3" />
+<rect x="265" y="477" width="20" height="20" class="past-0" />
 <rect x="289" y="333" width="20" height="20" class="past-0" />
 <rect x="289" y="357" width="20" height="20" class="past-0" />
 <rect x="289" y="381" width="20" height="20" class="past-0" />
-<rect x="289" y="405" width="20" height="20" class="past-1" />
-<rect x="289" y="429" width="20" height="20" class="past-2" />
+<rect x="289" y="405" width="20" height="20" class="past-0" />
+<rect x="289" y="429" width="20" height="20" class="past-0" />
 <rect x="289" y="453" width="20" height="20" class="past-0" />
-<rect x="289" y="477" width="20" height="20" class="past-1" />
-<rect x="313" y="333" width="20" height="20" class="past-1" />
-<rect x="313" y="357" width="20" height="20" class="past-2" />
-<rect x="313" y="381" width="20" height="20" class="past-1" />
-<rect x="313" y="405" width="20" height="20" class="past-1" />
-<rect x="313" y="429" width="20" height="20" class="past-4" />
+<rect x="289" y="477" width="20" height="20" class="past-0" />
+<rect x="313" y="333" width="20" height="20" class="past-0" />
+<rect x="313" y="357" width="20" height="20" class="past-0" />
+<rect x="313" y="381" width="20" height="20" class="past-0" />
+<rect x="313" y="405" width="20" height="20" class="past-0" />
+<rect x="313" y="429" width="20" height="20" class="past-1" />
 <rect x="313" y="453" width="20" height="20" class="past-0" />
-<rect x="313" y="477" width="20" height="20" class="past-0" />
-<rect x="337" y="333" width="20" height="20" class="past-2" />
-<rect x="337" y="357" width="20" height="20" class="past-2" />
-<rect x="337" y="381" width="20" height="20" class="past-0" />
-<rect x="337" y="405" width="20" height="20" class="past-2" />
-<rect x="337" y="429" width="20" height="20" class="past-1" />
-<rect x="337" y="453" width="20" height="20" class="past-3" />
-<rect x="337" y="477" width="20" height="20" class="past-4" />
-<rect x="361" y="333" width="20" height="20" class="past-0" />
-<rect x="361" y="357" width="20" height="20" class="past-1" />
-<rect x="361" y="381" width="20" height="20" class="past-1" />
+<rect x="313" y="477" width="20" height="20" class="past-1" />
+<rect x="337" y="333" width="20" height="20" class="past-0" />
+<rect x="337" y="357" width="20" height="20" class="past-1" />
+<rect x="337" y="381" width="20" height="20" class="past-3" />
+<rect x="337" y="405" width="20" height="20" class="past-1" />
+<rect x="337" y="429" width="20" height="20" class="past-0" />
+<rect x="337" y="453" width="20" height="20" class="past-0" />
+<rect x="337" y="477" width="20" height="20" class="past-0" />
+<rect x="361" y="333" width="20" height="20" class="past-1" />
+<rect x="361" y="357" width="20" height="20" class="past-0" />
+<rect x="361" y="381" width="20" height="20" class="past-0" />
 <rect x="361" y="405" width="20" height="20" class="past-0" />
 <rect x="361" y="429" width="20" height="20" class="past-0" />
 <rect x="361" y="453" width="20" height="20" class="past-0" />
 <rect x="361" y="477" width="20" height="20" class="past-0" />
 <rect x="385" y="333" width="20" height="20" class="past-0" />
 <rect x="385" y="357" width="20" height="20" class="past-0" />
-<rect x="385" y="381" width="20" height="20" class="past-3" />
-<rect x="385" y="405" width="20" height="20" class="past-2" />
+<rect x="385" y="381" width="20" height="20" class="past-0" />
+<rect x="385" y="405" width="20" height="20" class="past-0" />
 <rect x="385" y="429" width="20" height="20" class="past-0" />
-<rect x="385" y="453" width="20" height="20" class="past-4" />
+<rect x="385" y="453" width="20" height="20" class="past-0" />
 <rect x="385" y="477" width="20" height="20" class="past-0" />
-<rect x="409" y="333" width="20" height="20" class="past-1" />
-<rect x="409" y="357" width="20" height="20" class="past-1" />
-<rect x="409" y="381" width="20" height="20" class="past-4" />
+<rect x="409" y="333" width="20" height="20" class="past-0" />
+<rect x="409" y="357" width="20" height="20" class="past-0" />
+<rect x="409" y="381" width="20" height="20" class="past-0" />
 <rect x="409" y="405" width="20" height="20" class="past-0" />
 <rect x="409" y="429" width="20" height="20" class="past-0" />
 <rect x="409" y="453" width="20" height="20" class="past-0" />
 <rect x="409" y="477" width="20" height="20" class="past-0" />
 <rect x="433" y="333" width="20" height="20" class="past-0" />
 <rect x="433" y="357" width="20" height="20" class="past-0" />
-<rect x="433" y="381" width="20" height="20" class="past-1" />
-<rect x="433" y="405" width="20" height="20" class="past-2" />
+<rect x="433" y="381" width="20" height="20" class="past-0" />
+<rect x="433" y="405" width="20" height="20" class="past-0" />
 <rect x="433" y="429" width="20" height="20" class="past-0" />
 <rect x="433" y="453" width="20" height="20" class="past-0" />
 <rect x="433" y="477" width="20" height="20" class="past-0" />
 <rect x="457" y="333" width="20" height="20" class="past-0" />
-<rect x="457" y="357" width="20" height="20" class="past-1" />
+<rect x="457" y="357" width="20" height="20" class="past-0" />
 <rect x="457" y="381" width="20" height="20" class="past-0" />
 <rect x="457" y="405" width="20" height="20" class="past-0" />
 <rect x="457" y="429" width="20" height="20" class="past-0" />
 <rect x="457" y="453" width="20" height="20" class="past-0" />
-<rect x="457" y="477" width="20" height="20" class="past-1" />
-<rect x="481" y="333" width="20" height="20" class="past-1" />
-<rect x="481" y="357" width="20" height="20" class="past-1" />
-<rect x="481" y="381" width="20" height="20" class="past-3" />
-<rect x="481" y="405" width="20" height="20" class="past-3" />
-<rect x="481" y="429" width="20" height="20" class="past-2" />
+<rect x="457" y="477" width="20" height="20" class="past-0" />
+<rect x="481" y="333" width="20" height="20" class="past-0" />
+<rect x="481" y="357" width="20" height="20" class="past-0" />
+<rect x="481" y="381" width="20" height="20" class="past-0" />
+<rect x="481" y="405" width="20" height="20" class="past-0" />
+<rect x="481" y="429" width="20" height="20" class="past-0" />
 <rect x="481" y="453" width="20" height="20" class="past-0" />
-<rect x="481" y="477" width="20" height="20" class="past-2" />
-<rect x="505" y="333" width="20" height="20" class="past-0" />
-<rect x="505" y="357" width="20" height="20" class="past-3" />
+<rect x="481" y="477" width="20" height="20" class="past-0" />
+<rect x="505" y="333" width="20" height="20" class="past-4" />
+<rect x="505" y="357" width="20" height="20" class="past-0" />
 <rect x="505" y="381" width="20" height="20" class="past-0" />
-<rect x="505" y="405" width="20" height="20" class="past-2" />
-<rect x="505" y="429" width="20" height="20" class="past-0" />
-<rect x="505" y="453" width="20" height="20" class="past-0" />
-<rect x="505" y="477" width="20" height="20" class="past-3" />
-<rect x="529" y="333" width="20" height="20" class="past-4" />
+<rect x="505" y="405" width="20" height="20" class="past-4" />
+<rect x="505" y="429" width="20" height="20" class="past-1" />
+<rect x="505" y="453" width="20" height="20" class="past-1" />
+<rect x="505" y="477" width="20" height="20" class="past-0" />
+<rect x="529" y="333" width="20" height="20" class="past-3" />
 <rect x="529" y="357" width="20" height="20" class="past-1" />
-<rect x="529" y="381" width="20" height="20" class="past-0" />
-<rect x="529" y="405" width="20" height="20" class="past-0" />
-<rect x="529" y="429" width="20" height="20" class="past-2" />
-<rect x="529" y="453" width="20" height="20" class="past-0" />
+<rect x="529" y="381" width="20" height="20" class="past-2" />
+<rect x="529" y="405" width="20" height="20" class="past-2" />
+<rect x="529" y="429" width="20" height="20" class="past-1" />
+<rect x="529" y="453" width="20" height="20" class="past-2" />
 <rect x="529" y="477" width="20" height="20" class="past-1" />
-<rect x="553" y="333" width="20" height="20" class="past-0" />
-<rect x="553" y="357" width="20" height="20" class="past-0" />
-<rect x="553" y="381" width="20" height="20" class="past-2" />
-<rect x="553" y="405" width="20" height="20" class="past-1" />
-<rect x="553" y="429" width="20" height="20" class="past-1" />
-<rect x="553" y="453" width="20" height="20" class="past-2" />
-<rect x="553" y="477" width="20" height="20" class="past-1" />
-<rect x="577" y="333" width="20" height="20" class="past-1" />
+<rect x="553" y="333" width="20" height="20" class="past-2" />
+<rect x="553" y="357" width="20" height="20" class="past-1" />
+<rect x="553" y="381" width="20" height="20" class="past-1" />
+<rect x="553" y="405" width="20" height="20" class="past-0" />
+<rect x="553" y="429" width="20" height="20" class="past-0" />
+<rect x="553" y="453" width="20" height="20" class="past-0" />
+<rect x="553" y="477" width="20" height="20" class="past-0" />
+<rect x="577" y="333" width="20" height="20" class="past-0" />
 <rect x="577" y="357" width="20" height="20" class="past-0" />
-<rect x="577" y="381" width="20" height="20" class="past-2" />
-<rect x="577" y="405" width="20" height="20" class="past-3" />
-<rect x="577" y="429" width="20" height="20" class="past-0" />
-<rect x="577" y="453" width="20" height="20" class="past-0" />
-<rect x="577" y="477" width="20" height="20" class="past-2" />
-<rect x="601" y="333" width="20" height="20" class="past-1" />
-<rect x="601" y="357" width="20" height="20" class="past-2" />
-<rect x="601" y="381" width="20" height="20" class="past-2" />
+<rect x="577" y="381" width="20" height="20" class="past-0" />
+<rect x="577" y="405" width="20" height="20" class="past-1" />
+<rect x="577" y="429" width="20" height="20" class="past-1" />
+<rect x="577" y="453" width="20" height="20" class="past-3" />
+<rect x="577" y="477" width="20" height="20" class="past-1" />
+<rect x="601" y="333" width="20" height="20" class="past-0" />
+<rect x="601" y="357" width="20" height="20" class="past-3" />
+<rect x="601" y="381" width="20" height="20" class="past-0" />
 <rect x="601" y="405" width="20" height="20" class="past-0" />
-<rect x="601" y="429" width="20" height="20" class="past-4" />
-<rect x="601" y="453" width="20" height="20" class="past-0" />
-<rect x="601" y="477" width="20" height="20" class="past-3" />
-<rect x="625" y="333" width="20" height="20" class="past-0" />
-<rect x="625" y="357" width="20" height="20" class="past-0" />
-<rect x="625" y="381" width="20" height="20" class="past-0" />
-<rect x="625" y="405" width="20" height="20" class="past-2" />
-<rect x="625" y="429" width="20" height="20" class="past-3" />
-<rect x="625" y="453" width="20" height="20" class="past-4" />
-<rect x="625" y="477" width="20" height="20" class="past-0 current-day" />
+<rect x="601" y="429" width="20" height="20" class="past-1" />
+<rect x="601" y="453" width="20" height="20" class="past-1" />
+<rect x="601" y="477" width="20" height="20" class="game-survived-3" />
+<rect x="625" y="333" width="20" height="20" class="game-invaded-1 current-day" />
+<rect x="625" y="357" width="20" height="20" class="fog-of-war" />
+<rect x="625" y="381" width="20" height="20" class="fog-of-war" />
+<rect x="625" y="405" width="20" height="20" class="fog-of-war" />
+<rect x="625" y="429" width="20" height="20" class="fog-of-war" />
+<rect x="625" y="453" width="20" height="20" class="fog-of-war" />
+<rect x="625" y="477" width="20" height="20" class="fog-of-war" />
+<rect x="649" y="333" width="20" height="20" class="fog-of-war" />
+<rect x="649" y="357" width="20" height="20" class="fog-of-war" />
+<rect x="649" y="381" width="20" height="20" class="fog-of-war" />
+<rect x="649" y="405" width="20" height="20" class="fog-of-war" />
+<rect x="649" y="429" width="20" height="20" class="fog-of-war" />
+<rect x="649" y="453" width="20" height="20" class="fog-of-war" />
+<rect x="649" y="477" width="20" height="20" class="fog-of-war" />
 <rect x="690" y="165" width="265" height="164" class="intel-panel" />
-        <text x="705" y="190" class="text-neon text-medal">LIVE CAM: SQUAD EN ROUTE</text>
-        <!-- Kayan Yol (Hareket Hissi) -->
-        <line x1="700" y1="295" x2="945" y2="295" stroke="#39ff14" stroke-dasharray="15, 10" stroke-width="2">
-            <animate attributeName="stroke-dashoffset" from="25" to="0" dur="0.4s" repeatCount="indefinite" />
-        </line>
-        <!-- Zırhlı Araç -->
-        <g>
-            <animate attributeName="transform" type="translate" values="0,0; 0,2; 0,0" dur="0.2s" repeatCount="indefinite" />
-            <path d="M 740 275 L 760 245 L 820 245 L 840 275 L 860 275 L 860 290 L 740 290 Z" fill="#285473" />
-            <rect x="770" y="250" width="20" height="15" fill="#0d1117" />
-            <rect x="800" y="250" width="20" height="15" fill="#0d1117" />
-            <!-- Tekerlekler -->
-            <circle cx="770" cy="290" r="10" fill="#0d1117" stroke="#39ff14" stroke-width="2" />
-            <circle cx="830" cy="290" r="10" fill="#0d1117" stroke="#39ff14" stroke-width="2" />
+        <text x="705" y="190" class="text-neon text-medal">LIVE CAM: THERMAL SCOPE (ENGAGING)</text>
+        <rect x="700" y="205" width="245" height="114" fill="#0a0a2a" rx="4" ry="4" />
+        <circle cx="920" cy="265" r="8" fill="#ff8c00" opacity="0.8">
+             <animate attributeName="cx" values="940;730" dur="4s" repeatCount="indefinite" />
+             <animate attributeName="cy" values="265;260;265" dur="0.5s" repeatCount="indefinite" />
+        </circle>
+        <circle cx="870" cy="285" r="10" fill="#ff003c" opacity="0.9">
+             <animate attributeName="cx" values="940;730" dur="5s" repeatCount="indefinite" />
+             <animate attributeName="cy" values="285;280;285" dur="0.7s" repeatCount="indefinite" />
+        </circle>
+        <g stroke="#39ff14" stroke-width="1.5">
+            <animate attributeName="transform" type="translate" values="0,0; -8,-8; 0,0; 0,0" dur="2.5s" keyTimes="0; 0.05; 0.15; 1" repeatCount="indefinite" />
+            <circle cx="822.5" cy="260" r="45" fill="rgba(57,255,20,0.05)" />
+            <line x1="762.5" y1="260" x2="882.5" y2="260" />
+            <line x1="822.5" y1="200" x2="822.5" y2="320" />
+            <circle cx="822.5" cy="260" r="2" fill="#ff003c" stroke="none">
+                <animate attributeName="opacity" values="1;0;1" dur="2.5s" repeatCount="indefinite" />
+            </circle>
         </g>
         
     <rect x="690" y="337" width="265" height="164" class="intel-panel" />
@@ -644,10 +658,6 @@
             <animate attributeName="opacity" values="0;1;0" dur="3s" begin="1.4s" repeatCount="indefinite" />
         </circle>
         
-        <circle cx="867.5" cy="407" r="4" fill="#ff003c">
-            <animate attributeName="opacity" values="0;1;0" dur="3s" begin="2.0999999999999996s" repeatCount="indefinite" />
-        </circle>
-        
     <text x="25" y="525" class="text-neon text-medal">ACHIEVEMENTS &amp; MEDALS</text>
 <rect x="25" y="540" width="200" height="45" rx="3" ry="3" class="box-medal-earned" />
 <text x="35" y="558" class="text-neon text-medal">◆ ROOKIE</text>
@@ -663,8 +673,8 @@
 <text x="710" y="575" class="text-dim text-medal">[LOCKED: 365 DAYS]</text>
 
         <text y="640" class="text-neon text-info">
-            <animate attributeName="x" from="980" to="-968" dur="30s" repeatCount="indefinite" />
-            STATIC... ADJUSTING FREQUENCY... /// HEARING MOANS FROM THE EASTERN WOODS... /// OUTPOST ALPHA REPORTING ALL CLEAR... ///
+            <animate attributeName="x" from="980" to="-1992" dur="30s" repeatCount="indefinite" />
+            HEARING MOANS FROM THE EASTERN WOODS... /// HEARING MOANS FROM THE EASTERN WOODS... /// TARGET PRACTICE AT SECTOR 2026-08-15. OVERWHELMING FIREPOWER USED. /// MAYDAY! BARRICADES BREACHED ON 2026-08-16! /// HEARING MOANS FROM THE EASTERN WOODS... ///
         </text>
     </g>
     </svg>

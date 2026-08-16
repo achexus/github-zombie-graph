@@ -1,9 +1,16 @@
+import os
+import requests
 import random
-from datetime import datetime, date, timedelta
-import sys
+from datetime import datetime, date
+from dotenv import load_dotenv
 
-USERNAME = "ACHEXUS"
-GAME_START_DATE = date.today().strftime("%Y-%m-%d")
+load_dotenv()
+
+# GERÇEK GITHUB BİLGİLERİ
+TOKEN = os.getenv("GITHUB_TOKEN")
+USERNAME = os.getenv("GITHUB_USERNAME", "achexus")
+# OYUNUN GERÇEK BAŞLANGIÇ TARİHİ (Gün 0 Kuralı)
+GAME_START_DATE = "2026-08-15"
 
 MSG_OVERKILL = ["TARGET PRACTICE AT SECTOR {date}. OVERWHELMING FIREPOWER USED.", "THREAT NEUTRALIZED ON {date}. NO CASUALTIES REPORTED."]
 MSG_CLEARED = ["CLOSE CALL ON {date}. PERIMETER BARELY SECURED.", "HAND-TO-HAND COMBAT ON {date}. WE HOLD THE LINE."]
@@ -11,24 +18,51 @@ MSG_FAILED = ["MAYDAY! BARRICADES BREACHED ON {date}!", "SECTOR {date} OVERRUN. 
 MSG_ZERO = ["RADIO SILENCE ON {date}. SECTOR ASSUMED LOST.", "NO DEFENSIVE ACTION TAKEN ON {date}. WALKERS ROAM FREE."]
 MSG_GENERIC = ["STATIC... ADJUSTING FREQUENCY...", "OUTPOST ALPHA REPORTING ALL CLEAR...", "HEARING MOANS FROM THE EASTERN WOODS..."]
 
-def generate_mock_data():
-    days = []
-    base_date = date.today() - timedelta(days=371)
-    for i in range(371):
-        current = base_date + timedelta(days=i)
-        commits = random.choices([0, 1, 3, 6, 10], weights=[50, 20, 15, 10, 5])[0]
-        days.append({
-            "date": current.strftime("%Y-%m-%d"), 
-            "contributionCount": commits
-        })
-    return days
+query = f"""
+query {{
+  user(login: "{USERNAME}") {{
+    contributionsCollection {{
+      contributionCalendar {{
+        totalContributions
+        weeks {{
+          contributionDays {{
+            contributionCount
+            date
+          }}
+        }}
+      }}
+    }}
+  }}
+}}
+"""
 
-# --- GELİŞMİŞ ANİMASYON MODÜLLERİ ---
+def get_contribution_data():
+    print(f"[INTEL] {USERNAME} için GitHub'dan canlı veriler çekiliyor...")
+    url = 'https://api.github.com/graphql'
+    headers = {
+        'Authorization': f'Bearer {TOKEN}',
+        'Content-Type': 'application/json'
+    }
+    response = requests.post(url, json={'query': query}, headers=headers)
+    if response.status_code == 200:
+        data = response.json()
+        if 'errors' in data: 
+            print("[ERROR] GitHub API Hatası:", data['errors'])
+            return None
+        weeks = data['data']['user']['contributionsCollection']['contributionCalendar']['weeks']
+        days = []
+        for week in weeks:
+            for day in week['contributionDays']:
+                days.append(day)
+        print("[INTEL] Veriler başarıyla alındı!")
+        return days
+    print(f"[ERROR] Bağlantı Hatası: {response.status_code}")
+    return None
+
 def get_radar_svg(remaining_zombies, x, y, width, height):
     cx = x + (width / 2)
-    cy = y + 95 # Radarı biraz daha aşağı aldık
+    cy = y + 95
     
-    # Sadece HAYATTA KALAN (vurulmamış) zombiler kadar nokta çiz
     dots = ""
     coords = [(-40, -35), (35, 20), (-15, 45), (45, -25)]
     for idx in range(min(remaining_zombies, 4)):
@@ -60,17 +94,14 @@ def get_live_cam_svg(state, x, y, width, height):
     if state == "en_route":
         content = f"""
         <text x="{x+15}" y="{y+25}" class="text-neon text-medal">LIVE CAM: SQUAD EN ROUTE</text>
-        <!-- Kayan Yol (Hareket Hissi) -->
         <line x1="{x+10}" y1="{y+130}" x2="{x+width-10}" y2="{y+130}" stroke="#39ff14" stroke-dasharray="15, 10" stroke-width="2">
             <animate attributeName="stroke-dashoffset" from="25" to="0" dur="0.4s" repeatCount="indefinite" />
         </line>
-        <!-- Zırhlı Araç -->
         <g>
             <animate attributeName="transform" type="translate" values="0,0; 0,2; 0,0" dur="0.2s" repeatCount="indefinite" />
             <path d="M {x+50} {y+110} L {x+70} {y+80} L {x+130} {y+80} L {x+150} {y+110} L {x+170} {y+110} L {x+170} {y+125} L {x+50} {y+125} Z" fill="#285473" />
             <rect x="{x+80}" y="{y+85}" width="20" height="15" fill="#0d1117" />
             <rect x="{x+110}" y="{y+85}" width="20" height="15" fill="#0d1117" />
-            <!-- Tekerlekler -->
             <circle cx="{x+80}" cy="{y+125}" r="10" fill="#0d1117" stroke="#39ff14" stroke-width="2" />
             <circle cx="{x+140}" cy="{y+125}" r="10" fill="#0d1117" stroke="#39ff14" stroke-width="2" />
         </g>
@@ -78,10 +109,7 @@ def get_live_cam_svg(state, x, y, width, height):
     elif state == "combat":
         content = f"""
         <text x="{x+15}" y="{y+25}" class="text-neon text-medal">LIVE CAM: THERMAL SCOPE (ENGAGING)</text>
-        <!-- Termal Arka Plan -->
         <rect x="{x+10}" y="{y+40}" width="{width-20}" height="{height-50}" fill="#0a0a2a" rx="4" ry="4" />
-        
-        <!-- Termal Zombiler (Isı İmzası) -->
         <circle cx="{x+230}" cy="{y+100}" r="8" fill="#ff8c00" opacity="0.8">
              <animate attributeName="cx" values="{x+250};{x+40}" dur="4s" repeatCount="indefinite" />
              <animate attributeName="cy" values="{y+100};{y+95};{y+100}" dur="0.5s" repeatCount="indefinite" />
@@ -90,14 +118,11 @@ def get_live_cam_svg(state, x, y, width, height):
              <animate attributeName="cx" values="{x+250};{x+40}" dur="5s" repeatCount="indefinite" />
              <animate attributeName="cy" values="{y+120};{y+115};{y+120}" dur="0.7s" repeatCount="indefinite" />
         </circle>
-        
-        <!-- Sniper Dürbünü (Crosshair) & Geri Tepme (Recoil) -->
         <g stroke="#39ff14" stroke-width="1.5">
             <animate attributeName="transform" type="translate" values="0,0; -8,-8; 0,0; 0,0" dur="2.5s" keyTimes="0; 0.05; 0.15; 1" repeatCount="indefinite" />
             <circle cx="{x+(width/2)}" cy="{y+95}" r="45" fill="rgba(57,255,20,0.05)" />
             <line x1="{x+(width/2)-60}" y1="{y+95}" x2="{x+(width/2)+60}" y2="{y+95}" />
             <line x1="{x+(width/2)}" y1="{y+35}" x2="{x+(width/2)}" y2="{y+155}" />
-            <!-- Merkez Lazer Noktası -->
             <circle cx="{x+(width/2)}" cy="{y+95}" r="2" fill="#ff003c" stroke="none">
                 <animate attributeName="opacity" values="1;0;1" dur="2.5s" repeatCount="indefinite" />
             </circle>
@@ -106,16 +131,10 @@ def get_live_cam_svg(state, x, y, width, height):
     elif state == "secure":
         content = f"""
         <text x="{x+15}" y="{y+25}" class="text-neon text-medal">LIVE CAM: SECTOR SECURE (CITY)</text>
-        
-        <!-- Şehir Silüeti (Skyline) -->
         <path d="M {x+20} {y+145} L {x+20} {y+80} L {x+40} {y+80} L {x+40} {y+60} L {x+70} {y+60} L {x+70} {y+90} L {x+100} {y+90} L {x+100} {y+50} L {x+140} {y+50} L {x+140} {y+100} L {x+170} {y+100} L {x+170} {y+70} L {x+210} {y+70} L {x+210} {y+145} Z" fill="#1c3242" />
-        
-        <!-- Binalardaki Tek Tük Işıklar -->
         <rect x="{x+30}" y="{y+90}" width="4" height="4" fill="#39ff14" opacity="0.6" />
         <rect x="{x+80}" y="{y+100}" width="4" height="4" fill="#39ff14" opacity="0.6" />
         <rect x="{x+150}" y="{y+80}" width="4" height="4" fill="#39ff14" opacity="0.6" />
-        
-        <!-- Dönen Arama/Kurtarma Projektörü -->
         <polygon points="{x+120},{y+145} {x+40},{y+40} {x+200},{y+40}" fill="rgba(57, 255, 20, 0.15)">
             <animate attributeName="points" values="{x+120},{y+145} {x+40},{y+40} {x+200},{y+40}; {x+120},{y+145} {x+100},{y+30} {x+260},{y+30}; {x+120},{y+145} {x+40},{y+40} {x+200},{y+40}" dur="6s" repeatCount="indefinite" />
         </polygon>
@@ -125,30 +144,36 @@ def get_live_cam_svg(state, x, y, width, height):
 
 
 def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_count):
-    # --- YENİ: GENİŞLETİLMİŞ VE EŞİTLENMİŞ BOYUTLAR ---
     svg_width = 980
     svg_height = 740
     
     today_data = days[-1]
-    today_date = today_data['date']
+    today_date_str = today_data['date']
     today_commits = today_data['contributionCount']
-    random.seed(today_date)
-    today_zombies = random.randint(1, 4)
     
+    random.seed(today_date_str)
+    today_zombies = random.randint(1, 4)
     remaining_zombies = max(0, today_zombies - today_commits)
     
-    if today_commits == 0:
-        cam_state = "en_route"
-        today_status = "CRITICAL (EN ROUTE)"
-        status_color = "#ff003c"
-    elif today_commits < today_zombies:
-        cam_state = "combat"
-        today_status = "BREACHED (ENGAGING)"
-        status_color = "#ff8c00"
-    else:
+    if today_date_str < GAME_START_DATE:
+        # Eğer oyun henüz başlamadıysa radar ve kameralar "Standby" veya güvenli modda görünsün
         cam_state = "secure"
-        today_status = "SECURE (CLEARED)"
+        today_status = "SYSTEM STANDBY (PRE-INVASION)"
         status_color = "#39ff14"
+        remaining_zombies = 0
+    else:
+        if today_commits == 0:
+            cam_state = "en_route"
+            today_status = "CRITICAL (EN ROUTE)"
+            status_color = "#ff003c"
+        elif today_commits < today_zombies:
+            cam_state = "combat"
+            today_status = "BREACHED (ENGAGING)"
+            status_color = "#ff8c00"
+        else:
+            cam_state = "secure"
+            today_status = "SECURE (CLEARED)"
+            status_color = "#39ff14"
 
     svg_content = f"""<svg xmlns="http://www.w3.org/2000/svg" width="{svg_width}" height="{svg_height}">
     <style>
@@ -165,6 +190,9 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
         .box-medal-locked {{ fill: transparent; stroke: #1a4d1a; stroke-width: 1; stroke-dasharray: 4; }}
         .intel-panel {{ fill: rgba(13, 17, 23, 0.8); stroke: #1a4d1a; stroke-width: 1; rx: 4; ry: 4; }}
         
+        /* Sis Perdesi: Sadece haritanın sonundaki boşlukları doldurmak için */
+        .fog-of-war {{ fill: rgba(13, 17, 23, 0.3); stroke: #1a4d1a; stroke-width: 1; stroke-dasharray: 2; opacity: 0.8; }}
+
         .past-0 {{ fill: #0d1117; stroke: #1a2332; stroke-width: 1; rx: 2; ry: 2; }}
         .past-1 {{ fill: #1c3242; rx: 2; ry: 2; }}
         .past-2 {{ fill: #285473; rx: 2; ry: 2; }}
@@ -203,21 +231,32 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
     svg_content += f'<text x="450" y="75" class="text-neon text-info">STREAK       : {streak} DAYS</text>\n'
     svg_content += f'<text x="450" y="95" class="text-neon text-info">STATUS       : {survived} CLEARED / {invaded} INVADED</text>\n'
     
-    svg_content += f'<rect x="25" y="115" width="930" height="30" class="intel-panel" />\n'
-    svg_content += f'<text x="35" y="135" class="text-neon text-info">TODAY INTEL | INCOMING ZOMBIES: {today_zombies} | ELIMINATED: {today_commits} | STATUS: <tspan class="text-status">{today_status}</tspan></text>\n'
+    # Bugünün durumu paneli
+    if today_date_str < GAME_START_DATE:
+        display_zombies = 0
+        display_commits = 0
+    else:
+        display_zombies = today_zombies
+        display_commits = today_commits
 
-    # --- MATEMATİKSEL KUSURSUZ HARİTA HİZALAMASI ---
-    box_size = 20 # Büyütüldü
+    svg_content += f'<rect x="25" y="115" width="930" height="30" class="intel-panel" />\n'
+    svg_content += f'<text x="35" y="135" class="text-neon text-info">TODAY INTEL | INCOMING ZOMBIES: {display_zombies} | ELIMINATED: {display_commits} | STATUS: <tspan class="text-status">{today_status}</tspan></text>\n'
+
+    box_size = 20 
     gap = 4
     start_x = 25
     start_y = 165 
     
     ticker_logs = [random.choice(MSG_GENERIC), random.choice(MSG_GENERIC)]
     
-    for i, day in enumerate(days):
+    # Haritayı oluştur: 27 Sütun x 14 Satır = Tam 378 Kare
+    total_grid_slots = 378
+    
+    for i in range(total_grid_slots):
         week_idx = i // 7  
         day_idx = i % 7   
         
+        # Haritayı ikiye katlama matematiği
         if week_idx < 27:
             col = week_idx
             row = day_idx
@@ -228,41 +267,53 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
         x = start_x + (col * (box_size + gap))
         y = start_y + (row * (box_size + gap))
         
-        date_str = day['date']
-        commits = day['contributionCount']
-        
-        if date_str < GAME_START_DATE:
-            if commits == 0: color_class = "past-0"
-            elif commits <= 2: color_class = "past-1"
-            elif commits <= 4: color_class = "past-2"
-            elif commits <= 6: color_class = "past-3"
-            else: color_class = "past-4"
-        else:
-            random.seed(date_str)
-            zombies = random.randint(1, 4)
-            if commits >= zombies:
-                fark = commits - zombies
-                if fark == 0: 
-                    color_class = "game-survived-1"
-                    ticker_logs.append(random.choice(MSG_CLEARED).format(date=date_str, commits=commits))
-                elif fark <= 2: 
-                    color_class = "game-survived-2"
-                    ticker_logs.append(random.choice(MSG_CLEARED).format(date=date_str, commits=commits))
-                else: 
-                    color_class = "game-survived-3"
-                    ticker_logs.append(random.choice(MSG_OVERKILL).format(date=date_str, commits=commits))
+        # Eğer i indisi GitHub'dan gelen gün sayısından küçükse GERÇEK VERİYİ çiz
+        if i < len(days):
+            day = days[i]
+            date_str = day['date']
+            commits = day['contributionCount']
+            
+            # Son güne "Radar/Aktif Gün" animasyonu ekle
+            extra_class = " current-day" if i == len(days) - 1 else ""
+            
+            # GÜN SIFIR KURALI: Başlangıçtan önceki günler "Mavi Topoloji" (Stat dışı savaşlar)
+            if date_str < GAME_START_DATE:
+                if commits == 0: color_class = "past-0"
+                elif commits <= 2: color_class = "past-1"
+                elif commits <= 4: color_class = "past-2"
+                elif commits <= 6: color_class = "past-3"
+                else: color_class = "past-4"
             else:
-                if commits > 0: 
-                    color_class = "game-invaded-1"
-                    ticker_logs.append(random.choice(MSG_FAILED).format(date=date_str, commits=commits))
-                else: 
-                    color_class = "game-invaded-2"
-                    ticker_logs.append(random.choice(MSG_ZERO).format(date=date_str, commits=commits))
-                
-        extra_class = " current-day" if i == len(days) - 1 else ""
-        svg_content += f'<rect x="{x}" y="{y}" width="{box_size}" height="{box_size}" class="{color_class}{extra_class}" />\n'
+                # Oyun başladıktan sonraki günler ZOMBI İSTİLASI renkleri
+                random.seed(date_str)
+                zombies = random.randint(1, 4)
+                if commits >= zombies:
+                    fark = commits - zombies
+                    if fark == 0: 
+                        color_class = "game-survived-1"
+                        ticker_logs.append(random.choice(MSG_CLEARED).format(date=date_str, commits=commits))
+                    elif fark <= 2: 
+                        color_class = "game-survived-2"
+                        ticker_logs.append(random.choice(MSG_CLEARED).format(date=date_str, commits=commits))
+                    else: 
+                        color_class = "game-survived-3"
+                        ticker_logs.append(random.choice(MSG_OVERKILL).format(date=date_str, commits=commits))
+                else:
+                    if commits > 0: 
+                        color_class = "game-invaded-1"
+                        ticker_logs.append(random.choice(MSG_FAILED).format(date=date_str, commits=commits))
+                    else: 
+                        color_class = "game-invaded-2"
+                        ticker_logs.append(random.choice(MSG_ZERO).format(date=date_str, commits=commits))
+                        
+            svg_content += f'<rect x="{x}" y="{y}" width="{box_size}" height="{box_size}" class="{color_class}{extra_class}" />\n'
+            
+        else:
+            # GITHUB VERİSİ BİTTİ (Haritanın sonunda kalan eksik boşluklar) -> SİS PERDESİ EKLE
+            color_class = "fog-of-war"
+            svg_content += f'<rect x="{x}" y="{y}" width="{box_size}" height="{box_size}" class="{color_class}" />\n'
         
-    # --- YAN PANELLER (Alt Sınırları Harita ile Eşitlendi: 497. Pixel) ---
+    # --- YAN PANELLER ---
     panel_x = 690
     panel_width = 265
     panel_height = 164
@@ -270,8 +321,7 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
     svg_content += get_live_cam_svg(cam_state, panel_x, 165, panel_width, panel_height)
     svg_content += get_radar_svg(remaining_zombies, panel_x, 337, panel_width, panel_height)
 
-
-    # --- MADALYALAR AŞAĞI KAYDIRILDI ---
+    # --- MADALYALAR ---
     medal_y = 540
     ranks_data = [
         {"name": "ROOKIE", "req": 1, "icon": "◆"},
@@ -313,37 +363,66 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
     
     with open("test_v2_graph.svg", "w", encoding="utf-8") as file:
         file.write(svg_content)
-    print("[SUCCESS] Hizalanmış Ana Harita oluşturuldu: 'test_v2_graph.svg'")
+    print(f"[SUCCESS] Gerçek verilerle Ana Harita (Mavi Topoloji Korumalı) oluşturuldu: 'test_v2_graph.svg'")
 
-def generate_animations_test():
-    """Tüm animasyonları aynı anda görebilmen için özel şov dosyası"""
-    svg_content = f"""<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400">
-    <style>
-        .bg {{ fill: #050a05; }}
-        .text-neon {{ fill: #39ff14; font-family: 'Courier New', Courier, monospace; font-weight: bold; font-size: 14px;}}
-        .text-medal {{ font-size: 12px; }}
-        .intel-panel {{ fill: rgba(13, 17, 23, 0.8); stroke: #1a4d1a; stroke-width: 1; rx: 4; ry: 4; }}
-    </style>
-    <rect width="100%" height="100%" class="bg" />
-    <text x="20" y="30" class="text-neon">ANIMATION SHOWCASE ROOM</text>
+
+def simulate_zombie_survival(days):
+    """Gerçek verileri kullanarak istatistikleri ve rütbeleri hesaplar (Sadece GAME_START_DATE sonrasını sayar)"""
+    # Sadece Oyun Başlangıcından sonraki aktif günleri filtrele
+    active_days = [day for day in days if day['date'] >= GAME_START_DATE]
     
-    {get_live_cam_svg("en_route", 20, 50, 265, 164)}
-    {get_live_cam_svg("combat", 300, 50, 265, 164)}
-    {get_live_cam_svg("secure", 20, 230, 265, 164)}
-    {get_radar_svg(4, 300, 230, 265, 164)} 
-    </svg>
-    """
-    with open("test_animasyonlar.svg", "w", encoding="utf-8") as file:
-        file.write(svg_content)
-    print("[SUCCESS] Tüm animasyonları içeren şov dosyası oluşturuldu: 'test_animasyonlar.svg'")
+    if not active_days: 
+        print("[INTEL] Sistem Standby Modunda. Oyun henüz başlamadı (0. Gün).")
+        generate_pipboy_svg(days, streak=0, rank="ROOKIE", survived=0, invaded=0, survival_day_count=0)
+        return
 
-if __name__ == "__main__":
-    mock_days = generate_mock_data()
     start_date_obj = datetime.strptime(GAME_START_DATE, "%Y-%m-%d").date()
-    latest_date_obj = datetime.strptime(mock_days[-1]['date'], "%Y-%m-%d").date()
+    latest_date_obj = datetime.strptime(active_days[-1]['date'], "%Y-%m-%d").date()
     survival_day = max(0, (latest_date_obj - start_date_obj).days)
 
-    generate_pipboy_svg(mock_days, streak=12, rank="ROOKIE", survived=0, invaded=0, survival_day_count=survival_day)
+    streak = 0
+    # Streak hesaplarken listeyi tersine çevirip (sondan başa) bakıyoruz
+    for i, day in enumerate(reversed(active_days)):
+        if day['contributionCount'] > 0: 
+            streak += 1
+        elif i == 0 and day['contributionCount'] == 0: 
+            # Bugün (son gün) commit atılmamışsa seriyi hemen bozma
+            continue
+        else: 
+            break
+            
+    if streak >= 365: rank = "WAR HERO"
+    elif streak >= 100: rank = "COMMANDER"
+    elif streak >= 30: rank = "SERGEANT"
+    elif streak > 0: rank = "ROOKIE"
+    else: rank = "LOST CIVILIAN"
     
-    # Yeni Animasyon Test Dosyasını Çalıştır
-    generate_animations_test()
+    total_survived = 0
+    total_invaded = 0
+    
+    for d in active_days:
+        date_str = d['date']
+        commits = d['contributionCount']
+        random.seed(date_str)
+        zombies = random.randint(1, 4)
+        
+        if commits >= zombies:
+            total_survived += 1
+        else:
+            if commits > 0:
+                total_invaded += 1 
+            else:
+                total_invaded += 1 
+    
+    print(f"[STATS] Rütbe: {rank} | Streak: {streak} | Survived: {total_survived} | Invaded: {total_invaded}")
+    
+    generate_pipboy_svg(days, streak, rank, total_survived, total_invaded, survival_day)
+
+
+if __name__ == "__main__":
+    real_github_data = get_contribution_data()
+    
+    if real_github_data:
+        simulate_zombie_survival(real_github_data)
+    else:
+        print("[ERROR] Veri çekilemedi. Lütfen .env dosyanı kontrol et.")
