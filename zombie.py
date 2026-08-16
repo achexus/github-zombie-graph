@@ -6,11 +6,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# --- AÇIK KAYNAK DİNAMİK DEĞİŞKENLERİ ---
 TOKEN = os.getenv("GITHUB_TOKEN")
-# Eğer GITHUB_USERNAME girilmemişse, otomatik olarak repoyu çalıştıran kişiyi (OWNER) alır.
 USERNAME = os.getenv("GITHUB_USERNAME", os.getenv("GITHUB_REPOSITORY_OWNER", "achexus"))
-# Kullanıcı kendi başlama tarihini yml dosyasından girebilir. (Varsayılan: 2026-08-15)
 GAME_START_DATE = os.getenv("GAME_START_DATE", "2026-08-15")
 
 MSG_OVERKILL = ["TARGET PRACTICE AT SECTOR {date}. OVERWHELMING FIREPOWER USED.", "THREAT NEUTRALIZED ON {date}. NO CASUALTIES REPORTED."]
@@ -288,7 +285,7 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
         .game-survived-1 {{ fill: #1f6b11; rx: 2; ry: 2; }} 
         .game-survived-2 {{ fill: #2c9e17; rx: 2; ry: 2; }} 
         .game-survived-3 {{ fill: #39ff14; rx: 2; ry: 2; }} 
-        .game-invaded-1 {{ fill: #8a0020; rx: 2; ry: 2; }}  
+        .game-invaded-1 {{ fill: #8a0020; stroke: #ff003c; stroke-width: 1; rx: 2; ry: 2; }}  
         .game-invaded-2 {{ fill: #ff003c; rx: 2; ry: 2; }}  
         @keyframes pulse-beacon {{ 0% {{ fill-opacity: 1; stroke: #ffffff; stroke-width: 1px; }} 50% {{ fill-opacity: 0.4; stroke: #39ff14; stroke-width: 3px; }} 100% {{ fill-opacity: 1; stroke: #ffffff; stroke-width: 1px; }} }}
         .current-day {{ animation: pulse-beacon 1.5s infinite; rx: 3; ry: 3; }}
@@ -399,10 +396,10 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
     </svg>
     """
     
-    # DOSYA ADINI zombi-grafik.svg OLARAK DEĞİŞTİRDİK Kİ CANLIDA ÇALIŞSIN
-    with open("zombi-grafik.svg", "w", encoding="utf-8") as file:
+    # GLOBAL VE STANDART ÇIKTI DOSYA İSMİ (zombie-graph.svg)
+    with open("zombie-graph.svg", "w", encoding="utf-8") as file:
         file.write(svg_content)
-    print(f"[SUCCESS] Public Action Zombie Graph oluşturuldu: 'zombi-grafik.svg'")
+    print(f"[SUCCESS] Public Action Zombie Graph oluşturuldu: 'zombie-graph.svg'")
 
 def simulate_zombie_survival(days):
     active_days = [day for day in days if day['date'] >= GAME_START_DATE]
