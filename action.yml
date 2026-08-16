@@ -1,0 +1,39 @@
+name: 'GitHub Zombie Survival Graph'
+description: 'GitHub katkı geçmişini (contributions) zombi hayatta kalma haritasına dönüştürür.'
+branding:
+  icon: 'activity'
+  color: 'green'
+
+inputs:
+  github_token:
+    description: 'Verileri çekmek için gerekli GitHub Token (secrets.GITHUB_TOKEN)'
+    required: true
+  github_username:
+    description: 'GitHub kullanıcı adı (Opsiyonel, otomatik bulunur)'
+    required: false
+    default: ${{ github.repository_owner }}
+  game_start_date:
+    description: 'Zombi istilasının başlama tarihi (YYYY-MM-DD)'
+    required: false
+    default: '2026-08-15'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        
+    - name: Install dependencies
+      shell: bash
+      run: pip install requests python-dotenv
+        
+    - name: Run Zombie Script
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+        GITHUB_USERNAME: ${{ inputs.github_username }}
+        GAME_START_DATE: ${{ inputs.game_start_date }}
+      # python dosyasını action'ın kendi klasöründen bulup çalıştırır
+      run: python ${{ github.action_path }}/zombie.py
