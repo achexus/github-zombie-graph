@@ -7,16 +7,18 @@
 <br>
 
 <div align="center">
-  <a href="#english">🇬🇧 English</a> • 
-  <a href="#turkce">🇹🇷 Türkçe</a> • 
-  <a href="#espanol">🇪🇸 Español</a> • 
-  <a href="#deutsch">🇩🇪 Deutsch</a> • 
-  <a href="#francais">🇫🇷 Français</a><br>
-  <a href="#italiano">🇮🇹 Italiano</a> • 
-  <a href="#portugues">🇵🇹 Português</a> • 
-  <a href="#русский">🇷🇺 Русский</a> • 
-  <a href="#nederlands">🇳🇱 Nederlands</a> • 
-  <a href="#polski">🇵🇱 Polski</a>
+  <br>
+  <a href="#english"><kbd>🇬🇧 English</kbd></a>&nbsp;&nbsp;
+  <a href="#turkce"><kbd>🇹🇷 Türkçe</kbd></a>&nbsp;&nbsp;
+  <a href="#espanol"><kbd>🇪🇸 Español</kbd></a>&nbsp;&nbsp;
+  <a href="#deutsch"><kbd>🇩🇪 Deutsch</kbd></a>&nbsp;&nbsp;
+  <a href="#francais"><kbd>🇫🇷 Français</kbd></a><br><br>
+  <a href="#italiano"><kbd>🇮🇹 Italiano</kbd></a>&nbsp;&nbsp;
+  <a href="#portugues"><kbd>🇵🇹 Português</kbd></a>&nbsp;&nbsp;
+  <a href="#русский"><kbd>🇷🇺 Русский</kbd></a>&nbsp;&nbsp;
+  <a href="#nederlands"><kbd>🇳🇱 Nederlands</kbd></a>&nbsp;&nbsp;
+  <a href="#polski"><kbd>🇵🇱 Polski</kbd></a>
+  <br><br>
 </div>
 
 ---
