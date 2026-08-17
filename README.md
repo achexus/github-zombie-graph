@@ -1,12 +1,6 @@
 # 🧟‍♂️ GitHub Zombie Survival Graph
 
 <div align="center">
-  <img src="zombie-graph.svg" alt="GitHub Zombie Survival Graph" />
-</div>
-
-<br>
-
-<div align="center">
   <table>
     <tr>
       <td align="center"><a href="#english">🇬🇧 English</a></td>
@@ -23,6 +17,12 @@
       <td align="center"><a href="#polski">🇵🇱 Polski</a></td>
     </tr>
   </table>
+</div>
+
+<br>
+
+<div align="center">
+  <img src="zombie-graph.svg" alt="GitHub Zombie Survival Graph" />
 </div>
 
 ---
