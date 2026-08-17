@@ -1,5 +1,5 @@
 name: 'GitHub Zombie Survival Graph'
-description: 'GitHub katkı geçmişini (contributions) zombi hayatta kalma haritasına dönüştürür.'
+description: 'Transform your standard GitHub contribution graph into a post-apocalyptic tactical survival system.'
 branding:
   icon: 'activity'
   color: 'green'
