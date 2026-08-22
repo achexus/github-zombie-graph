@@ -2,6 +2,7 @@ import os
 import requests
 import random
 import json
+import math
 from datetime import datetime, date, timedelta
 from dotenv import load_dotenv
 
@@ -59,6 +60,33 @@ COMMIT_BADGES = [
     {"name": "WALKING CALAMITY", "req": 10000, "icon": "[C]", "desc": "Yürüyen Felaket"},
     {"name": "ABS EXTINCTION", "req": 50000, "icon": "[C]", "desc": "Mutlak Yok Oluş"}
 ]
+
+def calculate_level_info(total_commits):
+    if total_commits == 0:
+        return 0, 0, 1
+    # 1+2+3+... = n(n+1)/2 matematik formülünden seviye bulma
+    level = int((math.sqrt(8 * total_commits + 1) - 1) / 2)
+    current_level_base_xp = (level * (level + 1)) // 2
+    next_level_base_xp = ((level + 1) * (level + 2)) // 2
+    
+    current_xp_in_level = total_commits - current_level_base_xp
+    xp_needed_for_next = next_level_base_xp - current_level_base_xp
+    
+    return level, current_xp_in_level, xp_needed_for_next
+
+def get_rank(level):
+    # Yeni yapı: Max 300 seviye, her 25 seviyede bir atlayan rütbeler
+    RANKS = [
+        (300, "LIVING LEGEND"), (275, "ZOMBIE HUNTER"), (250, "COMMANDER"),
+        (225, "TACTICIAN"), (200, "SHARPSHOOTER"), (175, "VETERAN"),
+        (150, "GUARDIAN"), (125, "DEFENDER"), (100, "VANGUARD"),
+        (75, "SCOUT"), (50, "SURVIVOR"), (25, "SCAVENGER")
+    ]
+    for req_level, name in RANKS:
+        if level >= req_level:
+            return name, req_level
+            
+    return "LONE WANDERER", 25
 
 def get_current_epic_badge(value, badges_list):
     earned = [b for b in badges_list if value >= b['req']]
@@ -234,7 +262,7 @@ def get_live_cam_svg(state, x, y, width, height):
         """
     return bg + content
 
-def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_count, total_commits, game_start_date, history):
+def generate_pipboy_svg(days, level, xp_current, xp_needed, rank_name, next_rank_req, survived, invaded, survival_day_count, total_commits, game_start_date, history):
     svg_width = 980
     svg_height = 740
     
@@ -313,7 +341,7 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
         
     svg_content += f'<text x="25" y="40" class="text-neon text-title">{USERNAME.upper()} SURVIVAL SYSTEM</text>\n'
     svg_content += f'<text x="25" y="75" class="text-neon text-info">SURVIVAL DAY : {survival_day_count}</text>\n'
-    svg_content += f'<text x="25" y="95" class="text-neon text-info">RANK         : {rank.upper()}</text>\n'
+    svg_content += f'<text x="25" y="95" class="text-neon text-info">RANK         : {rank_name.upper()} (LVL {level})</text>\n'
     svg_content += f'<text x="450" y="75" class="text-neon text-info">TOTAL XP     : {total_commits} XP</text>\n'
     svg_content += f'<text x="450" y="95" class="text-neon text-info">STATUS       : {survived} CLEARED / {invaded} INVADED</text>\n'
     
@@ -373,8 +401,8 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
     commit_badge, commit_unlocked = get_current_epic_badge(total_commits, COMMIT_BADGES)
 
     slots = [
-        {"name": "XP SYSTEM", "req": "TBD", "icon": "[XP]", "unlocked": False, "type": "RANK"},
-        {"name": "RANK PENDING", "req": "TBD", "icon": "[R]", "unlocked": False, "type": "GOAL"},
+        {"name": rank_name, "req": level, "icon": "[R]", "unlocked": True, "type": "RANK"},
+        {"name": "NEXT RANK", "req": next_rank_req, "icon": "[R]", "unlocked": False, "type": "GOAL"},
         {"name": def_badge["name"], "req": def_badge["req"], "icon": def_badge["icon"], "unlocked": def_unlocked, "type": "DEFENSE"},
         {"name": commit_badge["name"], "req": commit_badge["req"], "icon": commit_badge["icon"], "unlocked": commit_unlocked, "type": "COMMIT"}
     ]
@@ -385,11 +413,23 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
         box_class = "box-medal-earned" if slot["unlocked"] else "box-medal-locked"
         text_class = "text-neon" if slot["unlocked"] else "text-dim"
         status_text = "[UNLOCKED]" if slot["unlocked"] else f"[LOCKED: {slot['req']}]"
+        if slot["type"] == "GOAL": status_text = f"[UNLOCKS AT LVL {slot['req']}]"
         
         svg_content += f'<rect x="{m_x}" y="{medal_y}" width="{medal_box_width}" height="45" rx="3" ry="3" class="{box_class}" />\n'
         svg_content += f'<text x="{m_x + 10}" y="{medal_y + 18}" class="{text_class} text-medal">{slot["icon"]} {slot["name"]}</text>\n'
         svg_content += f'<text x="{m_x + 10}" y="{medal_y + 35}" class="{text_class} text-medal">{status_text}</text>\n'
 
+    # XP BAR
+    xp_bar_y = 615
+    xp_width = 930
+    fill_width = int((xp_current / xp_needed) * xp_width) if xp_needed > 0 else 0
+    
+    svg_content += f'<text x="25" y="{xp_bar_y + 10}" class="text-neon text-info">LEVEL PROGRESS</text>\n'
+    svg_content += f'<text x="955" y="{xp_bar_y + 10}" class="text-neon text-info" text-anchor="end">{xp_current} / {xp_needed} XP TO LVL {level + 1}</text>\n'
+    svg_content += f'<rect x="25" y="{xp_bar_y + 20}" width="{xp_width}" height="14" class="intel-panel" />\n'
+    svg_content += f'<rect x="25" y="{xp_bar_y + 20}" width="{fill_width}" height="14" fill="#39ff14" rx="2" ry="2" />\n'
+
+    # AKAN YAZI
     ticker_logs.append(random.choice(current_msgs))
     ticker_text = " /// ".join(ticker_logs) + " ///"
     text_width_px = len(ticker_text) * 8
@@ -397,7 +437,7 @@ def generate_pipboy_svg(days, streak, rank, survived, invaded, survival_day_coun
     animation_duration = max(30, int(len(ticker_text) * 0.05))
     
     svg_content += f"""
-        <text y="640" class="text-neon text-info">
+        <text y="685" class="text-neon text-info">
             <animate attributeName="x" from="{svg_width}" to="{to_x_coord}" dur="{animation_duration}s" repeatCount="indefinite" />
             {ticker_text}
         </text>
@@ -422,7 +462,7 @@ def simulate_zombie_survival(days):
 
     active_days = [day for day in days if day['date'] >= game_start_date]
     if not active_days: 
-        generate_pipboy_svg(days, streak=0, rank="PENDING UPDATE", survived=0, invaded=0, survival_day_count=0, total_commits=0, game_start_date=game_start_date, history=history)
+        generate_pipboy_svg(days, level=0, xp_current=0, xp_needed=1, rank_name="LONE WANDERER", next_rank_req=25, survived=0, invaded=0, survival_day_count=0, total_commits=0, game_start_date=game_start_date, history=history)
         return
 
     start_date_obj = datetime.strptime(game_start_date, "%Y-%m-%d").date()
@@ -443,9 +483,7 @@ def simulate_zombie_survival(days):
     total_survived = 0
     total_invaded = 0
     total_commits = sum(d['contributionCount'] for d in active_days)
-    streak = 0 
-    rank = "[XP SYSTEM PENDING]"
-
+    
     for d in active_days:
         date_str = d['date']
         if date_str >= today_str: continue
@@ -454,8 +492,29 @@ def simulate_zombie_survival(days):
         
         if commits >= zombies: total_survived += 1
         else: total_invaded += 1 
+
+    # GERÇEK HESAPLAMALAR
+    level, xp_current, xp_needed = calculate_level_info(total_commits)
+    rank_name, current_rank_req = get_rank(level)
     
-    generate_pipboy_svg(days, streak, rank, total_survived, total_invaded, survival_day, total_commits, game_start_date, history)
+    next_rank_req = 25
+    if level >= 25:
+        next_rank_req = ((level // 25) + 1) * 25
+        if next_rank_req > 300: next_rank_req = 300
+
+    # =========================================================================
+    # TEST GÖRÜNÜMÜ İÇİN MOCK DEĞERLER 
+    # (Level 2 ve Yarı Dolu Bar görünümünü test etmek için bunları ezdiriyoruz)
+    # Tasarımı gördükten sonra bu bloğu silebilirsiniz.
+    level = 2
+    xp_current = 1  
+    xp_needed = 2   
+    total_commits = 4 
+    rank_name, _ = get_rank(level)
+    next_rank_req = 25
+    # =========================================================================
+    
+    generate_pipboy_svg(days, level, xp_current, xp_needed, rank_name, next_rank_req, total_survived, total_invaded, survival_day, total_commits, game_start_date, history)
 
 if __name__ == "__main__":
     real_github_data = get_contribution_data()
