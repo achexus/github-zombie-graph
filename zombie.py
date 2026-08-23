@@ -58,6 +58,12 @@ ORDERED_RANKS = [
     (300, "LIVING LEGEND", "🌌")
 ]
 
+def get_zombie_count_for_date(date_str):
+    # Bu fonksiyon tarihe özgü (deterministik) rastgele sayı üretir.
+    # Yani bir tarih için üretilen zombi sayısı HER ZAMAN aynı kalır, dosyada tutmaya gerek kalmaz!
+    r = random.Random(date_str)
+    return r.randint(1, 4)
+
 def calculate_level_info(total_commits):
     if total_commits == 0:
         return 0, 0, 1
@@ -91,15 +97,16 @@ def get_contribution_data():
         return days
     return None
 
-def load_state():
+def load_start_date():
     if os.path.exists(STATE_FILE):
         with open(STATE_FILE, "r") as f:
-            return json.load(f)
-    return {"start_date": "", "history": {}}
+            data = json.load(f)
+            return data.get("start_date")
+    return None
 
-def save_state(state):
+def save_start_date(date_str):
     with open(STATE_FILE, "w") as f:
-        json.dump(state, f, indent=4)
+        json.dump({"start_date": date_str}, f, indent=4)
 
 def get_radar_svg(remaining_zombies, x, y, width, height):
     cx = x + (width / 2)
@@ -239,7 +246,7 @@ def get_live_cam_svg(state, x, y, width, height, is_easter_egg=False):
         """
     return bg + content
 
-def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, survival_day_count, total_commits, game_start_date, history):
+def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, survival_day_count, total_commits, game_start_date):
     svg_width = 980
     svg_height = 740
     
@@ -254,7 +261,9 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
     grid_start_date = grid_end_date - timedelta(days=377)
     
     today_commits = day_map.get(today_str, 0)
-    today_zombies = history.get(today_str, 0)
+    
+    # Deterministik zombi sayısını al
+    today_zombies = get_zombie_count_for_date(today_str) if today_str >= game_start_date else 0
     remaining_zombies = max(0, today_zombies - today_commits)
     
     if today_str < game_start_date:
@@ -397,7 +406,7 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
                 elif commits <= 6: color_class = "past-3"
                 else: color_class = "past-4"
             else:
-                zombies = history.get(date_str, 0)
+                zombies = get_zombie_count_for_date(date_str)
                 if commits >= zombies:
                     fark = commits - zombies
                     if fark == 0: color_class = "game-survived-1"
@@ -507,41 +516,29 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
     </svg>
     """
     
-    # GERÇEK SİSTEM İÇİN ÇIKTI: zombie-graph.svg
     with open("zombie-graph.svg", "w", encoding="utf-8") as file:
         file.write(svg_content)
     print(f"[SUCCESS] Zombie Graph oluşturuldu: 'zombie-graph.svg'")
 
 def simulate_zombie_survival(days):
-    state = load_state()
     today_str = date.today().strftime("%Y-%m-%d")
+    
+    # 1. Start Date'i Dosyadan Oku
+    start_date = load_start_date()
 
-    if not state.get("start_date"):
-        state["start_date"] = today_str
-        save_state(state)
+    # 2. Eğer dosya yoksa/boşsa, bugünü başlangıç say ve DOSYAYA KAYDET
+    if not start_date:
+        start_date = today_str
+        save_start_date(start_date)
 
-    game_start_date = state["start_date"]
-    history = state.get("history", {})
-
-    active_days = [day for day in days if day['date'] >= game_start_date]
+    active_days = [day for day in days if day['date'] >= start_date]
     if not active_days: 
-        generate_pipboy_svg(days, level=0, xp_current=0, xp_needed=1, survived=0, invaded=0, survival_day_count=0, total_commits=0, game_start_date=game_start_date, history=history)
+        generate_pipboy_svg(days, level=0, xp_current=0, xp_needed=1, survived=0, invaded=0, survival_day_count=0, total_commits=0, game_start_date=start_date)
         return
 
-    start_date_obj = datetime.strptime(game_start_date, "%Y-%m-%d").date()
+    start_date_obj = datetime.strptime(start_date, "%Y-%m-%d").date()
     latest_date_obj = datetime.strptime(active_days[-1]['date'], "%Y-%m-%d").date()
     survival_day = max(0, (latest_date_obj - start_date_obj).days)
-
-    state_updated = False
-    for d in active_days:
-        date_str = d['date']
-        if date_str not in history and date_str <= today_str:
-            history[date_str] = random.randint(1, 4)
-            state_updated = True
-
-    if state_updated:
-        state["history"] = history
-        save_state(state)
 
     total_survived = 0
     total_invaded = 0
@@ -551,15 +548,16 @@ def simulate_zombie_survival(days):
         date_str = d['date']
         if date_str >= today_str: continue
         commits = d['contributionCount']
-        zombies = history.get(date_str, 0)
+        
+        # Dosyadan okumak yerine o güne özel kalıcı rastgele sayıyı hesapla
+        zombies = get_zombie_count_for_date(date_str)
         
         if commits >= zombies: total_survived += 1
         else: total_invaded += 1 
 
-    # Seviye ve XP Hesaplaması (Dinamik)
     level, xp_current, xp_needed = calculate_level_info(total_commits)
     
-    generate_pipboy_svg(days, level, xp_current, xp_needed, total_survived, total_invaded, survival_day, total_commits, game_start_date, history)
+    generate_pipboy_svg(days, level, xp_current, xp_needed, total_survived, total_invaded, survival_day, total_commits, start_date)
 
 if __name__ == "__main__":
     real_github_data = get_contribution_data()
