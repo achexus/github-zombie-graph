@@ -3,7 +3,7 @@ import requests
 import random
 import json
 import math
-from datetime import datetime, date, timedelta
+from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -59,8 +59,6 @@ ORDERED_RANKS = [
 ]
 
 def get_zombie_count_for_date(date_str):
-    # Bu fonksiyon tarihe özgü (deterministik) rastgele sayı üretir.
-    # Yani bir tarih için üretilen zombi sayısı HER ZAMAN aynı kalır, dosyada tutmaya gerek kalmaz!
     r = random.Random(date_str)
     return r.randint(1, 4)
 
@@ -99,9 +97,12 @@ def get_contribution_data():
 
 def load_start_date():
     if os.path.exists(STATE_FILE):
-        with open(STATE_FILE, "r") as f:
-            data = json.load(f)
-            return data.get("start_date")
+        try:
+            with open(STATE_FILE, "r") as f:
+                data = json.load(f)
+                return data.get("start_date")
+        except json.JSONDecodeError:
+            return None
     return None
 
 def save_start_date(date_str):
@@ -253,16 +254,9 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
     is_easter_egg = (total_commits == 100)
     
     day_map = {d['date']: d['contributionCount'] for d in days}
-    today_date_obj = date.today()
-    today_str = today_date_obj.strftime("%Y-%m-%d")
-    
-    gh_weekday = (today_date_obj.weekday() + 1) % 7 
-    grid_end_date = today_date_obj + timedelta(days=(6 - gh_weekday))
-    grid_start_date = grid_end_date - timedelta(days=377)
+    today_str = days[-1]['date']
     
     today_commits = day_map.get(today_str, 0)
-    
-    # Deterministik zombi sayısını al
     today_zombies = get_zombie_count_for_date(today_str) if today_str >= game_start_date else 0
     remaining_zombies = max(0, today_zombies - today_commits)
     
@@ -310,14 +304,6 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
     screen_class = "screen easter-egg" if is_easter_egg else "screen"
 
     svg_content = f"""<svg xmlns="http://www.w3.org/2000/svg" width="{svg_width}" height="{svg_height}">
-    <defs>
-        <linearGradient id="xp-green" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="#93f573" />
-            <stop offset="25%" stop-color="#4ae327" />
-            <stop offset="50%" stop-color="#2bd10d" />
-            <stop offset="100%" stop-color="#0fa100" />
-        </linearGradient>
-    </defs>
     <style>
         .bg {{ fill: transparent; }}
         .scanline {{ stroke: rgba(57, 255, 20, 0.10); stroke-width: 1; }}
@@ -386,7 +372,8 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
     svg_content += f'<text x="35" y="135" class="text-neon text-info">TODAY INTEL | INCOMING ZOMBIES: {display_zombies} | ELIMINATED: {display_commits} | STATUS: <tspan class="text-status">{today_status}</tspan></text>\n'
 
     box_size, gap, start_x, start_y = 20, 4, 25, 165 
-    ticker_logs = [random.choice(current_msgs), random.choice(current_msgs)]
+    
+    ticker_logs = [random.choice(current_msgs), random.choice(MSG_GENERIC)]
     
     for i in range(378):
         week_idx, day_idx = i // 7, i % 7   
@@ -411,16 +398,20 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
                     fark = commits - zombies
                     if fark == 0: color_class = "game-survived-1"
                     elif fark == 1: color_class = "game-survived-2"
-                    elif fark == 2: color_class = "game-survived-3"
-                    else: color_class = "game-survived-4"
-                    ticker_logs.append(random.choice(MSG_CLEARED).format(date=date_str, commits=commits))
+                    else: color_class = "game-survived-3" if fark == 2 else "game-survived-4"
+                    
+                    if date_str < today_str:
+                        msg = random.choice(MSG_OVERKILL) if fark >= 2 else random.choice(MSG_CLEARED)
+                        ticker_logs.append(msg.format(date=date_str, commits=commits))
                 else:
                     if commits > 0: 
                         color_class = "game-invaded-1"
-                        ticker_logs.append(random.choice(MSG_FAILED).format(date=date_str, commits=commits))
+                        if date_str < today_str:
+                            ticker_logs.append(random.choice(MSG_FAILED).format(date=date_str, commits=commits))
                     else: 
                         color_class = "game-invaded-2"
-                        ticker_logs.append(random.choice(MSG_ZERO).format(date=date_str, commits=commits))
+                        if date_str < today_str:
+                            ticker_logs.append(random.choice(MSG_ZERO).format(date=date_str, commits=commits))
             
             if is_easter_egg:
                 dur = round(random.uniform(0.1, 0.4), 2)
@@ -466,7 +457,7 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
         svg_content += f'<text x="{m_x + 10}" y="{medal_y + 35}" class="{text_class} text-medal">{status_text}</text>\n'
 
     # -------------------------------------------------------------
-    # WINDOWS XP STYLE PROGRESS BAR 
+    # TERMINAL STYLE LOADING (XP) BAR
     # -------------------------------------------------------------
     if not is_easter_egg:
         xp_bar_y = 615
@@ -476,11 +467,11 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
         bar_x = 25
         bar_width = (total_blocks * (block_width + block_gap)) + 2
         
-        svg_content += f'<text x="25" y="{xp_bar_y + 10}" class="text-neon text-info">LEVEL PROGRESS</text>\n'
+        svg_content += f'<text x="25" y="{xp_bar_y + 10}" class="text-neon text-info">SYSTEM UPGRADE PROGRESS</text>\n'
         svg_content += f'<text x="{bar_x + bar_width}" y="{xp_bar_y + 10}" class="text-neon text-info" text-anchor="end">{xp_current} / {xp_needed} XP TO LVL {level + 1}</text>\n'
         
-        svg_content += f'<rect x="{bar_x}" y="{xp_bar_y + 17}" width="{bar_width}" height="20" fill="transparent" stroke="#808080" stroke-width="1" />\n'
-        svg_content += f'<rect x="{bar_x + 1}" y="{xp_bar_y + 18}" width="{bar_width - 2}" height="18" fill="none" stroke="#e0e0e0" stroke-width="1" />\n'
+        # Terminal Loading Ekranı Çerçevesi (Yeşil ve sade)
+        svg_content += f'<rect x="{bar_x}" y="{xp_bar_y + 17}" width="{bar_width}" height="20" fill="none" stroke="#1a4d1a" stroke-width="1.5" />\n'
         
         if xp_needed > 0:
             fill_count = int(round((xp_current / xp_needed) * total_blocks))
@@ -493,15 +484,19 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
             
             if i < fill_count:
                 if i == fill_count - 1:
-                    svg_content += f'<rect x="{b_x}" y="{b_y}" width="{block_width}" height="14" fill="url(#xp-green)">\n'
-                    svg_content += f'    <animate attributeName="opacity" values="1;0;1" dur="0.8s" repeatCount="indefinite" />\n'
+                    # Son eklenen (yanıp sönen) commit bloğu
+                    svg_content += f'<rect x="{b_x}" y="{b_y}" width="{block_width}" height="14" fill="#39ff14">\n'
+                    svg_content += f'    <animate attributeName="opacity" values="1;0.2;1" dur="0.8s" repeatCount="indefinite" />\n'
                     svg_content += f'</rect>\n'
                 else:
-                    svg_content += f'<rect x="{b_x}" y="{b_y}" width="{block_width}" height="14" fill="url(#xp-green)" />\n'
+                    # Sabit dolu bloklar (Gradient kalktı, tek renk yeşil)
+                    svg_content += f'<rect x="{b_x}" y="{b_y}" width="{block_width}" height="14" fill="#39ff14" />\n'
     else:
         svg_content += f'<text x="490" y="640" class="text-status" text-anchor="middle" font-size="20">ERROR 404: LEVEL PROGRESSION NOT FOUND</text>\n'
 
+    ticker_logs = ticker_logs[-15:]
     ticker_logs.append(random.choice(current_msgs))
+    
     ticker_text = " /// ".join(ticker_logs) + " ///"
     text_width_px = len(ticker_text) * 8
     to_x_coord = -(text_width_px)
@@ -521,12 +516,10 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
     print(f"[SUCCESS] Zombie Graph oluşturuldu: 'zombie-graph.svg'")
 
 def simulate_zombie_survival(days):
-    today_str = date.today().strftime("%Y-%m-%d")
+    today_str = days[-1]['date']
     
-    # 1. Start Date'i Dosyadan Oku
     start_date = load_start_date()
 
-    # 2. Eğer dosya yoksa/boşsa, bugünü başlangıç say ve DOSYAYA KAYDET
     if not start_date:
         start_date = today_str
         save_start_date(start_date)
@@ -549,7 +542,6 @@ def simulate_zombie_survival(days):
         if date_str >= today_str: continue
         commits = d['contributionCount']
         
-        # Dosyadan okumak yerine o güne özel kalıcı rastgele sayıyı hesapla
         zombies = get_zombie_count_for_date(date_str)
         
         if commits >= zombies: total_survived += 1
