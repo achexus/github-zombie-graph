@@ -6,16 +6,12 @@ branding:
 
 inputs:
   github_token:
-    description: 'Verileri çekmek için gerekli GitHub Token (secrets.GITHUB_TOKEN)'
+    description: 'Verileri cekmek icin gerekli GitHub Token (secrets.GITHUB_TOKEN)'
     required: true
   github_username:
-    description: 'GitHub kullanıcı adı (Opsiyonel, otomatik bulunur)'
+    description: 'GitHub kullanici adi (Opsiyonel, otomatik bulunur)'
     required: false
     default: ${{ github.repository_owner }}
-  game_start_date:
-    description: 'Zombi istilasının başlama tarihi (YYYY-MM-DD)'
-    required: false
-    default: '2026-08-15'
 
 runs:
   using: "composite"
@@ -34,6 +30,4 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
         GITHUB_USERNAME: ${{ inputs.github_username }}
-        GAME_START_DATE: ${{ inputs.game_start_date }}
-      # python dosyasını action'ın kendi klasöründen bulup çalıştırır
       run: python ${{ github.action_path }}/zombie.py
