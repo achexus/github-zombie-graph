@@ -1,62 +1,38 @@
 import os
 import requests
 import random
-import json
 import math
-from datetime import datetime, date, timedelta
+from datetime import datetime
 from dotenv import load_dotenv
 
 load_dotenv()
 
 TOKEN = os.getenv("GITHUB_TOKEN")
 USERNAME = os.getenv("GITHUB_USERNAME", os.getenv("GITHUB_REPOSITORY_OWNER", "achexus"))
-STATE_FILE = "zombie-state.json"
 
+# --- SABİT MESAJLAR VE RÜTBELER ---
 MSG_OVERKILL = ["TARGET PRACTICE AT SECTOR {date}. OVERWHELMING FIREPOWER USED.", "THREAT NEUTRALIZED ON {date}. NO CASUALTIES REPORTED."]
 MSG_CLEARED = ["CLOSE CALL ON {date}. PERIMETER BARELY SECURED.", "HAND-TO-HAND COMBAT ON {date}. WE HOLD THE LINE."]
 MSG_FAILED = ["MAYDAY! BARRICADES BREACHED ON {date}!", "SECTOR {date} OVERRUN. WE TOOK DOWN {commits} BUT IT WAS NOT ENOUGH."]
 MSG_ZERO = ["RADIO SILENCE ON {date}. SECTOR ASSUMED LOST.", "NO DEFENSIVE ACTION TAKEN ON {date}. WALKERS ROAM FREE."]
 MSG_GENERIC = ["STATIC... ADJUSTING FREQUENCY...", "OUTPOST ALPHA REPORTING ALL CLEAR...", "HEARING MOANS FROM THE EASTERN WOODS..."]
 
-MSG_EN_ROUTE = [
-    "RADAR CONTACT ON THE MOVE. WE NEED BACKUP AT THE NEXT CROSSROAD.",
-    "SQUAD EN ROUTE. MULTIPLE BOGEYS DETECTED ON SCANNERS.",
-    "ETA 5 MINUTES. KEEP WEAPONS HOT AND EYES PEELED.",
-    "MOVEMENT IN THE SHADOWS AHEAD. PROCEED WITH CAUTION.",
-    "VEHICLE SYSTEMS NOMINAL. CLOSING IN ON THE TARGET ZONE."
-]
-
-MSG_COMBAT = [
-    "HOT DROP! WE HAVE ENGAGED THE ENEMY! FIRE AT WILL!",
-    "DO NOT LET THEM CROSS THE PERIMETER! HOLD THE LINE!",
-    "RELOADING! COVERING FIRE NEEDED AT THE FLANK!",
-    "THEY ARE BREAKING THROUGH THE WIRE! FALL BACK TO SECONDARY POSITIONS!",
-    "MULTIPLE HOSTILES DOWN, BUT MORE ARE COMING FROM THE WOODS!"
-]
-
-MSG_SECURE = [
-    "SECTOR CLEAR. REBUILDING BARRICADES AND RESTOCKING SUPPLIES.",
-    "HQ, BE ADVISED: WE HEAR SCREAMS FROM GRID C-7. BE CAREFUL OUT THERE.",
-    "ALL HOSTILES NEUTRALIZED. PATROLLING THE BORDERS FOR STRAGGLERS.",
-    "WARNING: OUTPOST DELTA WENT SILENT. STAY ALERT IN SECURE ZONES.",
-    "GATHERING SUPPLIES. NO SIGN OF THE UNDEAD IN THIS SECTOR TODAY."
-]
+MSG_EN_ROUTE = ["RADAR CONTACT ON THE MOVE. WE NEED BACKUP AT THE NEXT CROSSROAD.", "SQUAD EN ROUTE. MULTIPLE BOGEYS DETECTED ON SCANNERS."]
+MSG_COMBAT = ["HOT DROP! WE HAVE ENGAGED THE ENEMY! FIRE AT WILL!", "DO NOT LET THEM CROSS THE PERIMETER! HOLD THE LINE!"]
+MSG_SECURE = ["SECTOR CLEAR. REBUILDING BARRICADES AND RESTOCKING SUPPLIES.", "ALL HOSTILES NEUTRALIZED. PATROLLING THE BORDERS."]
 
 ORDERED_RANKS = [
-    (10, "SCAVENGER", "▲"),
-    (25, "SURVIVOR", "★"),
-    (50, "SCOUT", "❂"),
-    (75, "VANGUARD", "🛡️"),
-    (100, "DEFENDER", "⚔️"),
-    (125, "GUARDIAN", "🏰"),
-    (150, "VETERAN", "👑"),
-    (175, "SHARPSHOOTER", "🎯"),
-    (200, "TACTICIAN", "🧠"),
-    (225, "COMMANDER", "⭐"),
-    (250, "ZOMBIE HUNTER", "🩸"),
-    (275, "SLAYER", "💀"),
+    (10, "SCAVENGER", "▲"), (25, "SURVIVOR", "★"), (50, "SCOUT", "❂"),
+    (75, "VANGUARD", "🛡️"), (100, "DEFENDER", "⚔️"), (125, "GUARDIAN", "🏰"),
+    (150, "VETERAN", "👑"), (175, "SHARPSHOOTER", "🎯"), (200, "TACTICIAN", "🧠"),
+    (225, "COMMANDER", "⭐"), (250, "ZOMBIE HUNTER", "🩸"), (275, "SLAYER", "💀"),
     (300, "LIVING LEGEND", "🌌")
 ]
+
+def get_zombie_count_for_date(date_str):
+    # Zombiler artık tarihe göre matematiksel olarak hesaplanır (JSON state'e gerek kalmadı)
+    r = random.Random(date_str)
+    return r.randint(1, 4)
 
 def calculate_level_info(total_commits):
     if total_commits == 0:
@@ -67,7 +43,6 @@ def calculate_level_info(total_commits):
     
     current_xp_in_level = total_commits - current_level_base_xp
     xp_needed_for_next = next_level_base_xp - current_level_base_xp
-    
     return level, current_xp_in_level, xp_needed_for_next
 
 query = f"""
@@ -90,16 +65,6 @@ def get_contribution_data():
             for day in week['contributionDays']: days.append(day)
         return days
     return None
-
-def load_state():
-    if os.path.exists(STATE_FILE):
-        with open(STATE_FILE, "r") as f:
-            return json.load(f)
-    return {"start_date": "", "history": {}}
-
-def save_state(state):
-    with open(STATE_FILE, "w") as f:
-        json.dump(state, f, indent=4)
 
 def get_radar_svg(remaining_zombies, x, y, width, height):
     cx = x + (width / 2)
@@ -131,7 +96,6 @@ def get_radar_svg(remaining_zombies, x, y, width, height):
 def get_live_cam_svg(state, x, y, width, height, is_easter_egg=False):
     bg = f'<rect x="{x}" y="{y}" width="{width}" height="{height}" class="intel-panel" />'
     
-    # Easter egg varsa LIVE ibaresi hızlı hızlı yanıp sönsün
     blink_dur = "0.2s" if is_easter_egg else "1.5s"
     
     live_header = f"""
@@ -146,7 +110,6 @@ def get_live_cam_svg(state, x, y, width, height, is_easter_egg=False):
         <clipPath id="tire_clip_cam">
             <rect x="{x+10}" y="{y+40}" width="{width-20}" height="{height-50}" rx="4" />
         </clipPath>
-        
         <g clip-path="url(#tire_clip_cam)">
             <rect x="{x+10}" y="{y+40}" width="{width-20}" height="{height-50}" fill="#0a0a0f" />
             <line x1="{x+10}" y1="{y+145}" x2="{x+width-10}" y2="{y+145}" stroke="#1a4d1a" stroke-dasharray="35, 25" stroke-width="4">
@@ -181,9 +144,6 @@ def get_live_cam_svg(state, x, y, width, height, is_easter_egg=False):
             <circle cx="{x+240}" cy="{y+100}" r="9" fill="#FF8C00" opacity="0.9">
                  <animate attributeName="cx" values="{x+240};{x+40}" dur="4s" repeatCount="indefinite" />
             </circle>
-            <circle cx="{x+240}" cy="{y+100}" r="4" fill="#FFFFFF" opacity="1">
-                 <animate attributeName="cx" values="{x+240};{x+40}" dur="4s" repeatCount="indefinite" />
-            </circle>
         </g>
         <g>
             <animateTransform attributeName="transform" type="translate" values="0,0; 0,-8; 0,0" dur="1.2s" repeatCount="indefinite" />
@@ -192,9 +152,6 @@ def get_live_cam_svg(state, x, y, width, height, is_easter_egg=False):
                  <animate attributeName="cx" values="{x+220};{x+40}" dur="5s" repeatCount="indefinite" />
             </circle>
             <circle cx="{x+220}" cy="{y+130}" r="11" fill="#FFD700" opacity="0.8">
-                 <animate attributeName="cx" values="{x+220};{x+40}" dur="5s" repeatCount="indefinite" />
-            </circle>
-            <circle cx="{x+220}" cy="{y+130}" r="5" fill="#FFFFFF" opacity="1">
                  <animate attributeName="cx" values="{x+220};{x+40}" dur="5s" repeatCount="indefinite" />
             </circle>
         </g>
@@ -208,7 +165,7 @@ def get_live_cam_svg(state, x, y, width, height, is_easter_egg=False):
             </circle>
         </g>
         """
-    elif state == "secure":
+    else:
         content = live_header + f"""
         <rect x="{x+10}" y="{y+40}" width="{width-20}" height="{height-50}" fill="#0d1117" rx="4" ry="4" />
         <path d="M {x+10} {y+70} L {x+width-10} {y+70} M {x+10} {y+105} L {x+width-10} {y+105} M {x+10} {y+140} L {x+width-10} {y+140}" stroke="#1a2332" stroke-width="4" />
@@ -240,23 +197,20 @@ def get_live_cam_svg(state, x, y, width, height, is_easter_egg=False):
         """
     return bg + content
 
-def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, survival_day_count, total_commits, game_start_date, history):
+def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, survival_day, total_commits, first_active_date):
     svg_width = 980
     svg_height = 740
     
     is_easter_egg = (total_commits == 100)
     
     day_map = {d['date']: d['contributionCount'] for d in days}
-    today_date_obj = date.today()
-    today_str = today_date_obj.strftime("%Y-%m-%d")
-    
-    gh_weekday = (today_date_obj.weekday() + 1) % 7 
+    today_str = days[-1]['date']
     
     today_commits = day_map.get(today_str, 0)
-    today_zombies = history.get(today_str, 0)
+    today_zombies = get_zombie_count_for_date(today_str) if today_str >= first_active_date else 0
     remaining_zombies = max(0, today_zombies - today_commits)
     
-    if today_str < game_start_date:
+    if today_str < first_active_date:
         cam_state = "secure"
         today_status = "SYSTEM STANDBY (PRE-INVASION)"
         status_color = "#39ff14"
@@ -300,14 +254,6 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
     screen_class = "screen easter-egg" if is_easter_egg else "screen"
 
     svg_content = f"""<svg xmlns="http://www.w3.org/2000/svg" width="{svg_width}" height="{svg_height}">
-    <defs>
-        <linearGradient id="xp-green" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stop-color="#93f573" />
-            <stop offset="25%" stop-color="#4ae327" />
-            <stop offset="50%" stop-color="#2bd10d" />
-            <stop offset="100%" stop-color="#0fa100" />
-        </linearGradient>
-    </defs>
     <style>
         .bg {{ fill: transparent; }}
         .scanline {{ stroke: rgba(57, 255, 20, 0.10); stroke-width: 1; }}
@@ -341,7 +287,6 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
         @keyframes system-glitch {{ 0% {{ transform: translate(0, 0); }} 2% {{ transform: translate(1px, -1px); }} 4% {{ transform: translate(-1px, 1px); }} 6% {{ transform: translate(0, 0); }} 100% {{ transform: translate(0, 0); }} }}
         .screen {{ animation: crt-flicker 0.15s infinite, system-glitch 4s infinite; }}
         
-        /* EASTER EGG GLITCH ANIMATION */
         @keyframes extreme-glitch {{
             0%   {{ transform: translate(0, 0); opacity: 0.9; }}
             10%  {{ transform: translate(-5px, 5px); opacity: 0.5; filter: hue-rotate(90deg); }}
@@ -365,19 +310,19 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
         svg_content += f'<line x1="0" y1="{y}" x2="{svg_width}" y2="{y}" class="scanline" />\n'
         
     svg_content += f'<text x="25" y="40" class="text-neon text-title">{USERNAME.upper()} SURVIVAL SYSTEM</text>\n'
-    svg_content += f'<text x="25" y="75" class="text-neon text-info">SURVIVAL DAY : {survival_day_count}</text>\n'
+    svg_content += f'<text x="25" y="75" class="text-neon text-info">SURVIVAL DAY : {survival_day}</text>\n'
     svg_content += f'<text x="25" y="95" class="text-neon text-info">RANK         : {active_rank_name.upper()} (LVL {level})</text>\n'
     svg_content += f'<text x="450" y="75" class="text-neon text-info">TOTAL XP     : {total_commits} XP</text>\n'
     svg_content += f'<text x="450" y="95" class="text-neon text-info">STATUS       : {survived} CLEARED / {invaded} INVADED</text>\n'
     
-    display_zombies = 0 if today_str < game_start_date else today_zombies
-    display_commits = 0 if today_str < game_start_date else today_commits
+    display_zombies = 0 if today_str < first_active_date else today_zombies
+    display_commits = 0 if today_str < first_active_date else today_commits
 
     svg_content += f'<rect x="25" y="115" width="930" height="30" class="intel-panel" />\n'
     svg_content += f'<text x="35" y="135" class="text-neon text-info">TODAY INTEL | INCOMING ZOMBIES: {display_zombies} | ELIMINATED: {display_commits} | STATUS: <tspan class="text-status">{today_status}</tspan></text>\n'
 
     box_size, gap, start_x, start_y = 20, 4, 25, 165 
-    ticker_logs = [random.choice(current_msgs), random.choice(current_msgs)]
+    ticker_logs = [random.choice(current_msgs), random.choice(MSG_GENERIC)]
     
     for i in range(378):
         week_idx, day_idx = i // 7, i % 7   
@@ -390,30 +335,34 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
             date_str, commits = day['date'], day['contributionCount']
             extra_class = " current-day" if i == len(days) - 1 else ""
             
-            if date_str < game_start_date:
+            # Sadece ilk commit gününden sonrakiler zombi istilası sayılır
+            if date_str < first_active_date:
                 if commits == 0: color_class = "past-0"
                 elif commits <= 2: color_class = "past-1"
                 elif commits <= 4: color_class = "past-2"
                 elif commits <= 6: color_class = "past-3"
                 else: color_class = "past-4"
             else:
-                zombies = history.get(date_str, 0)
+                zombies = get_zombie_count_for_date(date_str)
                 if commits >= zombies:
                     fark = commits - zombies
                     if fark == 0: color_class = "game-survived-1"
                     elif fark == 1: color_class = "game-survived-2"
-                    elif fark == 2: color_class = "game-survived-3"
-                    else: color_class = "game-survived-4"
-                    ticker_logs.append(random.choice(MSG_CLEARED).format(date=date_str, commits=commits))
+                    else: color_class = "game-survived-3" if fark == 2 else "game-survived-4"
+                    
+                    if date_str < today_str:
+                        msg = random.choice(MSG_OVERKILL) if fark >= 2 else random.choice(MSG_CLEARED)
+                        ticker_logs.append(msg.format(date=date_str, commits=commits))
                 else:
                     if commits > 0: 
                         color_class = "game-invaded-1"
-                        ticker_logs.append(random.choice(MSG_FAILED).format(date=date_str, commits=commits))
+                        if date_str < today_str:
+                            ticker_logs.append(random.choice(MSG_FAILED).format(date=date_str, commits=commits))
                     else: 
                         color_class = "game-invaded-2"
-                        ticker_logs.append(random.choice(MSG_ZERO).format(date=date_str, commits=commits))
+                        if date_str < today_str:
+                            ticker_logs.append(random.choice(MSG_ZERO).format(date=date_str, commits=commits))
             
-            # Easter Egg ise commit kutularına rastgele çıldırma animasyonu eklensin
             if is_easter_egg:
                 dur = round(random.uniform(0.1, 0.4), 2)
                 anim = f'<animate attributeName="fill" values="#ff003c;#39ff14;#ff8c00;#0d1117;#00ffff;#ff00ff" dur="{dur}s" repeatCount="indefinite" />'
@@ -428,11 +377,9 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
     svg_content += get_radar_svg(remaining_zombies, panel_x, 337, panel_width, panel_height)
 
     # -------------------------------------------------------------
-    # KAYAN RÜTBE SİSTEMİ (SLIDING RANK SLOTS)
+    # KAYAN RÜTBE SİSTEMİ
     # -------------------------------------------------------------
     medal_y, medal_box_width, medal_gap, start_medal_x = 540, 200, 25, 25
-    
-    # current_rank_idx -1 ise (10. seviyenin altındaysa) en baştan (0) başlasın
     start_idx = max(0, min(current_rank_idx, len(ORDERED_RANKS) - 4))
     
     slots = []
@@ -440,12 +387,7 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
         target_idx = start_idx + i
         if target_idx < len(ORDERED_RANKS):
             req, name, icon = ORDERED_RANKS[target_idx]
-            slots.append({
-                "name": name,
-                "req": req,
-                "icon": icon,
-                "unlocked": level >= req
-            })
+            slots.append({"name": name, "req": req, "icon": icon, "unlocked": level >= req})
     
     svg_content += f'<text x="25" y="525" class="text-neon text-medal">RANK PROGRESSION [ACTIVE &amp; UPCOMING]</text>\n'
     for idx, slot in enumerate(slots):
@@ -459,7 +401,7 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
         svg_content += f'<text x="{m_x + 10}" y="{medal_y + 35}" class="{text_class} text-medal">{status_text}</text>\n'
 
     # -------------------------------------------------------------
-    # WINDOWS XP STYLE PROGRESS BAR (Easter Egg'de Gizlenir)
+    # TERMINAL STYLE LOADING (XP) BAR
     # -------------------------------------------------------------
     if not is_easter_egg:
         xp_bar_y = 615
@@ -469,17 +411,13 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
         bar_x = 25
         bar_width = (total_blocks * (block_width + block_gap)) + 2
         
-        svg_content += f'<text x="25" y="{xp_bar_y + 10}" class="text-neon text-info">LEVEL PROGRESS</text>\n'
+        svg_content += f'<text x="25" y="{xp_bar_y + 10}" class="text-neon text-info">SYSTEM UPGRADE PROGRESS</text>\n'
         svg_content += f'<text x="{bar_x + bar_width}" y="{xp_bar_y + 10}" class="text-neon text-info" text-anchor="end">{xp_current} / {xp_needed} XP TO LVL {level + 1}</text>\n'
         
-        # Arkası transparent yapıldı
-        svg_content += f'<rect x="{bar_x}" y="{xp_bar_y + 17}" width="{bar_width}" height="20" fill="transparent" stroke="#808080" stroke-width="1" />\n'
-        svg_content += f'<rect x="{bar_x + 1}" y="{xp_bar_y + 18}" width="{bar_width - 2}" height="18" fill="none" stroke="#e0e0e0" stroke-width="1" />\n'
+        svg_content += f'<rect x="{bar_x}" y="{xp_bar_y + 17}" width="{bar_width}" height="20" fill="none" stroke="#1a4d1a" stroke-width="1.5" />\n'
         
-        if xp_needed > 0:
-            fill_count = int(round((xp_current / xp_needed) * total_blocks))
-        else:
-            fill_count = 0
+        if xp_needed > 0: fill_count = int(round((xp_current / xp_needed) * total_blocks))
+        else: fill_count = 0
             
         for i in range(total_blocks):
             b_x = bar_x + 2 + i * (block_width + block_gap)
@@ -487,17 +425,15 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
             
             if i < fill_count:
                 if i == fill_count - 1:
-                    svg_content += f'<rect x="{b_x}" y="{b_y}" width="{block_width}" height="14" fill="url(#xp-green)">\n'
-                    svg_content += f'    <animate attributeName="opacity" values="1;0;1" dur="0.8s" repeatCount="indefinite" />\n'
+                    svg_content += f'<rect x="{b_x}" y="{b_y}" width="{block_width}" height="14" fill="#39ff14">\n'
+                    svg_content += f'    <animate attributeName="opacity" values="1;0.2;1" dur="0.8s" repeatCount="indefinite" />\n'
                     svg_content += f'</rect>\n'
                 else:
-                    svg_content += f'<rect x="{b_x}" y="{b_y}" width="{block_width}" height="14" fill="url(#xp-green)" />\n'
+                    svg_content += f'<rect x="{b_x}" y="{b_y}" width="{block_width}" height="14" fill="#39ff14" />\n'
     else:
-        # Easter Egg için XP Barının olduğu yere gizemli bir yazı
         svg_content += f'<text x="490" y="640" class="text-status" text-anchor="middle" font-size="20">ERROR 404: LEVEL PROGRESSION NOT FOUND</text>\n'
 
-
-    # AKAN YAZI
+    ticker_logs = ticker_logs[-15:]
     ticker_logs.append(random.choice(current_msgs))
     ticker_text = " /// ".join(ticker_logs) + " ///"
     text_width_px = len(ticker_text) * 8
@@ -515,61 +451,55 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
     
     with open("zombie-graph.svg", "w", encoding="utf-8") as file:
         file.write(svg_content)
-    print(f"[SUCCESS] Test Action Zombie Graph oluşturuldu: 'zombie-graph.svg'")
+    print(f"[SUCCESS] Zombie Graph oluşturuldu: 'zombie-graph.svg'")
 
 def simulate_zombie_survival(days):
-    state = load_state()
-    today_str = date.today().strftime("%Y-%m-%d")
-
-    if not state.get("start_date"):
-        state["start_date"] = today_str
-        save_state(state)
-
-    game_start_date = state["start_date"]
-    history = state.get("history", {})
-
-    active_days = [day for day in days if day['date'] >= game_start_date]
-    if not active_days: 
-        generate_pipboy_svg(days, level=0, xp_current=0, xp_needed=1, survived=0, invaded=0, survival_day_count=0, total_commits=0, game_start_date=game_start_date, history=history)
-        return
-
-    start_date_obj = datetime.strptime(game_start_date, "%Y-%m-%d").date()
-    latest_date_obj = datetime.strptime(active_days[-1]['date'], "%Y-%m-%d").date()
-    survival_day = max(0, (latest_date_obj - start_date_obj).days)
-
-    state_updated = False
-    for d in active_days:
-        date_str = d['date']
-        if date_str not in history and date_str <= today_str:
-            history[date_str] = random.randint(1, 4)
-            state_updated = True
-
-    if state_updated:
-        state["history"] = history
-        save_state(state)
+    today_str = days[-1]['date']
+    
+    # 1. Kullanıcının İLK aktif olduğu günü bul
+    first_active_date = None
+    for d in days:
+        if d['contributionCount'] > 0:
+            first_active_date = d['date']
+            break
+            
+    if not first_active_date: 
+        first_active_date = today_str # Hiç commit atmamışsa
+        
+    # 2. Hayatta Kalma Serisi (BUG FIX: Bugün 0 commit olsa bile dünkü seriyi bozmaz)
+    survival_day = 0
+    for d in days:
+        if d['date'] > today_str:
+            break
+        if d['contributionCount'] > 0:
+            survival_day += 1
+        elif d['date'] < today_str:
+            survival_day = 0 # Sadece GEÇMİŞ günlerde 0 commit atıldıysa seriyi sıfırla
 
     total_survived = 0
     total_invaded = 0
+    total_commits = 0
+    
+    active_days = [day for day in days if day['date'] >= first_active_date]
     
     for d in active_days:
         date_str = d['date']
-        if date_str >= today_str: continue
-        commits = d['contributionCount']
-        zombies = history.get(date_str, 0)
+        if date_str >= today_str: continue 
         
+        commits = d['contributionCount']
+        total_commits += commits
+        
+        zombies = get_zombie_count_for_date(date_str)
         if commits >= zombies: total_survived += 1
         else: total_invaded += 1 
 
-    # =========================================================================
-    # TEST GÖRÜNÜMÜ İÇİN MOCK DEĞERLER (100. COMMIT EASTER EGG SİMÜLASYONU)
-    # Lütfen gerçek ortama pushlamadan önce bu kısmı silin.
-    total_commits = 100 
-    level = 13
-    xp_current = 9
-    xp_needed = 14
-    # =========================================================================
+    # Bugünün commitlerini XP'ye dahil et
+    today_commits = next((d['contributionCount'] for d in days if d['date'] == today_str), 0)
+    total_commits += today_commits
+
+    level, xp_current, xp_needed = calculate_level_info(total_commits)
     
-    generate_pipboy_svg(days, level, xp_current, xp_needed, total_survived, total_invaded, survival_day, total_commits, game_start_date, history)
+    generate_pipboy_svg(days, level, xp_current, xp_needed, total_survived, total_invaded, survival_day, total_commits, first_active_date)
 
 if __name__ == "__main__":
     real_github_data = get_contribution_data()
