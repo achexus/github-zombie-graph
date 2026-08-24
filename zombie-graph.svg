@@ -7,7 +7,7 @@
         .text-title { font-size: 22px; }
         .text-info { font-size: 14px; }
         .text-medal { font-size: 12px; }
-        .text-status { fill: #ff003c; font-family: 'Courier New', Courier, monospace; font-weight: bold; font-size: 14px; }
+        .text-status { fill: #d92525; font-family: 'Courier New', Courier, monospace; font-weight: bold; font-size: 14px; }
         .box-medal-earned { fill: rgba(57, 255, 20, 0.05); stroke: #39ff14; stroke-width: 1; }
         .box-medal-locked { fill: transparent; stroke: #1a4d1a; stroke-width: 1; stroke-dasharray: 4; }
         .intel-panel { fill: rgba(13, 17, 23, 0.8); stroke: #1a4d1a; stroke-width: 1; rx: 4; ry: 4; }
@@ -22,8 +22,10 @@
         .game-survived-2 { fill: #2c9e17; rx: 2; ry: 2; } 
         .game-survived-3 { fill: #39ff14; rx: 2; ry: 2; } 
         .game-survived-4 { fill: #a3ff00; rx: 2; ry: 2; } 
-        .game-invaded-1 { fill: #8a0020; stroke: #ff003c; stroke-width: 1; rx: 2; ry: 2; }  
-        .game-invaded-2 { fill: #ff003c; rx: 2; ry: 2; }  
+        
+        /* GÜNCELLENEN SİBERPUNK KORUPTE RENKLER */
+        .game-invaded-1 { fill: #5e1111; stroke: #a11b1b; stroke-width: 1; rx: 2; ry: 2; }  
+        .game-invaded-2 { fill: #20080a; rx: 2; ry: 2; }  
         
         @keyframes pulse-beacon { 0% { fill-opacity: 1; stroke: #ffffff; stroke-width: 1px; } 50% { fill-opacity: 0.4; stroke: #39ff14; stroke-width: 3px; } 100% { fill-opacity: 1; stroke: #ffffff; stroke-width: 1px; } }
         .current-day { animation: pulse-beacon 1.5s infinite; rx: 3; ry: 3; }
@@ -235,12 +237,12 @@
 <line x1="0" y1="732" x2="980" y2="732" class="scanline" />
 <line x1="0" y1="736" x2="980" y2="736" class="scanline" />
 <text x="25" y="40" class="text-neon text-title">ACHEXUS SURVIVAL SYSTEM</text>
-<text x="25" y="75" class="text-neon text-info">SURVIVAL DAY : 2</text>
-<text x="25" y="95" class="text-neon text-info">RANK         : SCAVENGER (LVL 17)</text>
-<text x="450" y="75" class="text-neon text-info">TOTAL XP     : 160 XP</text>
-<text x="450" y="95" class="text-neon text-info">STATUS       : 23 CLEARED / 310 INVADED</text>
+<text x="25" y="75" class="text-neon text-info">SURVIVAL DAY : 3</text>
+<text x="25" y="95" class="text-neon text-info">RANK         : SCAVENGER (LVL 12)</text>
+<text x="450" y="75" class="text-neon text-info">TOTAL XP     : 81 XP</text>
+<text x="450" y="95" class="text-neon text-info">STATUS       : 9 CLEARED / 21 INVADED</text>
 <rect x="25" y="115" width="930" height="30" class="intel-panel" />
-<text x="35" y="135" class="text-neon text-info">TODAY INTEL | INCOMING ZOMBIES: 4 | ELIMINATED: 0 | STATUS: <tspan class="text-status">CRITICAL (EN ROUTE)</tspan></text>
+<text x="35" y="135" class="text-neon text-info">TODAY INTEL | INCOMING ZOMBIES: 1 | ELIMINATED: 0 | STATUS: <tspan class="text-status">CRITICAL (EN ROUTE)</tspan></text>
 <rect x="25" y="165" width="20" height="20" class="past-0" />
 <rect x="25" y="189" width="20" height="20" class="past-0" />
 <rect x="25" y="213" width="20" height="20" class="past-0" />
@@ -273,310 +275,310 @@
 <rect x="121" y="189" width="20" height="20" class="past-0" />
 <rect x="121" y="213" width="20" height="20" class="past-0" />
 <rect x="121" y="237" width="20" height="20" class="past-0" />
-<rect x="121" y="261" width="20" height="20" class="game-survived-1" />
-<rect x="121" y="285" width="20" height="20" class="game-invaded-2" />
-<rect x="121" y="309" width="20" height="20" class="game-invaded-2" />
-<rect x="145" y="165" width="20" height="20" class="game-invaded-2" />
-<rect x="145" y="189" width="20" height="20" class="game-invaded-2" />
-<rect x="145" y="213" width="20" height="20" class="game-invaded-2" />
-<rect x="145" y="237" width="20" height="20" class="game-invaded-2" />
-<rect x="145" y="261" width="20" height="20" class="game-invaded-2" />
-<rect x="145" y="285" width="20" height="20" class="game-invaded-1" />
-<rect x="145" y="309" width="20" height="20" class="game-survived-1" />
-<rect x="169" y="165" width="20" height="20" class="game-invaded-1" />
-<rect x="169" y="189" width="20" height="20" class="game-invaded-2" />
-<rect x="169" y="213" width="20" height="20" class="game-invaded-2" />
-<rect x="169" y="237" width="20" height="20" class="game-invaded-2" />
-<rect x="169" y="261" width="20" height="20" class="game-invaded-2" />
-<rect x="169" y="285" width="20" height="20" class="game-invaded-2" />
-<rect x="169" y="309" width="20" height="20" class="game-invaded-2" />
-<rect x="193" y="165" width="20" height="20" class="game-invaded-2" />
-<rect x="193" y="189" width="20" height="20" class="game-invaded-2" />
-<rect x="193" y="213" width="20" height="20" class="game-invaded-2" />
-<rect x="193" y="237" width="20" height="20" class="game-invaded-2" />
-<rect x="193" y="261" width="20" height="20" class="game-invaded-2" />
-<rect x="193" y="285" width="20" height="20" class="game-invaded-2" />
-<rect x="193" y="309" width="20" height="20" class="game-invaded-2" />
-<rect x="217" y="165" width="20" height="20" class="game-invaded-2" />
-<rect x="217" y="189" width="20" height="20" class="game-invaded-2" />
-<rect x="217" y="213" width="20" height="20" class="game-invaded-2" />
-<rect x="217" y="237" width="20" height="20" class="game-invaded-2" />
-<rect x="217" y="261" width="20" height="20" class="game-invaded-2" />
-<rect x="217" y="285" width="20" height="20" class="game-invaded-2" />
-<rect x="217" y="309" width="20" height="20" class="game-invaded-2" />
-<rect x="241" y="165" width="20" height="20" class="game-invaded-2" />
-<rect x="241" y="189" width="20" height="20" class="game-invaded-2" />
-<rect x="241" y="213" width="20" height="20" class="game-invaded-2" />
-<rect x="241" y="237" width="20" height="20" class="game-invaded-2" />
-<rect x="241" y="261" width="20" height="20" class="game-invaded-2" />
-<rect x="241" y="285" width="20" height="20" class="game-invaded-2" />
-<rect x="241" y="309" width="20" height="20" class="game-invaded-2" />
-<rect x="265" y="165" width="20" height="20" class="game-invaded-2" />
-<rect x="265" y="189" width="20" height="20" class="game-invaded-2" />
-<rect x="265" y="213" width="20" height="20" class="game-invaded-2" />
-<rect x="265" y="237" width="20" height="20" class="game-invaded-2" />
-<rect x="265" y="261" width="20" height="20" class="game-invaded-2" />
-<rect x="265" y="285" width="20" height="20" class="game-invaded-2" />
-<rect x="265" y="309" width="20" height="20" class="game-invaded-2" />
-<rect x="289" y="165" width="20" height="20" class="game-invaded-2" />
-<rect x="289" y="189" width="20" height="20" class="game-invaded-2" />
-<rect x="289" y="213" width="20" height="20" class="game-invaded-2" />
-<rect x="289" y="237" width="20" height="20" class="game-invaded-2" />
-<rect x="289" y="261" width="20" height="20" class="game-invaded-2" />
-<rect x="289" y="285" width="20" height="20" class="game-invaded-2" />
-<rect x="289" y="309" width="20" height="20" class="game-invaded-2" />
-<rect x="313" y="165" width="20" height="20" class="game-invaded-2" />
-<rect x="313" y="189" width="20" height="20" class="game-invaded-2" />
-<rect x="313" y="213" width="20" height="20" class="game-invaded-2" />
-<rect x="313" y="237" width="20" height="20" class="game-invaded-2" />
-<rect x="313" y="261" width="20" height="20" class="game-invaded-2" />
-<rect x="313" y="285" width="20" height="20" class="game-invaded-2" />
-<rect x="313" y="309" width="20" height="20" class="game-invaded-2" />
-<rect x="337" y="165" width="20" height="20" class="game-invaded-2" />
-<rect x="337" y="189" width="20" height="20" class="game-invaded-2" />
-<rect x="337" y="213" width="20" height="20" class="game-invaded-2" />
-<rect x="337" y="237" width="20" height="20" class="game-invaded-2" />
-<rect x="337" y="261" width="20" height="20" class="game-invaded-2" />
-<rect x="337" y="285" width="20" height="20" class="game-invaded-2" />
-<rect x="337" y="309" width="20" height="20" class="game-invaded-2" />
-<rect x="361" y="165" width="20" height="20" class="game-invaded-2" />
-<rect x="361" y="189" width="20" height="20" class="game-invaded-2" />
-<rect x="361" y="213" width="20" height="20" class="game-invaded-2" />
-<rect x="361" y="237" width="20" height="20" class="game-invaded-2" />
-<rect x="361" y="261" width="20" height="20" class="game-invaded-2" />
-<rect x="361" y="285" width="20" height="20" class="game-invaded-2" />
-<rect x="361" y="309" width="20" height="20" class="game-invaded-2" />
-<rect x="385" y="165" width="20" height="20" class="game-invaded-2" />
-<rect x="385" y="189" width="20" height="20" class="game-invaded-2" />
-<rect x="385" y="213" width="20" height="20" class="game-invaded-2" />
-<rect x="385" y="237" width="20" height="20" class="game-invaded-2" />
-<rect x="385" y="261" width="20" height="20" class="game-invaded-2" />
-<rect x="385" y="285" width="20" height="20" class="game-invaded-2" />
-<rect x="385" y="309" width="20" height="20" class="game-invaded-2" />
-<rect x="409" y="165" width="20" height="20" class="game-invaded-2" />
-<rect x="409" y="189" width="20" height="20" class="game-invaded-2" />
-<rect x="409" y="213" width="20" height="20" class="game-invaded-2" />
-<rect x="409" y="237" width="20" height="20" class="game-invaded-2" />
-<rect x="409" y="261" width="20" height="20" class="game-invaded-2" />
-<rect x="409" y="285" width="20" height="20" class="game-invaded-2" />
-<rect x="409" y="309" width="20" height="20" class="game-invaded-2" />
-<rect x="433" y="165" width="20" height="20" class="game-invaded-2" />
-<rect x="433" y="189" width="20" height="20" class="game-invaded-2" />
-<rect x="433" y="213" width="20" height="20" class="game-invaded-2" />
-<rect x="433" y="237" width="20" height="20" class="game-invaded-2" />
-<rect x="433" y="261" width="20" height="20" class="game-invaded-2" />
-<rect x="433" y="285" width="20" height="20" class="game-invaded-2" />
-<rect x="433" y="309" width="20" height="20" class="game-invaded-2" />
-<rect x="457" y="165" width="20" height="20" class="game-invaded-2" />
-<rect x="457" y="189" width="20" height="20" class="game-invaded-2" />
-<rect x="457" y="213" width="20" height="20" class="game-invaded-2" />
-<rect x="457" y="237" width="20" height="20" class="game-invaded-2" />
-<rect x="457" y="261" width="20" height="20" class="game-invaded-2" />
-<rect x="457" y="285" width="20" height="20" class="game-invaded-2" />
-<rect x="457" y="309" width="20" height="20" class="game-invaded-2" />
-<rect x="481" y="165" width="20" height="20" class="game-invaded-2" />
-<rect x="481" y="189" width="20" height="20" class="game-invaded-2" />
-<rect x="481" y="213" width="20" height="20" class="game-invaded-2" />
-<rect x="481" y="237" width="20" height="20" class="game-invaded-2" />
-<rect x="481" y="261" width="20" height="20" class="game-invaded-2" />
-<rect x="481" y="285" width="20" height="20" class="game-invaded-2" />
-<rect x="481" y="309" width="20" height="20" class="game-invaded-2" />
-<rect x="505" y="165" width="20" height="20" class="game-invaded-2" />
-<rect x="505" y="189" width="20" height="20" class="game-invaded-2" />
-<rect x="505" y="213" width="20" height="20" class="game-invaded-2" />
-<rect x="505" y="237" width="20" height="20" class="game-invaded-2" />
-<rect x="505" y="261" width="20" height="20" class="game-invaded-2" />
-<rect x="505" y="285" width="20" height="20" class="game-invaded-2" />
-<rect x="505" y="309" width="20" height="20" class="game-invaded-2" />
-<rect x="529" y="165" width="20" height="20" class="game-invaded-2" />
-<rect x="529" y="189" width="20" height="20" class="game-invaded-2" />
-<rect x="529" y="213" width="20" height="20" class="game-invaded-2" />
-<rect x="529" y="237" width="20" height="20" class="game-invaded-2" />
-<rect x="529" y="261" width="20" height="20" class="game-invaded-2" />
-<rect x="529" y="285" width="20" height="20" class="game-invaded-2" />
-<rect x="529" y="309" width="20" height="20" class="game-invaded-2" />
-<rect x="553" y="165" width="20" height="20" class="game-invaded-2" />
-<rect x="553" y="189" width="20" height="20" class="game-invaded-2" />
-<rect x="553" y="213" width="20" height="20" class="game-invaded-2" />
-<rect x="553" y="237" width="20" height="20" class="game-invaded-2" />
-<rect x="553" y="261" width="20" height="20" class="game-invaded-2" />
-<rect x="553" y="285" width="20" height="20" class="game-invaded-2" />
-<rect x="553" y="309" width="20" height="20" class="game-invaded-2" />
-<rect x="577" y="165" width="20" height="20" class="game-invaded-2" />
-<rect x="577" y="189" width="20" height="20" class="game-invaded-2" />
-<rect x="577" y="213" width="20" height="20" class="game-invaded-2" />
-<rect x="577" y="237" width="20" height="20" class="game-invaded-2" />
-<rect x="577" y="261" width="20" height="20" class="game-invaded-2" />
-<rect x="577" y="285" width="20" height="20" class="game-invaded-2" />
-<rect x="577" y="309" width="20" height="20" class="game-invaded-2" />
-<rect x="601" y="165" width="20" height="20" class="game-invaded-2" />
-<rect x="601" y="189" width="20" height="20" class="game-invaded-2" />
-<rect x="601" y="213" width="20" height="20" class="game-survived-3" />
-<rect x="601" y="237" width="20" height="20" class="game-invaded-2" />
-<rect x="601" y="261" width="20" height="20" class="game-invaded-1" />
-<rect x="601" y="285" width="20" height="20" class="game-invaded-1" />
-<rect x="601" y="309" width="20" height="20" class="game-invaded-2" />
-<rect x="625" y="165" width="20" height="20" class="game-invaded-2" />
-<rect x="625" y="189" width="20" height="20" class="game-invaded-2" />
-<rect x="625" y="213" width="20" height="20" class="game-invaded-2" />
-<rect x="625" y="237" width="20" height="20" class="game-invaded-2" />
-<rect x="625" y="261" width="20" height="20" class="game-invaded-2" />
-<rect x="625" y="285" width="20" height="20" class="game-invaded-2" />
-<rect x="625" y="309" width="20" height="20" class="game-invaded-2" />
-<rect x="649" y="165" width="20" height="20" class="game-invaded-2" />
-<rect x="649" y="189" width="20" height="20" class="game-invaded-2" />
-<rect x="649" y="213" width="20" height="20" class="game-invaded-2" />
-<rect x="649" y="237" width="20" height="20" class="game-invaded-2" />
-<rect x="649" y="261" width="20" height="20" class="game-invaded-1" />
-<rect x="649" y="285" width="20" height="20" class="game-invaded-2" />
-<rect x="649" y="309" width="20" height="20" class="game-invaded-2" />
-<rect x="25" y="333" width="20" height="20" class="game-invaded-2" />
-<rect x="25" y="357" width="20" height="20" class="game-invaded-2" />
-<rect x="25" y="381" width="20" height="20" class="game-invaded-2" />
-<rect x="25" y="405" width="20" height="20" class="game-invaded-2" />
-<rect x="25" y="429" width="20" height="20" class="game-invaded-2" />
-<rect x="25" y="453" width="20" height="20" class="game-invaded-2" />
-<rect x="25" y="477" width="20" height="20" class="game-invaded-2" />
-<rect x="49" y="333" width="20" height="20" class="game-invaded-2" />
-<rect x="49" y="357" width="20" height="20" class="game-invaded-2" />
-<rect x="49" y="381" width="20" height="20" class="game-invaded-2" />
-<rect x="49" y="405" width="20" height="20" class="game-invaded-2" />
-<rect x="49" y="429" width="20" height="20" class="game-invaded-2" />
-<rect x="49" y="453" width="20" height="20" class="game-invaded-2" />
-<rect x="49" y="477" width="20" height="20" class="game-invaded-2" />
-<rect x="73" y="333" width="20" height="20" class="game-invaded-2" />
-<rect x="73" y="357" width="20" height="20" class="game-invaded-2" />
-<rect x="73" y="381" width="20" height="20" class="game-invaded-2" />
-<rect x="73" y="405" width="20" height="20" class="game-invaded-2" />
-<rect x="73" y="429" width="20" height="20" class="game-invaded-2" />
-<rect x="73" y="453" width="20" height="20" class="game-invaded-2" />
-<rect x="73" y="477" width="20" height="20" class="game-invaded-2" />
-<rect x="97" y="333" width="20" height="20" class="game-invaded-2" />
-<rect x="97" y="357" width="20" height="20" class="game-invaded-2" />
-<rect x="97" y="381" width="20" height="20" class="game-invaded-2" />
-<rect x="97" y="405" width="20" height="20" class="game-invaded-2" />
-<rect x="97" y="429" width="20" height="20" class="game-invaded-2" />
-<rect x="97" y="453" width="20" height="20" class="game-invaded-2" />
-<rect x="97" y="477" width="20" height="20" class="game-invaded-2" />
-<rect x="121" y="333" width="20" height="20" class="game-invaded-2" />
-<rect x="121" y="357" width="20" height="20" class="game-invaded-2" />
-<rect x="121" y="381" width="20" height="20" class="game-invaded-2" />
-<rect x="121" y="405" width="20" height="20" class="game-invaded-2" />
-<rect x="121" y="429" width="20" height="20" class="game-invaded-2" />
-<rect x="121" y="453" width="20" height="20" class="game-invaded-2" />
-<rect x="121" y="477" width="20" height="20" class="game-invaded-2" />
-<rect x="145" y="333" width="20" height="20" class="game-invaded-2" />
-<rect x="145" y="357" width="20" height="20" class="game-invaded-2" />
-<rect x="145" y="381" width="20" height="20" class="game-invaded-2" />
-<rect x="145" y="405" width="20" height="20" class="game-invaded-2" />
-<rect x="145" y="429" width="20" height="20" class="game-invaded-2" />
-<rect x="145" y="453" width="20" height="20" class="game-invaded-2" />
-<rect x="145" y="477" width="20" height="20" class="game-invaded-2" />
-<rect x="169" y="333" width="20" height="20" class="game-invaded-2" />
-<rect x="169" y="357" width="20" height="20" class="game-invaded-2" />
-<rect x="169" y="381" width="20" height="20" class="game-invaded-2" />
-<rect x="169" y="405" width="20" height="20" class="game-invaded-2" />
-<rect x="169" y="429" width="20" height="20" class="game-invaded-2" />
-<rect x="169" y="453" width="20" height="20" class="game-invaded-2" />
-<rect x="169" y="477" width="20" height="20" class="game-invaded-2" />
-<rect x="193" y="333" width="20" height="20" class="game-invaded-2" />
-<rect x="193" y="357" width="20" height="20" class="game-invaded-2" />
-<rect x="193" y="381" width="20" height="20" class="game-invaded-2" />
-<rect x="193" y="405" width="20" height="20" class="game-invaded-2" />
-<rect x="193" y="429" width="20" height="20" class="game-invaded-2" />
-<rect x="193" y="453" width="20" height="20" class="game-invaded-2" />
-<rect x="193" y="477" width="20" height="20" class="game-invaded-2" />
-<rect x="217" y="333" width="20" height="20" class="game-invaded-2" />
-<rect x="217" y="357" width="20" height="20" class="game-invaded-2" />
-<rect x="217" y="381" width="20" height="20" class="game-invaded-2" />
-<rect x="217" y="405" width="20" height="20" class="game-invaded-2" />
-<rect x="217" y="429" width="20" height="20" class="game-invaded-2" />
-<rect x="217" y="453" width="20" height="20" class="game-invaded-2" />
-<rect x="217" y="477" width="20" height="20" class="game-invaded-2" />
-<rect x="241" y="333" width="20" height="20" class="game-invaded-2" />
-<rect x="241" y="357" width="20" height="20" class="game-invaded-2" />
-<rect x="241" y="381" width="20" height="20" class="game-invaded-2" />
-<rect x="241" y="405" width="20" height="20" class="game-invaded-2" />
-<rect x="241" y="429" width="20" height="20" class="game-invaded-2" />
-<rect x="241" y="453" width="20" height="20" class="game-invaded-2" />
-<rect x="241" y="477" width="20" height="20" class="game-invaded-2" />
-<rect x="265" y="333" width="20" height="20" class="game-invaded-2" />
-<rect x="265" y="357" width="20" height="20" class="game-invaded-2" />
-<rect x="265" y="381" width="20" height="20" class="game-invaded-2" />
-<rect x="265" y="405" width="20" height="20" class="game-invaded-2" />
-<rect x="265" y="429" width="20" height="20" class="game-invaded-2" />
-<rect x="265" y="453" width="20" height="20" class="game-invaded-2" />
-<rect x="265" y="477" width="20" height="20" class="game-invaded-2" />
-<rect x="289" y="333" width="20" height="20" class="game-invaded-2" />
-<rect x="289" y="357" width="20" height="20" class="game-invaded-2" />
-<rect x="289" y="381" width="20" height="20" class="game-invaded-2" />
-<rect x="289" y="405" width="20" height="20" class="game-invaded-2" />
-<rect x="289" y="429" width="20" height="20" class="game-survived-2" />
-<rect x="289" y="453" width="20" height="20" class="game-invaded-2" />
-<rect x="289" y="477" width="20" height="20" class="game-survived-2" />
-<rect x="313" y="333" width="20" height="20" class="game-invaded-2" />
-<rect x="313" y="357" width="20" height="20" class="game-invaded-1" />
-<rect x="313" y="381" width="20" height="20" class="game-survived-2" />
-<rect x="313" y="405" width="20" height="20" class="game-survived-1" />
-<rect x="313" y="429" width="20" height="20" class="game-invaded-2" />
-<rect x="313" y="453" width="20" height="20" class="game-invaded-2" />
-<rect x="313" y="477" width="20" height="20" class="game-invaded-2" />
-<rect x="337" y="333" width="20" height="20" class="game-invaded-1" />
-<rect x="337" y="357" width="20" height="20" class="game-invaded-2" />
-<rect x="337" y="381" width="20" height="20" class="game-invaded-2" />
-<rect x="337" y="405" width="20" height="20" class="game-invaded-2" />
-<rect x="337" y="429" width="20" height="20" class="game-invaded-2" />
-<rect x="337" y="453" width="20" height="20" class="game-invaded-2" />
-<rect x="337" y="477" width="20" height="20" class="game-invaded-2" />
-<rect x="361" y="333" width="20" height="20" class="game-invaded-2" />
-<rect x="361" y="357" width="20" height="20" class="game-invaded-2" />
-<rect x="361" y="381" width="20" height="20" class="game-invaded-2" />
-<rect x="361" y="405" width="20" height="20" class="game-invaded-2" />
-<rect x="361" y="429" width="20" height="20" class="game-invaded-2" />
-<rect x="361" y="453" width="20" height="20" class="game-invaded-2" />
-<rect x="361" y="477" width="20" height="20" class="game-invaded-2" />
-<rect x="385" y="333" width="20" height="20" class="game-invaded-2" />
-<rect x="385" y="357" width="20" height="20" class="game-invaded-2" />
-<rect x="385" y="381" width="20" height="20" class="game-invaded-2" />
-<rect x="385" y="405" width="20" height="20" class="game-invaded-2" />
-<rect x="385" y="429" width="20" height="20" class="game-invaded-2" />
-<rect x="385" y="453" width="20" height="20" class="game-invaded-2" />
-<rect x="385" y="477" width="20" height="20" class="game-invaded-2" />
-<rect x="409" y="333" width="20" height="20" class="game-invaded-2" />
-<rect x="409" y="357" width="20" height="20" class="game-invaded-2" />
-<rect x="409" y="381" width="20" height="20" class="game-invaded-2" />
-<rect x="409" y="405" width="20" height="20" class="game-invaded-2" />
-<rect x="409" y="429" width="20" height="20" class="game-invaded-2" />
-<rect x="409" y="453" width="20" height="20" class="game-invaded-2" />
-<rect x="409" y="477" width="20" height="20" class="game-invaded-2" />
-<rect x="433" y="333" width="20" height="20" class="game-invaded-2" />
-<rect x="433" y="357" width="20" height="20" class="game-invaded-2" />
-<rect x="433" y="381" width="20" height="20" class="game-invaded-2" />
-<rect x="433" y="405" width="20" height="20" class="game-invaded-2" />
-<rect x="433" y="429" width="20" height="20" class="game-invaded-2" />
-<rect x="433" y="453" width="20" height="20" class="game-invaded-2" />
-<rect x="433" y="477" width="20" height="20" class="game-invaded-2" />
-<rect x="457" y="333" width="20" height="20" class="game-invaded-2" />
-<rect x="457" y="357" width="20" height="20" class="game-invaded-2" />
-<rect x="457" y="381" width="20" height="20" class="game-invaded-2" />
-<rect x="457" y="405" width="20" height="20" class="game-invaded-2" />
-<rect x="457" y="429" width="20" height="20" class="game-invaded-2" />
-<rect x="457" y="453" width="20" height="20" class="game-invaded-2" />
-<rect x="457" y="477" width="20" height="20" class="game-invaded-2" />
-<rect x="481" y="333" width="20" height="20" class="game-survived-4" />
-<rect x="481" y="357" width="20" height="20" class="game-invaded-2" />
-<rect x="481" y="381" width="20" height="20" class="game-invaded-2" />
-<rect x="481" y="405" width="20" height="20" class="game-survived-4" />
-<rect x="481" y="429" width="20" height="20" class="game-invaded-1" />
-<rect x="481" y="453" width="20" height="20" class="game-invaded-1" />
-<rect x="481" y="477" width="20" height="20" class="game-invaded-2" />
-<rect x="505" y="333" width="20" height="20" class="game-survived-3" />
-<rect x="505" y="357" width="20" height="20" class="game-survived-1" />
-<rect x="505" y="381" width="20" height="20" class="game-survived-2" />
-<rect x="505" y="405" width="20" height="20" class="game-survived-1" />
-<rect x="505" y="429" width="20" height="20" class="game-invaded-1" />
-<rect x="505" y="453" width="20" height="20" class="game-survived-3" />
-<rect x="505" y="477" width="20" height="20" class="game-survived-1" />
+<rect x="121" y="261" width="20" height="20" class="past-1" />
+<rect x="121" y="285" width="20" height="20" class="past-0" />
+<rect x="121" y="309" width="20" height="20" class="past-0" />
+<rect x="145" y="165" width="20" height="20" class="past-0" />
+<rect x="145" y="189" width="20" height="20" class="past-0" />
+<rect x="145" y="213" width="20" height="20" class="past-0" />
+<rect x="145" y="237" width="20" height="20" class="past-0" />
+<rect x="145" y="261" width="20" height="20" class="past-0" />
+<rect x="145" y="285" width="20" height="20" class="past-1" />
+<rect x="145" y="309" width="20" height="20" class="past-1" />
+<rect x="169" y="165" width="20" height="20" class="past-1" />
+<rect x="169" y="189" width="20" height="20" class="past-0" />
+<rect x="169" y="213" width="20" height="20" class="past-0" />
+<rect x="169" y="237" width="20" height="20" class="past-0" />
+<rect x="169" y="261" width="20" height="20" class="past-0" />
+<rect x="169" y="285" width="20" height="20" class="past-0" />
+<rect x="169" y="309" width="20" height="20" class="past-0" />
+<rect x="193" y="165" width="20" height="20" class="past-0" />
+<rect x="193" y="189" width="20" height="20" class="past-0" />
+<rect x="193" y="213" width="20" height="20" class="past-0" />
+<rect x="193" y="237" width="20" height="20" class="past-0" />
+<rect x="193" y="261" width="20" height="20" class="past-0" />
+<rect x="193" y="285" width="20" height="20" class="past-0" />
+<rect x="193" y="309" width="20" height="20" class="past-0" />
+<rect x="217" y="165" width="20" height="20" class="past-0" />
+<rect x="217" y="189" width="20" height="20" class="past-0" />
+<rect x="217" y="213" width="20" height="20" class="past-0" />
+<rect x="217" y="237" width="20" height="20" class="past-0" />
+<rect x="217" y="261" width="20" height="20" class="past-0" />
+<rect x="217" y="285" width="20" height="20" class="past-0" />
+<rect x="217" y="309" width="20" height="20" class="past-0" />
+<rect x="241" y="165" width="20" height="20" class="past-0" />
+<rect x="241" y="189" width="20" height="20" class="past-0" />
+<rect x="241" y="213" width="20" height="20" class="past-0" />
+<rect x="241" y="237" width="20" height="20" class="past-0" />
+<rect x="241" y="261" width="20" height="20" class="past-0" />
+<rect x="241" y="285" width="20" height="20" class="past-0" />
+<rect x="241" y="309" width="20" height="20" class="past-0" />
+<rect x="265" y="165" width="20" height="20" class="past-0" />
+<rect x="265" y="189" width="20" height="20" class="past-0" />
+<rect x="265" y="213" width="20" height="20" class="past-0" />
+<rect x="265" y="237" width="20" height="20" class="past-0" />
+<rect x="265" y="261" width="20" height="20" class="past-0" />
+<rect x="265" y="285" width="20" height="20" class="past-0" />
+<rect x="265" y="309" width="20" height="20" class="past-0" />
+<rect x="289" y="165" width="20" height="20" class="past-0" />
+<rect x="289" y="189" width="20" height="20" class="past-0" />
+<rect x="289" y="213" width="20" height="20" class="past-0" />
+<rect x="289" y="237" width="20" height="20" class="past-0" />
+<rect x="289" y="261" width="20" height="20" class="past-0" />
+<rect x="289" y="285" width="20" height="20" class="past-0" />
+<rect x="289" y="309" width="20" height="20" class="past-0" />
+<rect x="313" y="165" width="20" height="20" class="past-0" />
+<rect x="313" y="189" width="20" height="20" class="past-0" />
+<rect x="313" y="213" width="20" height="20" class="past-0" />
+<rect x="313" y="237" width="20" height="20" class="past-0" />
+<rect x="313" y="261" width="20" height="20" class="past-0" />
+<rect x="313" y="285" width="20" height="20" class="past-0" />
+<rect x="313" y="309" width="20" height="20" class="past-0" />
+<rect x="337" y="165" width="20" height="20" class="past-0" />
+<rect x="337" y="189" width="20" height="20" class="past-0" />
+<rect x="337" y="213" width="20" height="20" class="past-0" />
+<rect x="337" y="237" width="20" height="20" class="past-0" />
+<rect x="337" y="261" width="20" height="20" class="past-0" />
+<rect x="337" y="285" width="20" height="20" class="past-0" />
+<rect x="337" y="309" width="20" height="20" class="past-0" />
+<rect x="361" y="165" width="20" height="20" class="past-0" />
+<rect x="361" y="189" width="20" height="20" class="past-0" />
+<rect x="361" y="213" width="20" height="20" class="past-0" />
+<rect x="361" y="237" width="20" height="20" class="past-0" />
+<rect x="361" y="261" width="20" height="20" class="past-0" />
+<rect x="361" y="285" width="20" height="20" class="past-0" />
+<rect x="361" y="309" width="20" height="20" class="past-0" />
+<rect x="385" y="165" width="20" height="20" class="past-0" />
+<rect x="385" y="189" width="20" height="20" class="past-0" />
+<rect x="385" y="213" width="20" height="20" class="past-0" />
+<rect x="385" y="237" width="20" height="20" class="past-0" />
+<rect x="385" y="261" width="20" height="20" class="past-0" />
+<rect x="385" y="285" width="20" height="20" class="past-0" />
+<rect x="385" y="309" width="20" height="20" class="past-0" />
+<rect x="409" y="165" width="20" height="20" class="past-0" />
+<rect x="409" y="189" width="20" height="20" class="past-0" />
+<rect x="409" y="213" width="20" height="20" class="past-0" />
+<rect x="409" y="237" width="20" height="20" class="past-0" />
+<rect x="409" y="261" width="20" height="20" class="past-0" />
+<rect x="409" y="285" width="20" height="20" class="past-0" />
+<rect x="409" y="309" width="20" height="20" class="past-0" />
+<rect x="433" y="165" width="20" height="20" class="past-0" />
+<rect x="433" y="189" width="20" height="20" class="past-0" />
+<rect x="433" y="213" width="20" height="20" class="past-0" />
+<rect x="433" y="237" width="20" height="20" class="past-0" />
+<rect x="433" y="261" width="20" height="20" class="past-0" />
+<rect x="433" y="285" width="20" height="20" class="past-0" />
+<rect x="433" y="309" width="20" height="20" class="past-0" />
+<rect x="457" y="165" width="20" height="20" class="past-0" />
+<rect x="457" y="189" width="20" height="20" class="past-0" />
+<rect x="457" y="213" width="20" height="20" class="past-0" />
+<rect x="457" y="237" width="20" height="20" class="past-0" />
+<rect x="457" y="261" width="20" height="20" class="past-0" />
+<rect x="457" y="285" width="20" height="20" class="past-0" />
+<rect x="457" y="309" width="20" height="20" class="past-0" />
+<rect x="481" y="165" width="20" height="20" class="past-0" />
+<rect x="481" y="189" width="20" height="20" class="past-0" />
+<rect x="481" y="213" width="20" height="20" class="past-0" />
+<rect x="481" y="237" width="20" height="20" class="past-0" />
+<rect x="481" y="261" width="20" height="20" class="past-0" />
+<rect x="481" y="285" width="20" height="20" class="past-0" />
+<rect x="481" y="309" width="20" height="20" class="past-0" />
+<rect x="505" y="165" width="20" height="20" class="past-0" />
+<rect x="505" y="189" width="20" height="20" class="past-0" />
+<rect x="505" y="213" width="20" height="20" class="past-0" />
+<rect x="505" y="237" width="20" height="20" class="past-0" />
+<rect x="505" y="261" width="20" height="20" class="past-0" />
+<rect x="505" y="285" width="20" height="20" class="past-0" />
+<rect x="505" y="309" width="20" height="20" class="past-0" />
+<rect x="529" y="165" width="20" height="20" class="past-0" />
+<rect x="529" y="189" width="20" height="20" class="past-0" />
+<rect x="529" y="213" width="20" height="20" class="past-0" />
+<rect x="529" y="237" width="20" height="20" class="past-0" />
+<rect x="529" y="261" width="20" height="20" class="past-0" />
+<rect x="529" y="285" width="20" height="20" class="past-0" />
+<rect x="529" y="309" width="20" height="20" class="past-0" />
+<rect x="553" y="165" width="20" height="20" class="past-0" />
+<rect x="553" y="189" width="20" height="20" class="past-0" />
+<rect x="553" y="213" width="20" height="20" class="past-0" />
+<rect x="553" y="237" width="20" height="20" class="past-0" />
+<rect x="553" y="261" width="20" height="20" class="past-0" />
+<rect x="553" y="285" width="20" height="20" class="past-0" />
+<rect x="553" y="309" width="20" height="20" class="past-0" />
+<rect x="577" y="165" width="20" height="20" class="past-0" />
+<rect x="577" y="189" width="20" height="20" class="past-0" />
+<rect x="577" y="213" width="20" height="20" class="past-0" />
+<rect x="577" y="237" width="20" height="20" class="past-0" />
+<rect x="577" y="261" width="20" height="20" class="past-0" />
+<rect x="577" y="285" width="20" height="20" class="past-0" />
+<rect x="577" y="309" width="20" height="20" class="past-0" />
+<rect x="601" y="165" width="20" height="20" class="past-0" />
+<rect x="601" y="189" width="20" height="20" class="past-0" />
+<rect x="601" y="213" width="20" height="20" class="past-2" />
+<rect x="601" y="237" width="20" height="20" class="past-0" />
+<rect x="601" y="261" width="20" height="20" class="past-1" />
+<rect x="601" y="285" width="20" height="20" class="past-1" />
+<rect x="601" y="309" width="20" height="20" class="past-0" />
+<rect x="625" y="165" width="20" height="20" class="past-0" />
+<rect x="625" y="189" width="20" height="20" class="past-0" />
+<rect x="625" y="213" width="20" height="20" class="past-0" />
+<rect x="625" y="237" width="20" height="20" class="past-0" />
+<rect x="625" y="261" width="20" height="20" class="past-0" />
+<rect x="625" y="285" width="20" height="20" class="past-0" />
+<rect x="625" y="309" width="20" height="20" class="past-0" />
+<rect x="649" y="165" width="20" height="20" class="past-0" />
+<rect x="649" y="189" width="20" height="20" class="past-0" />
+<rect x="649" y="213" width="20" height="20" class="past-0" />
+<rect x="649" y="237" width="20" height="20" class="past-0" />
+<rect x="649" y="261" width="20" height="20" class="past-1" />
+<rect x="649" y="285" width="20" height="20" class="past-0" />
+<rect x="649" y="309" width="20" height="20" class="past-0" />
+<rect x="25" y="333" width="20" height="20" class="past-0" />
+<rect x="25" y="357" width="20" height="20" class="past-0" />
+<rect x="25" y="381" width="20" height="20" class="past-0" />
+<rect x="25" y="405" width="20" height="20" class="past-0" />
+<rect x="25" y="429" width="20" height="20" class="past-0" />
+<rect x="25" y="453" width="20" height="20" class="past-0" />
+<rect x="25" y="477" width="20" height="20" class="past-0" />
+<rect x="49" y="333" width="20" height="20" class="past-0" />
+<rect x="49" y="357" width="20" height="20" class="past-0" />
+<rect x="49" y="381" width="20" height="20" class="past-0" />
+<rect x="49" y="405" width="20" height="20" class="past-0" />
+<rect x="49" y="429" width="20" height="20" class="past-0" />
+<rect x="49" y="453" width="20" height="20" class="past-0" />
+<rect x="49" y="477" width="20" height="20" class="past-0" />
+<rect x="73" y="333" width="20" height="20" class="past-0" />
+<rect x="73" y="357" width="20" height="20" class="past-0" />
+<rect x="73" y="381" width="20" height="20" class="past-0" />
+<rect x="73" y="405" width="20" height="20" class="past-0" />
+<rect x="73" y="429" width="20" height="20" class="past-0" />
+<rect x="73" y="453" width="20" height="20" class="past-0" />
+<rect x="73" y="477" width="20" height="20" class="past-0" />
+<rect x="97" y="333" width="20" height="20" class="past-0" />
+<rect x="97" y="357" width="20" height="20" class="past-0" />
+<rect x="97" y="381" width="20" height="20" class="past-0" />
+<rect x="97" y="405" width="20" height="20" class="past-0" />
+<rect x="97" y="429" width="20" height="20" class="past-0" />
+<rect x="97" y="453" width="20" height="20" class="past-0" />
+<rect x="97" y="477" width="20" height="20" class="past-0" />
+<rect x="121" y="333" width="20" height="20" class="past-0" />
+<rect x="121" y="357" width="20" height="20" class="past-0" />
+<rect x="121" y="381" width="20" height="20" class="past-0" />
+<rect x="121" y="405" width="20" height="20" class="past-0" />
+<rect x="121" y="429" width="20" height="20" class="past-0" />
+<rect x="121" y="453" width="20" height="20" class="past-0" />
+<rect x="121" y="477" width="20" height="20" class="past-0" />
+<rect x="145" y="333" width="20" height="20" class="past-0" />
+<rect x="145" y="357" width="20" height="20" class="past-0" />
+<rect x="145" y="381" width="20" height="20" class="past-0" />
+<rect x="145" y="405" width="20" height="20" class="past-0" />
+<rect x="145" y="429" width="20" height="20" class="past-0" />
+<rect x="145" y="453" width="20" height="20" class="past-0" />
+<rect x="145" y="477" width="20" height="20" class="past-0" />
+<rect x="169" y="333" width="20" height="20" class="past-0" />
+<rect x="169" y="357" width="20" height="20" class="past-0" />
+<rect x="169" y="381" width="20" height="20" class="past-0" />
+<rect x="169" y="405" width="20" height="20" class="past-0" />
+<rect x="169" y="429" width="20" height="20" class="past-0" />
+<rect x="169" y="453" width="20" height="20" class="past-0" />
+<rect x="169" y="477" width="20" height="20" class="past-0" />
+<rect x="193" y="333" width="20" height="20" class="past-0" />
+<rect x="193" y="357" width="20" height="20" class="past-0" />
+<rect x="193" y="381" width="20" height="20" class="past-0" />
+<rect x="193" y="405" width="20" height="20" class="past-0" />
+<rect x="193" y="429" width="20" height="20" class="past-0" />
+<rect x="193" y="453" width="20" height="20" class="past-0" />
+<rect x="193" y="477" width="20" height="20" class="past-0" />
+<rect x="217" y="333" width="20" height="20" class="past-0" />
+<rect x="217" y="357" width="20" height="20" class="past-0" />
+<rect x="217" y="381" width="20" height="20" class="past-0" />
+<rect x="217" y="405" width="20" height="20" class="past-0" />
+<rect x="217" y="429" width="20" height="20" class="past-0" />
+<rect x="217" y="453" width="20" height="20" class="past-0" />
+<rect x="217" y="477" width="20" height="20" class="past-0" />
+<rect x="241" y="333" width="20" height="20" class="past-0" />
+<rect x="241" y="357" width="20" height="20" class="past-0" />
+<rect x="241" y="381" width="20" height="20" class="past-0" />
+<rect x="241" y="405" width="20" height="20" class="past-0" />
+<rect x="241" y="429" width="20" height="20" class="past-0" />
+<rect x="241" y="453" width="20" height="20" class="past-0" />
+<rect x="241" y="477" width="20" height="20" class="past-0" />
+<rect x="265" y="333" width="20" height="20" class="past-0" />
+<rect x="265" y="357" width="20" height="20" class="past-0" />
+<rect x="265" y="381" width="20" height="20" class="past-0" />
+<rect x="265" y="405" width="20" height="20" class="past-0" />
+<rect x="265" y="429" width="20" height="20" class="past-0" />
+<rect x="265" y="453" width="20" height="20" class="past-0" />
+<rect x="265" y="477" width="20" height="20" class="past-0" />
+<rect x="289" y="333" width="20" height="20" class="past-0" />
+<rect x="289" y="357" width="20" height="20" class="past-0" />
+<rect x="289" y="381" width="20" height="20" class="past-0" />
+<rect x="289" y="405" width="20" height="20" class="past-0" />
+<rect x="289" y="429" width="20" height="20" class="past-1" />
+<rect x="289" y="453" width="20" height="20" class="past-0" />
+<rect x="289" y="477" width="20" height="20" class="past-1" />
+<rect x="313" y="333" width="20" height="20" class="past-0" />
+<rect x="313" y="357" width="20" height="20" class="past-1" />
+<rect x="313" y="381" width="20" height="20" class="past-3" />
+<rect x="313" y="405" width="20" height="20" class="past-1" />
+<rect x="313" y="429" width="20" height="20" class="past-0" />
+<rect x="313" y="453" width="20" height="20" class="past-0" />
+<rect x="313" y="477" width="20" height="20" class="past-0" />
+<rect x="337" y="333" width="20" height="20" class="past-1" />
+<rect x="337" y="357" width="20" height="20" class="past-0" />
+<rect x="337" y="381" width="20" height="20" class="past-0" />
+<rect x="337" y="405" width="20" height="20" class="past-0" />
+<rect x="337" y="429" width="20" height="20" class="past-0" />
+<rect x="337" y="453" width="20" height="20" class="past-0" />
+<rect x="337" y="477" width="20" height="20" class="past-0" />
+<rect x="361" y="333" width="20" height="20" class="past-0" />
+<rect x="361" y="357" width="20" height="20" class="past-0" />
+<rect x="361" y="381" width="20" height="20" class="past-0" />
+<rect x="361" y="405" width="20" height="20" class="past-0" />
+<rect x="361" y="429" width="20" height="20" class="past-0" />
+<rect x="361" y="453" width="20" height="20" class="past-0" />
+<rect x="361" y="477" width="20" height="20" class="past-0" />
+<rect x="385" y="333" width="20" height="20" class="past-0" />
+<rect x="385" y="357" width="20" height="20" class="past-0" />
+<rect x="385" y="381" width="20" height="20" class="past-0" />
+<rect x="385" y="405" width="20" height="20" class="past-0" />
+<rect x="385" y="429" width="20" height="20" class="past-0" />
+<rect x="385" y="453" width="20" height="20" class="past-0" />
+<rect x="385" y="477" width="20" height="20" class="past-0" />
+<rect x="409" y="333" width="20" height="20" class="past-0" />
+<rect x="409" y="357" width="20" height="20" class="past-0" />
+<rect x="409" y="381" width="20" height="20" class="past-0" />
+<rect x="409" y="405" width="20" height="20" class="past-0" />
+<rect x="409" y="429" width="20" height="20" class="past-0" />
+<rect x="409" y="453" width="20" height="20" class="past-0" />
+<rect x="409" y="477" width="20" height="20" class="past-0" />
+<rect x="433" y="333" width="20" height="20" class="past-0" />
+<rect x="433" y="357" width="20" height="20" class="past-0" />
+<rect x="433" y="381" width="20" height="20" class="past-0" />
+<rect x="433" y="405" width="20" height="20" class="past-0" />
+<rect x="433" y="429" width="20" height="20" class="past-0" />
+<rect x="433" y="453" width="20" height="20" class="past-0" />
+<rect x="433" y="477" width="20" height="20" class="past-0" />
+<rect x="457" y="333" width="20" height="20" class="past-0" />
+<rect x="457" y="357" width="20" height="20" class="past-0" />
+<rect x="457" y="381" width="20" height="20" class="past-0" />
+<rect x="457" y="405" width="20" height="20" class="past-0" />
+<rect x="457" y="429" width="20" height="20" class="past-0" />
+<rect x="457" y="453" width="20" height="20" class="past-0" />
+<rect x="457" y="477" width="20" height="20" class="past-0" />
+<rect x="481" y="333" width="20" height="20" class="past-4" />
+<rect x="481" y="357" width="20" height="20" class="past-0" />
+<rect x="481" y="381" width="20" height="20" class="past-0" />
+<rect x="481" y="405" width="20" height="20" class="past-4" />
+<rect x="481" y="429" width="20" height="20" class="past-1" />
+<rect x="481" y="453" width="20" height="20" class="past-1" />
+<rect x="481" y="477" width="20" height="20" class="past-0" />
+<rect x="505" y="333" width="20" height="20" class="past-3" />
+<rect x="505" y="357" width="20" height="20" class="past-1" />
+<rect x="505" y="381" width="20" height="20" class="past-2" />
+<rect x="505" y="405" width="20" height="20" class="past-2" />
+<rect x="505" y="429" width="20" height="20" class="past-1" />
+<rect x="505" y="453" width="20" height="20" class="past-2" />
+<rect x="505" y="477" width="20" height="20" class="past-1" />
 <rect x="529" y="333" width="20" height="20" class="game-survived-3" />
 <rect x="529" y="357" width="20" height="20" class="game-invaded-1" />
 <rect x="529" y="381" width="20" height="20" class="game-invaded-1" />
@@ -606,8 +608,8 @@
 <rect x="601" y="453" width="20" height="20" class="game-invaded-2" />
 <rect x="601" y="477" width="20" height="20" class="game-survived-1" />
 <rect x="625" y="333" width="20" height="20" class="game-invaded-1" />
-<rect x="625" y="357" width="20" height="20" class="game-invaded-2 current-day" />
-<rect x="625" y="381" width="20" height="20" class="fog-of-war" />
+<rect x="625" y="357" width="20" height="20" class="game-survived-1" />
+<rect x="625" y="381" width="20" height="20" class="game-invaded-2 current-day" />
 <rect x="625" y="405" width="20" height="20" class="fog-of-war" />
 <rect x="625" y="429" width="20" height="20" class="fog-of-war" />
 <rect x="625" y="453" width="20" height="20" class="fog-of-war" />
@@ -620,7 +622,7 @@
 <rect x="649" y="453" width="20" height="20" class="fog-of-war" />
 <rect x="649" y="477" width="20" height="20" class="fog-of-war" />
 <rect x="690" y="165" width="265" height="164" class="intel-panel" />
-    <circle cx="708" cy="185" r="4" fill="#ff003c">
+    <circle cx="708" cy="185" r="4" fill="#d92525">
         <animate attributeName="opacity" values="1;0;1" dur="1.5s" repeatCount="indefinite" />
     </circle>
     <text x="718" y="189" class="text-neon text-medal">LIVE</text>
@@ -662,20 +664,8 @@
         <animateTransform attributeName="transform" type="rotate" from="0 822.5 432" to="360 822.5 432" dur="3.5s" repeatCount="indefinite" />
     </g>
     
-        <circle cx="782.5" cy="397" r="4" fill="#ff003c">
+        <circle cx="782.5" cy="397" r="4" fill="#d92525">
             <animate attributeName="opacity" values="0;1;0" dur="3s" begin="0.0s" repeatCount="indefinite" />
-        </circle>
-        
-        <circle cx="857.5" cy="452" r="4" fill="#ff003c">
-            <animate attributeName="opacity" values="0;1;0" dur="3s" begin="0.7s" repeatCount="indefinite" />
-        </circle>
-        
-        <circle cx="807.5" cy="477" r="4" fill="#ff003c">
-            <animate attributeName="opacity" values="0;1;0" dur="3s" begin="1.4s" repeatCount="indefinite" />
-        </circle>
-        
-        <circle cx="867.5" cy="407" r="4" fill="#ff003c">
-            <animate attributeName="opacity" values="0;1;0" dur="3s" begin="2.0999999999999996s" repeatCount="indefinite" />
         </circle>
         
     <text x="25" y="525" class="text-neon text-medal">RANK PROGRESSION [ACTIVE &amp; UPCOMING]</text>
@@ -692,7 +682,7 @@
 <text x="710" y="558" class="text-dim text-medal">🛡️ VANGUARD</text>
 <text x="710" y="575" class="text-dim text-medal">[LOCKED: LVL 75]</text>
 <text x="25" y="625" class="text-neon text-info">SYSTEM UPGRADE PROGRESS</text>
-<text x="951" y="625" class="text-neon text-info" text-anchor="end">7 / 18 XP TO LVL 18</text>
+<text x="951" y="625" class="text-neon text-info" text-anchor="end">3 / 13 XP TO LVL 13</text>
 <rect x="25" y="632" width="926" height="20" fill="none" stroke="#1a4d1a" stroke-width="1.5" />
 <rect x="27" y="635" width="10" height="14" fill="#39ff14" />
 <rect x="39" y="635" width="10" height="14" fill="#39ff14" />
@@ -711,25 +701,13 @@
 <rect x="195" y="635" width="10" height="14" fill="#39ff14" />
 <rect x="207" y="635" width="10" height="14" fill="#39ff14" />
 <rect x="219" y="635" width="10" height="14" fill="#39ff14" />
-<rect x="231" y="635" width="10" height="14" fill="#39ff14" />
-<rect x="243" y="635" width="10" height="14" fill="#39ff14" />
-<rect x="255" y="635" width="10" height="14" fill="#39ff14" />
-<rect x="267" y="635" width="10" height="14" fill="#39ff14" />
-<rect x="279" y="635" width="10" height="14" fill="#39ff14" />
-<rect x="291" y="635" width="10" height="14" fill="#39ff14" />
-<rect x="303" y="635" width="10" height="14" fill="#39ff14" />
-<rect x="315" y="635" width="10" height="14" fill="#39ff14" />
-<rect x="327" y="635" width="10" height="14" fill="#39ff14" />
-<rect x="339" y="635" width="10" height="14" fill="#39ff14" />
-<rect x="351" y="635" width="10" height="14" fill="#39ff14" />
-<rect x="363" y="635" width="10" height="14" fill="#39ff14" />
-<rect x="375" y="635" width="10" height="14" fill="#39ff14">
+<rect x="231" y="635" width="10" height="14" fill="#39ff14">
     <animate attributeName="opacity" values="1;0.2;1" dur="0.8s" repeatCount="indefinite" />
 </rect>
 
         <text y="685" class="text-neon text-info">
             <animate attributeName="x" from="980" to="-7776" dur="48s" repeatCount="indefinite" />
-            RADIO SILENCE ON 2026-08-09. SECTOR ASSUMED LOST. /// THREAT NEUTRALIZED ON 2026-08-10. NO CASUALTIES REPORTED. /// NO DEFENSIVE ACTION TAKEN ON 2026-08-11. WALKERS ROAM FREE. /// NO DEFENSIVE ACTION TAKEN ON 2026-08-12. WALKERS ROAM FREE. /// MAYDAY! BARRICADES BREACHED ON 2026-08-13! /// HAND-TO-HAND COMBAT ON 2026-08-14. WE HOLD THE LINE. /// THREAT NEUTRALIZED ON 2026-08-15. NO CASUALTIES REPORTED. /// TARGET PRACTICE AT SECTOR 2026-08-16. OVERWHELMING FIREPOWER USED. /// TARGET PRACTICE AT SECTOR 2026-08-17. OVERWHELMING FIREPOWER USED. /// RADIO SILENCE ON 2026-08-18. SECTOR ASSUMED LOST. /// RADIO SILENCE ON 2026-08-19. SECTOR ASSUMED LOST. /// NO DEFENSIVE ACTION TAKEN ON 2026-08-20. WALKERS ROAM FREE. /// RADIO SILENCE ON 2026-08-21. SECTOR ASSUMED LOST. /// HAND-TO-HAND COMBAT ON 2026-08-22. WE HOLD THE LINE. /// SECTOR 2026-08-23 OVERRUN. WE TOOK DOWN 2 BUT IT WAS NOT ENOUGH. /// RADAR CONTACT ON THE MOVE. WE NEED BACKUP AT THE NEXT CROSSROAD. ///
+            TARGET PRACTICE AT SECTOR 2026-08-10. OVERWHELMING FIREPOWER USED. /// NO DEFENSIVE ACTION TAKEN ON 2026-08-11. WALKERS ROAM FREE. /// RADIO SILENCE ON 2026-08-12. SECTOR ASSUMED LOST. /// SECTOR 2026-08-13 OVERRUN. WE TOOK DOWN 1 BUT IT WAS NOT ENOUGH. /// HAND-TO-HAND COMBAT ON 2026-08-14. WE HOLD THE LINE. /// TARGET PRACTICE AT SECTOR 2026-08-15. OVERWHELMING FIREPOWER USED. /// TARGET PRACTICE AT SECTOR 2026-08-16. OVERWHELMING FIREPOWER USED. /// THREAT NEUTRALIZED ON 2026-08-17. NO CASUALTIES REPORTED. /// RADIO SILENCE ON 2026-08-18. SECTOR ASSUMED LOST. /// NO DEFENSIVE ACTION TAKEN ON 2026-08-19. WALKERS ROAM FREE. /// RADIO SILENCE ON 2026-08-20. SECTOR ASSUMED LOST. /// NO DEFENSIVE ACTION TAKEN ON 2026-08-21. WALKERS ROAM FREE. /// HAND-TO-HAND COMBAT ON 2026-08-22. WE HOLD THE LINE. /// MAYDAY! BARRICADES BREACHED ON 2026-08-23! /// CLOSE CALL ON 2026-08-24. PERIMETER BARELY SECURED. /// SQUAD EN ROUTE. MULTIPLE BOGEYS DETECTED ON SCANNERS. ///
         </text>
     </g>
     </svg>
