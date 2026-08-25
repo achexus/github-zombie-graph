@@ -2,11 +2,7 @@ import os
 import requests
 import random
 import math
-<<<<<<< Updated upstream
-from datetime import datetime
-=======
 from datetime import datetime, timedelta
->>>>>>> Stashed changes
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -34,10 +30,6 @@ ORDERED_RANKS = [
 ]
 
 def get_zombie_count_for_date(date_str):
-<<<<<<< Updated upstream
-    # Zombiler artık tarihe göre matematiksel olarak hesaplanır (JSON state'e gerek kalmadı)
-=======
->>>>>>> Stashed changes
     r = random.Random(date_str)
     return r.randint(1, 4)
 
@@ -148,11 +140,7 @@ def get_live_cam_svg(state, x, y, width, height, is_easter_egg=False):
             <circle cx="{x+240}" cy="{y+100}" r="15" fill="#a11b1b" opacity="0.6">
                  <animate attributeName="cx" values="{x+240};{x+40}" dur="4s" repeatCount="indefinite" />
             </circle>
-<<<<<<< Updated upstream
-            <circle cx="{x+240}" cy="{y+100}" r="9" fill="#FF8C00" opacity="0.9">
-=======
             <circle cx="{x+240}" cy="{y+100}" r="9" fill="#d92525" opacity="0.9">
->>>>>>> Stashed changes
                  <animate attributeName="cx" values="{x+240};{x+40}" dur="4s" repeatCount="indefinite" />
             </circle>
         </g>
@@ -162,11 +150,7 @@ def get_live_cam_svg(state, x, y, width, height, is_easter_egg=False):
             <circle cx="{x+220}" cy="{y+130}" r="18" fill="#a11b1b" opacity="0.5">
                  <animate attributeName="cx" values="{x+220};{x+40}" dur="5s" repeatCount="indefinite" />
             </circle>
-<<<<<<< Updated upstream
-            <circle cx="{x+220}" cy="{y+130}" r="11" fill="#FFD700" opacity="0.8">
-=======
             <circle cx="{x+220}" cy="{y+130}" r="11" fill="#d92525" opacity="0.8">
->>>>>>> Stashed changes
                  <animate attributeName="cx" values="{x+220};{x+40}" dur="5s" repeatCount="indefinite" />
             </circle>
         </g>
@@ -352,10 +336,6 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
             date_str, commits = day['date'], day['contributionCount']
             extra_class = " current-day" if i == len(days) - 1 else ""
             
-<<<<<<< Updated upstream
-            # Sadece ilk commit gününden sonrakiler zombi istilası sayılır
-=======
->>>>>>> Stashed changes
             if date_str < first_active_date:
                 if commits == 0: color_class = "past-0"
                 elif commits <= 2: color_class = "past-1"
@@ -475,13 +455,6 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
 
 def simulate_zombie_survival(days):
     today_str = days[-1]['date']
-<<<<<<< Updated upstream
-    
-    # 1. Kullanıcının İLK aktif olduğu günü bul
-    first_active_date = None
-    for d in days:
-        if d['contributionCount'] > 0:
-=======
     today_obj = datetime.strptime(today_str, "%Y-%m-%d").date()
     
     # 1. Sadece SON 30 GÜN içindeki İLK aktif günü bul
@@ -490,20 +463,13 @@ def simulate_zombie_survival(days):
     
     for d in days:
         if d['date'] >= cutoff_date_str and d['contributionCount'] > 0:
->>>>>>> Stashed changes
             first_active_date = d['date']
             break
             
     if not first_active_date: 
-<<<<<<< Updated upstream
-        first_active_date = today_str # Hiç commit atmamışsa
-        
-    # 2. Hayatta Kalma Serisi (BUG FIX: Bugün 0 commit olsa bile dünkü seriyi bozmaz)
-=======
         first_active_date = today_str 
 
     # 2. Hayatta Kalma Serisi
->>>>>>> Stashed changes
     survival_day = 0
     for d in days:
         if d['date'] > today_str:
@@ -511,11 +477,7 @@ def simulate_zombie_survival(days):
         if d['contributionCount'] > 0:
             survival_day += 1
         elif d['date'] < today_str:
-<<<<<<< Updated upstream
-            survival_day = 0 # Sadece GEÇMİŞ günlerde 0 commit atıldıysa seriyi sıfırla
-=======
             survival_day = 0 
->>>>>>> Stashed changes
 
     total_survived = 0
     total_invaded = 0
@@ -534,10 +496,6 @@ def simulate_zombie_survival(days):
         if commits >= zombies: total_survived += 1
         else: total_invaded += 1 
 
-<<<<<<< Updated upstream
-    # Bugünün commitlerini XP'ye dahil et
-=======
->>>>>>> Stashed changes
     today_commits = next((d['contributionCount'] for d in days if d['date'] == today_str), 0)
     total_commits += today_commits
 
