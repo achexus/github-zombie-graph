@@ -32,11 +32,31 @@
 Transform your standard GitHub contribution graph into a post-apocalyptic tactical survival system! This GitHub Action generates a dynamic SVG showing your survival streak, eliminated zombies (commits), and tactical rank based on your daily GitHub activity.
 
 ### 🎯 The Goal & Mechanics
-Survive the apocalypse by writing code! Every day, a deterministic number of zombies (1 to 4) attacks your sector. You must make enough GitHub commits to eliminate them.
+Survive the apocalypse by writing code! Every day, a deterministic number of zombies attacks your sector. You must make enough GitHub commits to eliminate them.
 * **Cleared:** Your Commits >= Zombies. Sector secured!
 * **Invaded:** Your Commits < Zombies. The sector is overrun.
 * **Survival Streak:** If you make **0 commits** in a day, your active "Survival Day" streak resets to 0. Don't break the chain!
-* **🖥️ UI Features:** Cyberpunk terminal aesthetics, "Corrupted System" dark crimson colors for offline/invaded days, a local radar, live cam, and a terminal-style XP loading bar.
+* **🖥️ UI Features:** Terminal aesthetics, a local radar, live cam, and a terminal-style XP loading bar.
+
+### ⚔️ Difficulty Levels
+Control how many zombies spawn each day with the `difficulty` input:
+
+| Value | Zombies per Day | Description |
+|-------|----------------|-------------|
+| `easy` | 1 – 2 | For casual coders |
+| `normal` | 1 – 4 | Default — balanced challenge |
+| `hard` | 3 – 6 | You'd better commit daily |
+| `nightmare` | 5 – 10 | Extreme pressure. No rest. |
+
+### 🎨 Themes
+Customize the look of your SVG with the `theme` input:
+
+| Value | Style |
+|-------|-------|
+| `classic` | The original pre-theming colors (neon green, dark background, crimson red) |
+| `cyberpunk` | Same neon-green cyberpunk palette — independently customizable |
+| `fallout` | Pip-Boy amber/orange on deep black |
+| `resident_evil` | Umbrella Corp — white text, deep red danger colors |
 
 ### 🚀 How to Use
 
@@ -65,9 +85,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Generate Zombie Survival Graph
-        uses: achexus/github-zombie-graph@v1.1.2
+        uses: achexus/github-zombie-graph@v1.2.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          difficulty: normal      # easy | normal | hard | nightmare
+          theme: cyberpunk        # classic | cyberpunk | fallout | resident_evil
 
       - name: Commit and Push the generated SVG
         uses: stefanzweifel/git-auto-commit-action@v5
@@ -94,11 +116,31 @@ Add the generated SVG to your profile's `README.md`:
 Klasik GitHub katkı grafiğinizi kıyamet sonrası taktiksel bir hayatta kalma sistemine dönüştürün! Bu GitHub Action, günlük GitHub aktivitenize dayanarak hayatta kalma serinizi, yok edilen zombileri (commit'ler) ve taktiksel rütbenizi gösteren dinamik bir SVG oluşturur.
 
 ### 🎯 Oyunun Amacı ve Mekanikler
-Kod yazarak kıyametten sağ çıkın! Her gün, bölgenize rastgele sayıda (1-4) zombi saldırır. Onları yok etmek için yeterli sayıda GitHub commit'i atmalısınız.
+Kod yazarak kıyametten sağ çıkın! Her gün, bölgenize belirli sayıda zombi saldırır. Onları yok etmek için yeterli sayıda GitHub commit'i atmalısınız.
 * **Temizlendi (Cleared):** Commit >= Zombi. Bölge güvende!
 * **İstila Edildi (Invaded):** Commit < Zombi. Bölge ele geçirildi.
 * **Hayatta Kalma Serisi (Streak):** Bir gün boyunca hiç commit atmazsanız (0 commit), "Survival Day" seriniz 0'a sıfırlanır. Zinciri kırmayın!
-* **🖥️ Arayüz Özellikleri:** Siberpunk terminal estetiği, çevrimdışı günler için "Bozulmuş Sistem" (koyu bordo) renkleri, yerel radar, canlı kamera ve terminal tarzı XP yükleme çubuğu.
+* **🖥️ Arayüz Özellikleri:** Terminal estetiği, yerel radar, canlı kamera ve terminal tarzı XP yükleme çubuğu.
+
+### ⚔️ Zorluk Seviyeleri
+Her gün kaç zombinin saldıracağını `difficulty` parametresiyle belirleyin:
+
+| Değer | Günlük Zombi | Açıklama |
+|-------|-------------|----------|
+| `easy` | 1 – 2 | Rahat bir tempo |
+| `normal` | 1 – 4 | Varsayılan — dengeli zorluk |
+| `hard` | 3 – 6 | Her gün commit atmak zorundasın |
+| `nightmare` | 5 – 10 | Aşırı baskı. Dinlenme yok. |
+
+### 🎨 Temalar
+SVG'nin görünümünü `theme` parametresiyle özelleştirin:
+
+| Değer | Stil |
+|-------|------|
+| `classic` | Orijinal eski renkler (neon yeşil, koyu arka plan, kırmızı tehlike) |
+| `cyberpunk` | Aynı neon-yeşil siberpunk paleti — bağımsız özelleştirilebilir |
+| `fallout` | Pip-Boy amber/turuncu, çok koyu arka plan |
+| `resident_evil` | Umbrella Corp — beyaz metin, derin kırmızı tehlike renkleri |
 
 ### 🚀 Nasıl Kullanılır?
 
@@ -127,9 +169,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Generate Zombie Survival Graph
-        uses: achexus/github-zombie-graph@v1.1.2
+        uses: achexus/github-zombie-graph@v1.2.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          difficulty: normal      # easy | normal | hard | nightmare
+          theme: cyberpunk        # classic | cyberpunk | fallout | resident_evil
 
       - name: Commit and Push the generated SVG
         uses: stefanzweifel/git-auto-commit-action@v5
@@ -156,11 +200,31 @@ Oluşturulan SVG dosyasını profilinizin `README.md` dosyasına ekleyin:
 ¡Transforma tu gráfico de contribuciones de GitHub estándar en un sistema táctico de supervivencia post-apocalíptico! Esta GitHub Action genera un SVG dinámico que muestra tu racha de supervivencia, zombis eliminados (commits) y rango táctico.
 
 ### 🎯 El Objetivo y Mecánicas
-¡Sobrevive al apocalipsis escribiendo código! Cada día, un número de zombis (1-4) ataca tu sector. Debes hacer suficientes commits para eliminarlos.
+¡Sobrevive al apocalipsis escribiendo código! Cada día, un número de zombis ataca tu sector. Debes hacer suficientes commits para eliminarlos.
 * **Despejado (Cleared):** Commits >= Zombis. ¡Sector asegurado!
 * **Invadido (Invaded):** Commits < Zombis. El sector ha sido invadido.
 * **Racha (Streak):** Si haces **0 commits** en un día, tu racha de "Survival Day" se reinicia a 0. ¡No rompas la cadena!
-* **🖥️ Interfaz:** Estética de terminal ciberpunk, colores carmesí oscuro de "Sistema Corrupto", radar local, cámara en vivo y barra de XP de terminal.
+* **🖥️ Interfaz:** Estética de terminal, radar local, cámara en vivo y barra de XP de terminal.
+
+### ⚔️ Niveles de Dificultad
+Controla cuántos zombis aparecen cada día con el parámetro `difficulty`:
+
+| Valor | Zombis por Día | Descripción |
+|-------|---------------|-------------|
+| `easy` | 1 – 2 | Para programadores casuales |
+| `normal` | 1 – 4 | Predeterminado — desafío equilibrado |
+| `hard` | 3 – 6 | Mejor que hagas commits a diario |
+| `nightmare` | 5 – 10 | Presión extrema. Sin descanso. |
+
+### 🎨 Temas
+Personaliza el aspecto de tu SVG con el parámetro `theme`:
+
+| Valor | Estilo |
+|-------|--------|
+| `classic` | Los colores originales (verde neón, fondo oscuro, rojo carmesí) |
+| `cyberpunk` | La misma paleta neón-verde — personalizable de forma independiente |
+| `fallout` | Ámbar/naranja Pip-Boy sobre negro profundo |
+| `resident_evil` | Umbrella Corp — texto blanco, colores de peligro rojo intenso |
 
 ### 🚀 Cómo Utilizar
 
@@ -176,7 +240,7 @@ on:
       - main
   schedule:
     - cron: "0 0 * * *"
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   build:
@@ -189,9 +253,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Generate Zombie Survival Graph
-        uses: achexus/github-zombie-graph@v1.1.2
+        uses: achexus/github-zombie-graph@v1.2.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          difficulty: normal      # easy | normal | hard | nightmare
+          theme: cyberpunk        # classic | cyberpunk | fallout | resident_evil
 
       - name: Commit and Push the generated SVG
         uses: stefanzweifel/git-auto-commit-action@v5
@@ -218,11 +284,31 @@ Añade el SVG generado al `README.md` de tu perfil:
 Verwandle dein standardmäßiges GitHub-Beitragsdiagramm in ein postapokalyptisches taktisches Überlebenssystem! Diese GitHub Action generiert eine dynamische SVG, die deine Überlebenssträhne, eliminierte Zombies (Commits) und deinen taktischen Rang anzeigt.
 
 ### 🎯 Das Ziel & Mechanik
-Überlebe die Apokalypse, indem du Code schreibst! Jeden Tag greifen Zombies (1-4) deinen Sektor an. Du musst genug Commits machen, um sie zu eliminieren.
+Überlebe die Apokalypse, indem du Code schreibst! Jeden Tag greifen Zombies deinen Sektor an. Du musst genug Commits machen, um sie zu eliminieren.
 * **Geräumt (Cleared):** Commits >= Zombies. Sektor gesichert!
 * **Überrannt (Invaded):** Commits < Zombies. Der Sektor wird überrannt.
 * **Überlebensserie (Streak):** Wenn du an einem Tag **0 Commits** machst, wird deine "Survival Day"-Serie auf 0 zurückgesetzt. Brich die Kette nicht!
-* **🖥️ UI-Funktionen:** Cyberpunk-Terminal-Ästhetik, dunkelrote "Corrupted System"-Farben, lokales Radar, Live-Kamera und Terminal-XP-Leiste.
+* **🖥️ UI-Funktionen:** Terminal-Ästhetik, lokales Radar, Live-Kamera und Terminal-XP-Leiste.
+
+### ⚔️ Schwierigkeitsgrade
+Steuere mit dem Parameter `difficulty`, wie viele Zombies täglich spawnen:
+
+| Wert | Zombies pro Tag | Beschreibung |
+|------|----------------|--------------|
+| `easy` | 1 – 2 | Für gelegentliche Programmierer |
+| `normal` | 1 – 4 | Standard — ausgewogene Herausforderung |
+| `hard` | 3 – 6 | Du solltest täglich committen |
+| `nightmare` | 5 – 10 | Extremer Druck. Keine Ruhe. |
+
+### 🎨 Themes
+Passe das Aussehen deiner SVG mit dem Parameter `theme` an:
+
+| Wert | Stil |
+|------|------|
+| `classic` | Die originalen Farben (Neongrün, dunkler Hintergrund, Dunkelrot) |
+| `cyberpunk` | Dieselbe Neongrün-Palette — unabhängig anpassbar |
+| `fallout` | Pip-Boy Bernstein/Orange auf tiefem Schwarz |
+| `resident_evil` | Umbrella Corp — weißer Text, tiefrote Gefahrenfarben |
 
 ### 🚀 Verwendung
 
@@ -238,7 +324,7 @@ on:
       - main
   schedule:
     - cron: "0 0 * * *"
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   build:
@@ -251,9 +337,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Generate Zombie Survival Graph
-        uses: achexus/github-zombie-graph@v1.1.2
+        uses: achexus/github-zombie-graph@v1.2.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          difficulty: normal      # easy | normal | hard | nightmare
+          theme: cyberpunk        # classic | cyberpunk | fallout | resident_evil
 
       - name: Commit and Push the generated SVG
         uses: stefanzweifel/git-auto-commit-action@v5
@@ -280,11 +368,31 @@ Füge die generierte SVG-Datei zur `README.md` deines Profils hinzu:
 Transformez votre graphique de contributions GitHub standard en un système de survie tactique post-apocalyptique ! Cette GitHub Action génère un SVG dynamique affichant votre série de survie, les zombies éliminés (commits) et votre rang tactique.
 
 ### 🎯 L'Objectif et Mécaniques
-Survivez à l'apocalypse en écrivant du code ! Chaque jour, des zombies (1-4) attaquent votre secteur. Vous devez faire suffisamment de commits pour les éliminer.
+Survivez à l'apocalypse en écrivant du code ! Chaque jour, des zombies attaquent votre secteur. Vous devez faire suffisamment de commits pour les éliminer.
 * **Sécurisé (Cleared) :** Commits >= Zombies. Secteur sécurisé !
 * **Envahi (Invaded) :** Commits < Zombies. Le secteur est envahi.
 * **Série de survie (Streak) :** Si vous faites **0 commit** en un jour, votre série "Survival Day" retombe à 0. Ne brisez pas la chaîne !
-* **🖥️ Interface :** Esthétique de terminal cyberpunk, couleurs cramoisi sombre "Système Corrompu", radar local, caméra en direct et barre d'XP style terminal.
+* **🖥️ Interface :** Esthétique de terminal, radar local, caméra en direct et barre d'XP style terminal.
+
+### ⚔️ Niveaux de Difficulté
+Contrôlez le nombre de zombies par jour avec le paramètre `difficulty` :
+
+| Valeur | Zombies par Jour | Description |
+|--------|-----------------|-------------|
+| `easy` | 1 – 2 | Pour les codeurs occasionnels |
+| `normal` | 1 – 4 | Par défaut — défi équilibré |
+| `hard` | 3 – 6 | Mieux vaut commiter chaque jour |
+| `nightmare` | 5 – 10 | Pression extrême. Pas de repos. |
+
+### 🎨 Thèmes
+Personnalisez l'apparence de votre SVG avec le paramètre `theme` :
+
+| Valeur | Style |
+|--------|-------|
+| `classic` | Les couleurs d'origine (vert néon, fond sombre, rouge cramoisi) |
+| `cyberpunk` | La même palette néon-vert — personnalisable indépendamment |
+| `fallout` | Ambre/orange Pip-Boy sur noir profond |
+| `resident_evil` | Umbrella Corp — texte blanc, rouge danger intense |
 
 ### 🚀 Comment l'utiliser
 
@@ -300,7 +408,7 @@ on:
       - main
   schedule:
     - cron: "0 0 * * *"
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   build:
@@ -313,9 +421,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Generate Zombie Survival Graph
-        uses: achexus/github-zombie-graph@v1.1.2
+        uses: achexus/github-zombie-graph@v1.2.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          difficulty: normal      # easy | normal | hard | nightmare
+          theme: cyberpunk        # classic | cyberpunk | fallout | resident_evil
 
       - name: Commit and Push the generated SVG
         uses: stefanzweifel/git-auto-commit-action@v5
@@ -342,11 +452,31 @@ Ajoutez le SVG généré au `README.md` de votre profil :
 Trasforma il tuo grafico standard dei contributi di GitHub in un sistema tattico di sopravvivenza post-apocalittico! Questa GitHub Action genera un SVG dinamico che mostra la tua serie di sopravvivenza, gli zombie eliminati (commit) e il tuo grado tattico.
 
 ### 🎯 L'Obiettivo e Meccaniche
-Sopravvivi all'apocalisse scrivendo codice! Ogni giorno, degli zombie (1-4) attaccano il tuo settore. Devi fare abbastanza commit per eliminarli.
+Sopravvivi all'apocalisse scrivendo codice! Ogni giorno, degli zombie attaccano il tuo settore. Devi fare abbastanza commit per eliminarli.
 * **Liberato (Cleared):** Commit >= Zombie. Settore sicuro!
 * **Invaso (Invaded):** Commit < Zombie. Il settore è invaso.
 * **Serie (Streak):** Se fai **0 commit** in un giorno, la tua serie "Survival Day" si azzera. Non spezzare la catena!
-* **🖥️ Interfaccia:** Estetica terminale cyberpunk, colori cremisi scuro "Sistema Corrotto", radar locale, live cam e barra XP da terminale.
+* **🖥️ Interfaccia:** Estetica terminale, radar locale, live cam e barra XP da terminale.
+
+### ⚔️ Livelli di Difficoltà
+Controlla quanti zombie appaiono ogni giorno con il parametro `difficulty`:
+
+| Valore | Zombie al Giorno | Descrizione |
+|--------|-----------------|-------------|
+| `easy` | 1 – 2 | Per programmatori occasionali |
+| `normal` | 1 – 4 | Predefinito — sfida equilibrata |
+| `hard` | 3 – 6 | Meglio fare commit ogni giorno |
+| `nightmare` | 5 – 10 | Pressione estrema. Nessuna tregua. |
+
+### 🎨 Temi
+Personalizza l'aspetto del tuo SVG con il parametro `theme`:
+
+| Valore | Stile |
+|--------|-------|
+| `classic` | I colori originali (verde neon, sfondo scuro, rosso cremisi) |
+| `cyberpunk` | La stessa palette neon-verde — personalizzabile indipendentemente |
+| `fallout` | Ambra/arancio Pip-Boy su nero profondo |
+| `resident_evil` | Umbrella Corp — testo bianco, colori pericolo rosso intenso |
 
 ### 🚀 Come Usarlo
 
@@ -362,7 +492,7 @@ on:
       - main
   schedule:
     - cron: "0 0 * * *"
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   build:
@@ -375,9 +505,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Generate Zombie Survival Graph
-        uses: achexus/github-zombie-graph@v1.1.2
+        uses: achexus/github-zombie-graph@v1.2.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          difficulty: normal      # easy | normal | hard | nightmare
+          theme: cyberpunk        # classic | cyberpunk | fallout | resident_evil
 
       - name: Commit and Push the generated SVG
         uses: stefanzweifel/git-auto-commit-action@v5
@@ -404,11 +536,31 @@ Aggiungi l'SVG generato al `README.md` del tuo profilo:
 Transforme seu gráfico de contribuições padrão do GitHub em um sistema tático de sobrevivência pós-apocalíptico! Esta GitHub Action gera um SVG dinâmico mostrando sua sequência de sobrevivência, zumbis eliminados (commits) e rank tático.
 
 ### 🎯 O Objetivo e Mecânicas
-Sobreviva ao apocalipse escrevendo código! Todos os dias, zumbis (1-4) atacam seu setor. Você deve fazer commits suficientes para eliminá-los.
+Sobreviva ao apocalipse escrevendo código! Todos os dias, zumbis atacam seu setor. Você deve fazer commits suficientes para eliminá-los.
 * **Livre (Cleared):** Commits >= Zumbis. Setor seguro!
 * **Invadido (Invaded):** Commits < Zumbis. O setor foi invadido.
 * **Sequência (Streak):** Se você fizer **0 commits** em um dia, sua sequência de "Survival Day" zera. Não quebre a corrente!
-* **🖥️ Interface:** Estética de terminal cyberpunk, cores carmesim escuro "Sistema Corrompido", radar local, câmera ao vivo e barra de XP de terminal.
+* **🖥️ Interface:** Estética de terminal, radar local, câmera ao vivo e barra de XP de terminal.
+
+### ⚔️ Níveis de Dificuldade
+Controle quantos zumbis aparecem por dia com o parâmetro `difficulty`:
+
+| Valor | Zumbis por Dia | Descrição |
+|-------|---------------|-----------|
+| `easy` | 1 – 2 | Para programadores casuais |
+| `normal` | 1 – 4 | Padrão — desafio equilibrado |
+| `hard` | 3 – 6 | Melhor fazer commits todo dia |
+| `nightmare` | 5 – 10 | Pressão extrema. Sem descanso. |
+
+### 🎨 Temas
+Personalize a aparência do seu SVG com o parâmetro `theme`:
+
+| Valor | Estilo |
+|-------|--------|
+| `classic` | As cores originais (verde neon, fundo escuro, vermelho carmesim) |
+| `cyberpunk` | A mesma paleta neon-verde — personalizável de forma independente |
+| `fallout` | Âmbar/laranja Pip-Boy sobre preto profundo |
+| `resident_evil` | Umbrella Corp — texto branco, cores de perigo vermelho intenso |
 
 ### 🚀 Como Usar
 
@@ -424,7 +576,7 @@ on:
       - main
   schedule:
     - cron: "0 0 * * *"
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   build:
@@ -437,9 +589,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Generate Zombie Survival Graph
-        uses: achexus/github-zombie-graph@v1.1.2
+        uses: achexus/github-zombie-graph@v1.2.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          difficulty: normal      # easy | normal | hard | nightmare
+          theme: cyberpunk        # classic | cyberpunk | fallout | resident_evil
 
       - name: Commit and Push the generated SVG
         uses: stefanzweifel/git-auto-commit-action@v5
@@ -466,11 +620,31 @@ Adicione o SVG gerado ao `README.md` do seu perfil:
 Превратите ваш стандартный график активности GitHub в постапокалиптическую тактическую систему выживания! Этот GitHub Action создает динамический SVG, показывающий вашу серию выживания, уничтоженных зомби (коммиты) и тактический ранг.
 
 ### 🎯 Цель и Механика
-Выживите в апокалипсисе, создавая код! Каждый день зомби (1-4) атакуют ваш сектор. Сделайте достаточно коммитов, чтобы уничтожить их.
+Выживите в апокалипсисе, создавая код! Каждый день зомби атакуют ваш сектор. Сделайте достаточно коммитов, чтобы уничтожить их.
 * **Очищено (Cleared):** Коммиты >= Зомби. Сектор в безопасности!
 * **Захвачено (Invaded):** Коммиты < Зомби. Сектор захвачен.
 * **Серия выживания (Streak):** Если вы сделаете **0 коммитов** за день, ваша серия "Survival Day" сбросится до 0. Не прерывайте цепь!
-* **🖥️ Интерфейс:** Эстетика киберпанк-терминала, темно-бордовые цвета "Поврежденной системы", локальный радар, прямая трансляция и шкала XP в стиле терминала.
+* **🖥️ Интерфейс:** Эстетика терминала, локальный радар, прямая трансляция и шкала XP в стиле терминала.
+
+### ⚔️ Уровни Сложности
+Управляйте количеством зомби в день с помощью параметра `difficulty`:
+
+| Значение | Зомби в День | Описание |
+|----------|-------------|----------|
+| `easy` | 1 – 2 | Для любителей |
+| `normal` | 1 – 4 | По умолчанию — сбалансированное испытание |
+| `hard` | 3 – 6 | Лучше делайте коммиты ежедневно |
+| `nightmare` | 5 – 10 | Экстремальное давление. Без отдыха. |
+
+### 🎨 Темы
+Настройте внешний вид SVG с помощью параметра `theme`:
+
+| Значение | Стиль |
+|----------|-------|
+| `classic` | Оригинальные цвета (неоновый зелёный, тёмный фон, тёмно-красный) |
+| `cyberpunk` | Та же неоново-зелёная палитра — независимо настраиваемая |
+| `fallout` | Янтарный/оранжевый Pip-Boy на глубоком чёрном |
+| `resident_evil` | Umbrella Corp — белый текст, насыщенный красный для опасности |
 
 ### 🚀 Как Использовать
 
@@ -486,7 +660,7 @@ on:
       - main
   schedule:
     - cron: "0 0 * * *"
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   build:
@@ -499,9 +673,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Generate Zombie Survival Graph
-        uses: achexus/github-zombie-graph@v1.1.2
+        uses: achexus/github-zombie-graph@v1.2.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          difficulty: normal      # easy | normal | hard | nightmare
+          theme: cyberpunk        # classic | cyberpunk | fallout | resident_evil
 
       - name: Commit and Push the generated SVG
         uses: stefanzweifel/git-auto-commit-action@v5
@@ -528,11 +704,31 @@ jobs:
 Transformeer je standaard GitHub bijdragegrafiek in een post-apocalyptisch tactisch overlevingssysteem! Deze GitHub Action genereert een dynamische SVG die je overlevingsreeks, geëlimineerde zombies (commits) en tactische rang toont.
 
 ### 🎯 Het Doel & Mechanica
-Overleef de apocalyps door code te schrijven! Elke dag vallen zombies (1-4) je sector aan. Je moet genoeg commits maken om ze te elimineren.
+Overleef de apocalyps door code te schrijven! Elke dag vallen zombies je sector aan. Je moet genoeg commits maken om ze te elimineren.
 * **Gevrijwaard (Cleared):** Commits >= Zombies. Sector veilig!
 * **Overspoeld (Invaded):** Commits < Zombies. De sector is overspoeld.
 * **Overlevingsreeks (Streak):** Als je **0 commits** op een dag maakt, wordt je "Survival Day"-reeks gereset naar 0. Verbreek de ketting niet!
-* **🖥️ Interface:** Cyberpunk terminal esthetiek, donkerrode "Corrupted System" kleuren, lokale radar, live cam en terminal-stijl XP balk.
+* **🖥️ Interface:** Terminal esthetiek, lokale radar, live cam en terminal-stijl XP balk.
+
+### ⚔️ Moeilijkheidsgraden
+Bepaal hoeveel zombies er dagelijks spawnen met de parameter `difficulty`:
+
+| Waarde | Zombies per Dag | Beschrijving |
+|--------|----------------|--------------|
+| `easy` | 1 – 2 | Voor casual programmeurs |
+| `normal` | 1 – 4 | Standaard — evenwichtige uitdaging |
+| `hard` | 3 – 6 | Beter dagelijks committen |
+| `nightmare` | 5 – 10 | Extreme druk. Geen rust. |
+
+### 🎨 Thema's
+Pas het uiterlijk van je SVG aan met de parameter `theme`:
+
+| Waarde | Stijl |
+|--------|-------|
+| `classic` | De originele kleuren (neongroen, donkere achtergrond, donkerrood) |
+| `cyberpunk` | Dezelfde neongroene paletten — onafhankelijk aanpasbaar |
+| `fallout` | Pip-Boy amber/oranje op diep zwart |
+| `resident_evil` | Umbrella Corp — witte tekst, dieprode gevaarskleur |
 
 ### 🚀 Hoe te Gebruiken
 
@@ -548,7 +744,7 @@ on:
       - main
   schedule:
     - cron: "0 0 * * *"
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   build:
@@ -561,9 +757,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Generate Zombie Survival Graph
-        uses: achexus/github-zombie-graph@v1.1.2
+        uses: achexus/github-zombie-graph@v1.2.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          difficulty: normal      # easy | normal | hard | nightmare
+          theme: cyberpunk        # classic | cyberpunk | fallout | resident_evil
 
       - name: Commit and Push the generated SVG
         uses: stefanzweifel/git-auto-commit-action@v5
@@ -590,11 +788,31 @@ Voeg de gegenereerde SVG toe aan de `README.md` van je profiel:
 Przekształć swój standardowy wykres aktywności GitHub w postapokaliptyczny system taktycznego przetrwania! Ta akcja GitHub generuje dynamiczny SVG pokazujący Twoją serię przetrwania, wyeliminowane zombie (commity) i rangę taktyczną.
 
 ### 🎯 Cel i Mechanika
-Przetrwaj apokalipsę pisząc kod! Codziennie zombie (1-4) atakują twój sektor. Musisz zrobić wystarczająco dużo commitów, aby ich wyeliminować.
+Przetrwaj apokalipsę pisząc kod! Codziennie zombie atakują twój sektor. Musisz zrobić wystarczająco dużo commitów, aby ich wyeliminować.
 * **Oczyszczono (Cleared):** Commity >= Zombie. Sektor bezpieczny!
 * **Zajęto (Invaded):** Commity < Zombie. Sektor został zajęty.
 * **Seria przetrwania (Streak):** Jeśli w ciągu dnia zrobisz **0 commitów**, twoja seria "Survival Day" zresetuje się do 0. Nie przerywaj łańcucha!
-* **🖥️ Interfejs:** Estetyka cyberpunkowego terminala, ciemnoszkarłatne kolory "Zepsutego Systemu", lokalny radar, kamera na żywo i pasek XP w stylu terminala.
+* **🖥️ Interfejs:** Estetyka terminala, lokalny radar, kamera na żywo i pasek XP w stylu terminala.
+
+### ⚔️ Poziomy Trudności
+Kontroluj liczbę zombie pojawiających się każdego dnia za pomocą parametru `difficulty`:
+
+| Wartość | Zombie na Dzień | Opis |
+|---------|----------------|------|
+| `easy` | 1 – 2 | Dla okazjonalnych programistów |
+| `normal` | 1 – 4 | Domyślny — zrównoważone wyzwanie |
+| `hard` | 3 – 6 | Lepiej commitować codziennie |
+| `nightmare` | 5 – 10 | Ekstremalna presja. Bez odpoczynku. |
+
+### 🎨 Motywy
+Dostosuj wygląd swojego SVG za pomocą parametru `theme`:
+
+| Wartość | Styl |
+|---------|------|
+| `classic` | Oryginalne kolory (neonowa zieleń, ciemne tło, ciemnoczerwony) |
+| `cyberpunk` | Ta sama paleta neonowej zieleni — niezależnie konfigurowalna |
+| `fallout` | Bursztynowy/pomarańczowy Pip-Boy na głębokiej czerni |
+| `resident_evil` | Umbrella Corp — biały tekst, głęboka czerwień dla zagrożenia |
 
 ### 🚀 Jak Używać
 
@@ -610,7 +828,7 @@ on:
       - main
   schedule:
     - cron: "0 0 * * *"
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   build:
@@ -623,9 +841,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Generate Zombie Survival Graph
-        uses: achexus/github-zombie-graph@v1.1.2
+        uses: achexus/github-zombie-graph@v1.2.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          difficulty: normal      # easy | normal | hard | nightmare
+          theme: cyberpunk        # classic | cyberpunk | fallout | resident_evil
 
       - name: Commit and Push the generated SVG
         uses: stefanzweifel/git-auto-commit-action@v5

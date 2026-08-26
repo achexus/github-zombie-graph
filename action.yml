@@ -12,6 +12,14 @@ inputs:
     description: 'GitHub kullanici adi (Opsiyonel, otomatik bulunur)'
     required: false
     default: ${{ github.repository_owner }}
+  difficulty:
+    description: 'Zombie spawn difficulty: easy, normal, hard, nightmare'
+    required: false
+    default: 'normal'
+  theme:
+    description: 'Color theme for the SVG: classic, cyberpunk, fallout, resident_evil'
+    required: false
+    default: 'cyberpunk'
 
 runs:
   using: "composite"
@@ -30,4 +38,6 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.github_token }}
         GITHUB_USERNAME: ${{ inputs.github_username }}
+        GITHUB_DIFFICULTY: ${{ inputs.difficulty }}
+        GITHUB_THEME: ${{ inputs.theme }}
       run: python ${{ github.action_path }}/zombie.py
