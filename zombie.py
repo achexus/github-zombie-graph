@@ -10,7 +10,8 @@ load_dotenv()
 TOKEN = os.getenv("GITHUB_TOKEN")
 USERNAME = os.getenv("GITHUB_USERNAME", os.getenv("GITHUB_REPOSITORY_OWNER", "achexus"))
 DIFFICULTY = os.getenv("GITHUB_DIFFICULTY", "normal").lower().strip()
-THEME_NAME = os.getenv("GITHUB_THEME", "cyberpunk").lower().strip()
+# Varsayılan ana tema 'classic' olarak ayarlandı
+THEME_NAME = os.getenv("GITHUB_THEME", "classic").lower().strip()
 
 # --- THEME PALETTES ---
 THEMES = {
@@ -38,6 +39,18 @@ THEMES = {
         "tire_hub":        "#2a0040",
         "tire_hub2":       "#0a0010",
         "bar_fill":        "#ff00ff",
+        "past_0":          "#050008",
+        "past_1":          "#130020",
+        "past_2":          "#220033",
+        "past_3":          "#30004d",
+        "past_4":          "#3f0066",
+        "surv_1":          "#660066",
+        "surv_2":          "#990099",
+        "surv_3":          "#cc00cc",
+        "surv_4":          "#ff00ff",
+        "inv_1":           "#5e0020",
+        "inv_1_stroke":    "#990040",
+        "inv_2":           "#20000a",
     },
     "fallout": {
         "bg_color":        "#0a0800",
@@ -63,6 +76,18 @@ THEMES = {
         "tire_hub":        "#261900",
         "tire_hub2":       "#0a0800",
         "bar_fill":        "#ffa500",
+        "past_0":          "#0a0800",
+        "past_1":          "#1a1400",
+        "past_2":          "#332800",
+        "past_3":          "#4d3c00",
+        "past_4":          "#665000",
+        "surv_1":          "#664400",
+        "surv_2":          "#996600",
+        "surv_3":          "#cc8800",
+        "surv_4":          "#ffa500",
+        "inv_1":           "#4a1111",
+        "inv_1_stroke":    "#8a2222",
+        "inv_2":           "#1a0505",
     },
     "resident_evil": {
         "bg_color":        "#0a0a0a",
@@ -88,38 +113,59 @@ THEMES = {
         "tire_hub":        "#1a0000",
         "tire_hub2":       "#0a0a0a",
         "bar_fill":        "#e8e8e8",
+        "past_0":          "#0a0a0a",
+        "past_1":          "#1a1a1a",
+        "past_2":          "#2a2a2a",
+        "past_3":          "#3a3a3a",
+        "past_4":          "#4a4a4a",
+        "surv_1":          "#555555",
+        "surv_2":          "#888888",
+        "surv_3":          "#bbbbbb",
+        "surv_4":          "#e8e8e8",
+        "inv_1":           "#660000",
+        "inv_1_stroke":    "#aa0000",
+        "inv_2":           "#220000",
     },
+    "classic": {
+        "bg_color":        "#0d1117",
+        "panel_color":     "rgba(13, 17, 23, 0.8)",
+        "panel_stroke":    "#1a4d1a",
+        "panel_dark":      "#0a0a0f",
+        "primary_text":    "#39ff14",
+        "dim_text":        "#1a4d1a",
+        "secure_color":    "#39ff14",
+        "danger_color":    "#d92525",
+        "danger_dark":     "#a11b1b",
+        "warning_color":   "#ff8c00",
+        "radar_ring":      "#1a4d1a",
+        "radar_sweep":     "rgba(57, 255, 20, 0.15)",
+        "scanline":        "rgba(57, 255, 20, 0.10)",
+        "crosshair":       "#39ff14",
+        "crosshair_bg":    "rgba(57,255,20,0.05)",
+        "secure_bg":       "rgba(57, 255, 20, 0.15)",
+        "cam_bg":          "#050510",
+        "cam_secure_bg":   "#0d1117",
+        "grid_stroke":     "#1a2332",
+        "tire_stripe":     "#1a4d1a",
+        "tire_hub":        "#1c3242",
+        "tire_hub2":       "#0d1117",
+        "bar_fill":        "#39ff14",
+        "past_0":          "#0d1117",
+        "past_1":          "#1c3242",
+        "past_2":          "#285473",
+        "past_3":          "#3679a6",
+        "past_4":          "#459fdb",
+        "surv_1":          "#1f6b11",
+        "surv_2":          "#2c9e17",
+        "surv_3":          "#39ff14",
+        "surv_4":          "#a3ff00",
+        "inv_1":           "#8a0020",
+        "inv_1_stroke":    "#ff003c",
+        "inv_2":           "#3a000d",
+    }
 }
 
-# "classic" — the original pre-theming colors, stored as a fully independent palette
-THEMES["classic"] = {
-    "bg_color":        "#0d1117",
-    "panel_color":     "rgba(13, 17, 23, 0.8)",
-    "panel_stroke":    "#1a4d1a",
-    "panel_dark":      "#0a0a0f",
-    "primary_text":    "#39ff14",
-    "dim_text":        "#1a4d1a",
-    "secure_color":    "#39ff14",
-    "danger_color":    "#d92525",
-    "danger_dark":     "#a11b1b",
-    "warning_color":   "#ff8c00",
-    "radar_ring":      "#1a4d1a",
-    "radar_sweep":     "rgba(57, 255, 20, 0.15)",
-    "scanline":        "rgba(57, 255, 20, 0.10)",
-    "crosshair":       "#39ff14",
-    "crosshair_bg":    "rgba(57,255,20,0.05)",
-    "secure_bg":       "rgba(57, 255, 20, 0.15)",
-    "cam_bg":          "#050510",
-    "cam_secure_bg":   "#0d1117",
-    "grid_stroke":     "#1a2332",
-    "tire_stripe":     "#1a4d1a",
-    "tire_hub":        "#1c3242",
-    "tire_hub2":       "#0d1117",
-    "bar_fill":        "#39ff14",
-}
-
-# Fall back to cyberpunk if theme name is unknown
-THEME = THEMES.get(THEME_NAME, THEMES["cyberpunk"])
+THEME = THEMES.get(THEME_NAME, THEMES["classic"])
 
 # --- SABİT MESAJLAR VE RÜTBELER ---
 MSG_OVERKILL = ["TARGET PRACTICE AT SECTOR {date}. OVERWHELMING FIREPOWER USED.", "THREAT NEUTRALIZED ON {date}. NO CASUALTIES REPORTED."]
@@ -140,7 +186,6 @@ ORDERED_RANKS = [
     (300, "LIVING LEGEND", "🌌")
 ]
 
-# Difficulty -> (min_zombies, max_zombies)
 _DIFFICULTY_RANGES = {
     "easy":      (1, 2),
     "normal":    (1, 4),
@@ -149,16 +194,18 @@ _DIFFICULTY_RANGES = {
 }
 
 def get_zombie_count_for_date(date_str, difficulty=None):
-    """Return a deterministic zombie count for a given date, based on difficulty."""
-    if difficulty is None:
-        difficulty = DIFFICULTY
+    if not date_str: return 0
+    if difficulty is None: difficulty = DIFFICULTY
     lo, hi = _DIFFICULTY_RANGES.get(difficulty, _DIFFICULTY_RANGES["normal"])
-    r = random.Random(date_str)
-    return r.randint(lo, hi)
+    
+    try:
+        r = random.Random(date_str)
+        return r.randint(lo, hi)
+    except Exception:
+        return 0
 
 def calculate_level_info(total_commits):
-    if total_commits == 0:
-        return 0, 0, 1
+    if total_commits == 0: return 0, 0, 1
     level = int((math.sqrt(8 * total_commits + 1) - 1) / 2)
     current_level_base_xp = (level * (level + 1)) // 2
     next_level_base_xp = ((level + 1) * (level + 2)) // 2
@@ -188,9 +235,7 @@ def get_contribution_data():
         return days
     return None
 
-def get_radar_svg(remaining_zombies, x, y, width, height, t=None):
-    if t is None:
-        t = THEME
+def get_radar_svg(remaining_zombies, x, y, width, height, t):
     cx = x + (width / 2)
     cy = y + 95
     dots = ""
@@ -217,13 +262,9 @@ def get_radar_svg(remaining_zombies, x, y, width, height, t=None):
     {dots}
     """
 
-def get_live_cam_svg(state, x, y, width, height, is_easter_egg=False, t=None):
-    if t is None:
-        t = THEME
+def get_live_cam_svg(state, x, y, width, height, t, is_easter_egg=False):
     bg = f'<rect x="{x}" y="{y}" width="{width}" height="{height}" class="intel-panel" />'
-    
     blink_dur = "0.2s" if is_easter_egg else "1.5s"
-    
     live_header = f"""
     <circle cx="{x+18}" cy="{y+20}" r="4" fill="{t['danger_color']}">
         <animate attributeName="opacity" values="1;0;1" dur="{blink_dur}" repeatCount="indefinite" />
@@ -323,12 +364,9 @@ def get_live_cam_svg(state, x, y, width, height, is_easter_egg=False, t=None):
         """
     return bg + content
 
-def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, survival_day, total_commits, first_active_date, t=None):
-    if t is None:
-        t = THEME
+def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, survival_day, total_commits, first_active_date, t, theme_name):
     svg_width = 980
     svg_height = 740
-    
     is_easter_egg = (total_commits == 100)
     
     day_map = {d['date']: d['contributionCount'] for d in days}
@@ -371,13 +409,8 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
         if level >= req:
             current_rank_idx = i
             
-    if current_rank_idx == -1:
-        active_rank_name = "UNRANKED"
-    else:
-        active_rank_name = ORDERED_RANKS[current_rank_idx][1]
-        
-    if is_easter_egg:
-        active_rank_name = "KAYBOLMUŞ"
+    active_rank_name = "UNRANKED" if current_rank_idx == -1 else ORDERED_RANKS[current_rank_idx][1]
+    if is_easter_egg: active_rank_name = "KAYBOLMUŞ"
 
     screen_class = "screen easter-egg" if is_easter_egg else "screen"
 
@@ -396,41 +429,25 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
         .intel-panel {{ fill: {t['panel_color']}; stroke: {t['panel_stroke']}; stroke-width: 1; rx: 4; ry: 4; }}
         .fog-of-war {{ fill: {t['panel_color']}; stroke: {t['panel_stroke']}; stroke-width: 1; stroke-dasharray: 2; opacity: 0.8; }}
         
-        .past-0 {{ fill: #0d1117; stroke: #1a2332; stroke-width: 1; rx: 2; ry: 2; }}
-        .past-1 {{ fill: #1c3242; rx: 2; ry: 2; }}
-        .past-2 {{ fill: #285473; rx: 2; ry: 2; }}
-        .past-3 {{ fill: #3679a6; rx: 2; ry: 2; }}
-        .past-4 {{ fill: #459fdb; rx: 2; ry: 2; }}
-        .game-survived-1 {{ fill: #1f6b11; rx: 2; ry: 2; }} 
-        .game-survived-2 {{ fill: #2c9e17; rx: 2; ry: 2; }} 
-        .game-survived-3 {{ fill: #39ff14; rx: 2; ry: 2; }} 
-        .game-survived-4 {{ fill: #a3ff00; rx: 2; ry: 2; }} 
+        .past-0 {{ fill: {t['past_0']}; stroke: {t['grid_stroke']}; stroke-width: 1; rx: 2; ry: 2; }}
+        .past-1 {{ fill: {t['past_1']}; rx: 2; ry: 2; }}
+        .past-2 {{ fill: {t['past_2']}; rx: 2; ry: 2; }}
+        .past-3 {{ fill: {t['past_3']}; rx: 2; ry: 2; }}
+        .past-4 {{ fill: {t['past_4']}; rx: 2; ry: 2; }}
+        .game-survived-1 {{ fill: {t['surv_1']}; rx: 2; ry: 2; }} 
+        .game-survived-2 {{ fill: {t['surv_2']}; rx: 2; ry: 2; }} 
+        .game-survived-3 {{ fill: {t['surv_3']}; rx: 2; ry: 2; }} 
+        .game-survived-4 {{ fill: {t['surv_4']}; rx: 2; ry: 2; }} 
         
-        /* GÜNCELLENEN SİBERPUNK KORUPTE RENKLER */
-        .game-invaded-1 {{ fill: #5e1111; stroke: #a11b1b; stroke-width: 1; rx: 2; ry: 2; }}  
-        .game-invaded-2 {{ fill: #20080a; rx: 2; ry: 2; }}  
+        .game-invaded-1 {{ fill: {t['inv_1']}; stroke: {t['inv_1_stroke']}; stroke-width: 1; rx: 2; ry: 2; }}  
+        .game-invaded-2 {{ fill: {t['inv_2']}; rx: 2; ry: 2; }}  
         
-        @keyframes pulse-beacon {{ 0% {{ fill-opacity: 1; stroke: #ffffff; stroke-width: 1px; }} 50% {{ fill-opacity: 0.4; stroke: #39ff14; stroke-width: 3px; }} 100% {{ fill-opacity: 1; stroke: #ffffff; stroke-width: 1px; }} }}
+        @keyframes pulse-beacon {{ 0% {{ fill-opacity: 1; stroke: #ffffff; stroke-width: 1px; }} 50% {{ fill-opacity: 0.4; stroke: {t['secure_color']}; stroke-width: 3px; }} 100% {{ fill-opacity: 1; stroke: #ffffff; stroke-width: 1px; }} }}
         .current-day {{ animation: pulse-beacon 1.5s infinite; rx: 3; ry: 3; }}
         
         @keyframes crt-flicker {{ 0% {{ opacity: 0.95; }} 5% {{ opacity: 0.85; }} 10% {{ opacity: 0.95; }} 15% {{ opacity: 1.0; }} 50% {{ opacity: 0.98; }} 100% {{ opacity: 0.95; }} }}
         @keyframes system-glitch {{ 0% {{ transform: translate(0, 0); }} 2% {{ transform: translate(1px, -1px); }} 4% {{ transform: translate(-1px, 1px); }} 6% {{ transform: translate(0, 0); }} 100% {{ transform: translate(0, 0); }} }}
         .screen {{ animation: crt-flicker 0.15s infinite, system-glitch 4s infinite; }}
-        
-        @keyframes extreme-glitch {{
-            0%   {{ transform: translate(0, 0); opacity: 0.9; }}
-            10%  {{ transform: translate(-5px, 5px); opacity: 0.5; filter: hue-rotate(90deg); }}
-            20%  {{ transform: translate(5px, -5px); opacity: 1.0; }}
-            30%  {{ transform: translate(-5px, -5px); opacity: 0.4; filter: hue-rotate(-90deg); }}
-            40%  {{ transform: translate(5px, 5px); opacity: 0.9; }}
-            50%  {{ transform: translate(-2px, 2px); opacity: 0.6; filter: hue-rotate(180deg); }}
-            60%  {{ transform: translate(2px, -2px); opacity: 1.0; }}
-            70%  {{ transform: translate(-2px, -2px); opacity: 0.5; filter: hue-rotate(-180deg); }}
-            80%  {{ transform: translate(2px, 2px); opacity: 0.9; }}
-            90%  {{ transform: translate(0, 0); opacity: 0.7; filter: hue-rotate(45deg); }}
-            100% {{ transform: translate(0, 0); opacity: 0.9; }}
-        }}
-        .easter-egg {{ animation: extreme-glitch 0.15s infinite !important; }}
     </style>
     <rect width="{svg_width}" height="{svg_height}" class="bg" />
     <g class="{screen_class}">
@@ -439,7 +456,7 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
     for y in range(0, svg_height, 4):
         svg_content += f'<line x1="0" y1="{y}" x2="{svg_width}" y2="{y}" class="scanline" />\n'
         
-    svg_content += f'<text x="25" y="40" class="text-neon text-title">{USERNAME.upper()} SURVIVAL SYSTEM</text>\n'
+    svg_content += f'<text x="25" y="40" class="text-neon text-title">{USERNAME.upper()} SURVIVAL SYSTEM [{theme_name.upper()}]</text>\n'
     svg_content += f'<text x="25" y="75" class="text-neon text-info">SURVIVAL DAY : {survival_day}</text>\n'
     svg_content += f'<text x="25" y="95" class="text-neon text-info">RANK         : {active_rank_name.upper()} (LVL {level})</text>\n'
     svg_content += f'<text x="450" y="75" class="text-neon text-info">TOTAL XP     : {total_commits} XP</text>\n'
@@ -492,22 +509,14 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
                         if date_str < today_str:
                             ticker_logs.append(random.choice(MSG_ZERO).format(date=date_str, commits=commits))
             
-            if is_easter_egg:
-                dur = round(random.uniform(0.1, 0.4), 2)
-                anim = f'<animate attributeName="fill" values="#ff003c;#39ff14;#ff8c00;#0d1117;#00ffff;#ff00ff" dur="{dur}s" repeatCount="indefinite" />'
-                svg_content += f'<rect x="{x}" y="{y}" width="{box_size}" height="{box_size}" class="{color_class}{extra_class}">{anim}</rect>\n'
-            else:
-                svg_content += f'<rect x="{x}" y="{y}" width="{box_size}" height="{box_size}" class="{color_class}{extra_class}" />\n'
+            svg_content += f'<rect x="{x}" y="{y}" width="{box_size}" height="{box_size}" class="{color_class}{extra_class}" />\n'
         else:
             svg_content += f'<rect x="{x}" y="{y}" width="{box_size}" height="{box_size}" class="fog-of-war" />\n'
         
     panel_x, panel_width, panel_height = 690, 265, 164
-    svg_content += get_live_cam_svg(cam_state, panel_x, 165, panel_width, panel_height, is_easter_egg, t=t)
-    svg_content += get_radar_svg(remaining_zombies, panel_x, 337, panel_width, panel_height, t=t)
+    svg_content += get_live_cam_svg(cam_state, panel_x, 165, panel_width, panel_height, t, is_easter_egg)
+    svg_content += get_radar_svg(remaining_zombies, panel_x, 337, panel_width, panel_height, t)
 
-    # -------------------------------------------------------------
-    # KAYAN RÜTBE SİSTEMİ
-    # -------------------------------------------------------------
     medal_y, medal_box_width, medal_gap, start_medal_x = 540, 200, 25, 25
     start_idx = max(0, min(current_rank_idx, len(ORDERED_RANKS) - 4))
     
@@ -529,9 +538,6 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
         svg_content += f'<text x="{m_x + 10}" y="{medal_y + 18}" class="{text_class} text-medal">{slot["icon"]} {slot["name"]}</text>\n'
         svg_content += f'<text x="{m_x + 10}" y="{medal_y + 35}" class="{text_class} text-medal">{status_text}</text>\n'
 
-    # -------------------------------------------------------------
-    # TERMINAL STYLE LOADING (XP) BAR
-    # -------------------------------------------------------------
     if not is_easter_egg:
         xp_bar_y = 615
         total_blocks = 77
@@ -578,15 +584,22 @@ def generate_pipboy_svg(days, level, xp_current, xp_needed, survived, invaded, s
     </svg>
     """
     
-    with open("zombie-graph.svg", "w", encoding="utf-8") as file:
-        file.write(svg_content)
-    print(f"[SUCCESS] Zombie Graph oluşturuldu: 'zombie-graph.svg'")
+    # Sadece seçilen (THEME_NAME) temayı 'zombie-graph.svg' olarak dışarı aktarıyoruz
+    if theme_name == THEME_NAME:
+        filename = "zombie-graph.svg"
+        with open(filename, "w", encoding="utf-8") as file:
+            file.write(svg_content)
+        print(f"[SUCCESS] Ana grafik oluşturuldu: '{filename}' ({theme_name.capitalize()})")
+    else:
+        filename = f"zombie-graph-{theme_name}.svg"
+        with open(filename, "w", encoding="utf-8") as file:
+            file.write(svg_content)
+        print(f"[SUCCESS] Alternatif tema oluşturuldu: '{filename}'")
 
 def simulate_zombie_survival(days):
     today_str = days[-1]['date']
     today_obj = datetime.strptime(today_str, "%Y-%m-%d").date()
     
-    # 1. Sadece SON 30 GÜN içindeki İLK aktif günü bul
     cutoff_date_str = (today_obj - timedelta(days=30)).strftime("%Y-%m-%d")
     first_active_date = None
     
@@ -598,7 +611,6 @@ def simulate_zombie_survival(days):
     if not first_active_date: 
         first_active_date = today_str 
 
-    # 2. Hayatta Kalma Serisi
     survival_day = 0
     for d in days:
         if d['date'] > today_str:
@@ -630,7 +642,13 @@ def simulate_zombie_survival(days):
 
     level, xp_current, xp_needed = calculate_level_info(total_commits)
     
-    generate_pipboy_svg(days, level, xp_current, xp_needed, total_survived, total_invaded, survival_day, total_commits, first_active_date, t=THEME)
+    # Tüm temalar için ayrı ayrı SVG üretimi
+    for theme_key, theme_data in THEMES.items():
+        generate_pipboy_svg(
+            days, level, xp_current, xp_needed, total_survived, total_invaded, 
+            survival_day, total_commits, first_active_date, 
+            t=theme_data, theme_name=theme_key
+        )
 
 if __name__ == "__main__":
     real_github_data = get_contribution_data()
